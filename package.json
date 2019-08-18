@@ -41,10 +41,18 @@
     "@material-ui/icons": "^4.2.1",
     "@open-rpc/client-js": "^1.1.0",
     "@open-rpc/meta-schema": "^1.5.3",
+    "@qiwi/semantic-release-gh-pages-plugin": "^1.10.5",
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/commit-analyzer": "^6.3.0",
+    "@semantic-release/git": "^7.0.16",
+    "@semantic-release/github": "^5.4.2",
+    "@semantic-release/npm": "^5.1.13",
+    "@semantic-release/release-notes-generator": "^7.3.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-json-view": "^1.19.1",
     "react-split-pane": "^0.1.87",
+    "semantic-release": "^15.13.21",
     "use-dark-mode": "^2.3.1"
   }
 }
