@@ -1,3 +1,16 @@
+# 1.0.0 (2019-08-18)
+
+
+### Bug Fixes
+
+* add CNAME to public folder ([be3050a](https://github.com/open-rpc/inspector/commit/be3050a))
+* **README:** add inspector readme ([6814619](https://github.com/open-rpc/inspector/commit/6814619))
+
+
+### Features
+
+* initial commit ([893136f](https://github.com/open-rpc/inspector/commit/893136f))
+
 ## [1.0.2](https://github.com/etclabscore/pristine-typescript-react/compare/1.0.1...1.0.2) (2019-07-02)
 
 
