@@ -6,6 +6,9 @@
   "files": [
     "package/"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
