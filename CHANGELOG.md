@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/open-rpc/inspector/compare/1.0.0...1.0.1) (2019-08-18)
+
+
+### Bug Fixes
+
+* publish access public ([dbcf09f](https://github.com/open-rpc/inspector/commit/dbcf09f))
+
 # 1.0.0 (2019-08-18)
 
 
