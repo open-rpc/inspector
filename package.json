@@ -1,7 +1,6 @@
 {
   "name": "@open-rpc/inspector",
   "version": "0.0.0-development",
-  "homepage": "https://open-rpc.github.io/inspector/",
   "description": "",
   "main": "package/index.js",
   "files": [
