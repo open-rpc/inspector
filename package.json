@@ -1,0 +1,51 @@
+{
+  "name": "@open-rpc/inspector",
+  "version": "0.0.0-development",
+  "homepage": "https://open-rpc.github.io/inspector/",
+  "description": "",
+  "main": "package/index.js",
+  "files": [
+    "package/"
+  ],
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "lint": "tslint --fix -p .",
+    "test": "npm run lint && react-scripts test --coverage --passWithNoTests",
+    "build:package": "tsc --noEmit false --outDir package --jsx react --declaration true --allowJs false --isolatedModules false && mv package/exports.d.ts package/index.d.ts && mv package/exports.js package/index.js"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/jest": "^24.0.13",
+    "@types/react-dom": "^16.8.4",
+    "jest": "24.7.1",
+    "react-scripts": "^3.0.1",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.17.0",
+    "typescript": "^3.5.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.3.2",
+    "@material-ui/icons": "^4.2.1",
+    "@open-rpc/client-js": "^1.1.0",
+    "@open-rpc/meta-schema": "^1.5.3",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-json-view": "^1.19.1",
+    "react-split-pane": "^0.1.87",
+    "use-dark-mode": "^2.3.1"
+  }
+}

@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #666;
+  z-index: 1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 5px;
+}
+
+.Resizer {
+  z-index: 1;
+}
+
+.react-json-view, .object-key-val, .object-container, .object-content {
+  background: transparent !important;
+}
