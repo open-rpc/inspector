@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/open-rpc/inspector/compare/1.0.2...1.0.3) (2019-08-19)
+
+
+### Bug Fixes
+
+* refactor dark mode ([4c1e947](https://github.com/open-rpc/inspector/commit/4c1e947))
+
 ## [1.0.2](https://github.com/open-rpc/inspector/compare/1.0.1...1.0.2) (2019-08-19)
 
 
