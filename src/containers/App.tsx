@@ -5,21 +5,15 @@ import { lightTheme, darkTheme } from "../themes/openrpcTheme";
 import useDarkMode from "use-dark-mode";
 import Inspector from "./Inspector";
 
-interface IProps {
-  url?: string;
-  request?: any;
-  darkMode?: boolean;
-  hideToggleTheme?: boolean;
-}
-
-const App: React.FC<IProps> = (props) => {
-  const darkMode = useDarkMode(props.darkMode);
+const App: React.FC = () => {
+  const darkMode = useDarkMode();
   const theme = darkMode.value ? darkTheme : lightTheme;
+  const reactJsonTheme = darkMode.value ? "summerfruit" : "summerfruit:inverted";
 
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
-      <Inspector />
+      <Inspector onToggleDarkMode={darkMode.toggle} darkMode={darkMode.value} reactJsonTheme={reactJsonTheme}/>
     </MuiThemeProvider>
   );
 };

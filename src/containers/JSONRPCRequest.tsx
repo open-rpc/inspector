@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import ReactJson from "react-json-view";
+import ReactJson, { ReactJsonViewProps } from "react-json-view";
 
 interface IProps {
   json?: any;
-  reactJsonTheme: string;
+  reactJsonTheme: ReactJsonViewProps["theme"];
   onChange?: (newValue: any) => void;
 }
 

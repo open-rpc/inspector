@@ -4,8 +4,7 @@ import JSONRPCRequest from "./JSONRPCRequest";
 import PlayCircle from "@material-ui/icons/PlayCircleFilled";
 import { IconButton, AppBar, Toolbar, Typography, Button, InputBase } from "@material-ui/core";
 import { Client, RequestManager, HTTPTransport, WebSocketTransport } from "@open-rpc/client-js";
-import ReactJson from "react-json-view";
-import useDarkMode from "use-dark-mode";
+import ReactJson, { ReactJsonViewProps } from "react-json-view";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 
@@ -14,6 +13,8 @@ interface IProps {
   request?: any;
   darkMode?: boolean;
   hideToggleTheme?: boolean;
+  onToggleDarkMode?: () => void;
+  reactJsonTheme?: ReactJsonViewProps["theme"];
 }
 
 const useClient = (url: string): [Client] => {
@@ -51,8 +52,6 @@ function useCounter(defaultValue: number): [number, () => void] {
 }
 
 const Inspector: React.FC<IProps> = (props) => {
-  const darkMode = useDarkMode(props.darkMode);
-  const reactJsonTheme = darkMode.value ? "summerfruit" : "summerfruit:inverted";
 
   const [id, incrementId] = useCounter(0);
   const [json, setJson] = useState(props.request || {
@@ -81,9 +80,15 @@ const Inspector: React.FC<IProps> = (props) => {
     setResults(undefined);
   };
 
+  const handleToggleDarkMode =  () => {
+    if (props.onToggleDarkMode) {
+      props.onToggleDarkMode();
+    }
+  };
+
   return (
     <div style={{ height: "100%" }}>
-      <AppBar position="static" elevation={0}>
+      <AppBar position="static" elevation={0} color="default">
         <Toolbar>
           <img
             height="30"
@@ -107,8 +112,8 @@ const Inspector: React.FC<IProps> = (props) => {
           {
             props.hideToggleTheme
               ? null
-              : <IconButton onClick={darkMode.toggle}>
-                {darkMode.value ? <Brightness3Icon /> : <WbSunnyIcon />}
+              : <IconButton onClick={handleToggleDarkMode}>
+                {props.darkMode ? <Brightness3Icon /> : <WbSunnyIcon />}
               </IconButton>
           }
         </Toolbar>
@@ -119,7 +124,7 @@ const Inspector: React.FC<IProps> = (props) => {
             <JSONRPCRequest
               json={{ ...json, id: id.toString() }}
               onChange={setJson}
-              reactJsonTheme={reactJsonTheme}
+              reactJsonTheme={props.reactJsonTheme || "summerfruit:inverted"}
             />
           </div>
           <div style={{ height: "100%", padding: "10px", overflowY: "auto", paddingBottom: "80px" }}>
@@ -136,7 +141,7 @@ const Inspector: React.FC<IProps> = (props) => {
                 name={false}
                 displayDataTypes={false}
                 displayObjectSize={false}
-                theme={reactJsonTheme}
+                theme={props.reactJsonTheme || "summerfruit:inverted"}
               />}
           </div>
         </SplitPane >
