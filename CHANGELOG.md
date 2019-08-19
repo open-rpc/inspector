@@ -1,3 +1,12 @@
+## [1.0.5](https://github.com/open-rpc/inspector/compare/1.0.4...1.0.5) (2019-08-19)
+
+
+### Bug Fixes
+
+* add query string configuration ([95bc328](https://github.com/open-rpc/inspector/commit/95bc328))
+* **App:** inspector element line length ([c8477c3](https://github.com/open-rpc/inspector/commit/c8477c3))
+* **README:** add docs on url configuration ([c7d737d](https://github.com/open-rpc/inspector/commit/c7d737d))
+
 ## [1.0.4](https://github.com/open-rpc/inspector/compare/1.0.3...1.0.4) (2019-08-19)
 
 
