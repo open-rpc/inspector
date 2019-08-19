@@ -64,6 +64,12 @@ const Inspector: React.FC<IProps> = (props) => {
   const [url, setUrl] = useState(props.url || "");
   const [client] = useClient(url);
 
+  useEffect(() => {
+    if (props.url) {
+      setUrl(props.url);
+    }
+  }, [props.url]);
+
   const handlePlayButton = async () => {
     if (client) {
       incrementId();
