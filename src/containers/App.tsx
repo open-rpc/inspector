@@ -15,7 +15,13 @@ const App: React.FC = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
-      <Inspector onToggleDarkMode={darkMode.toggle} darkMode={darkMode.value} reactJsonTheme={reactJsonTheme} url={query.url} request={query.request}/>
+      <Inspector
+        onToggleDarkMode={darkMode.toggle}
+        darkMode={darkMode.value}
+        reactJsonTheme={reactJsonTheme}
+        url={query.url}
+        request={query.request}
+      />
     </MuiThemeProvider>
   );
 };
