@@ -1,3 +1,12 @@
+## [1.0.6](https://github.com/open-rpc/inspector/compare/1.0.5...1.0.6) (2019-08-19)
+
+
+### Bug Fixes
+
+* **package:** add @types/qs to devDeps ([0948180](https://github.com/open-rpc/inspector/commit/0948180))
+* **package:** npm export ([fbc40b7](https://github.com/open-rpc/inspector/commit/fbc40b7))
+* **README:** typo with params ([e8f37c9](https://github.com/open-rpc/inspector/commit/e8f37c9))
+
 ## [1.0.5](https://github.com/open-rpc/inspector/compare/1.0.4...1.0.5) (2019-08-19)
 
 
