@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/open-rpc/inspector/compare/1.0.3...1.0.4) (2019-08-19)
+
+
+### Bug Fixes
+
+* update url when props.url changes ([2e5c58d](https://github.com/open-rpc/inspector/commit/2e5c58d))
+
 ## [1.0.3](https://github.com/open-rpc/inspector/compare/1.0.2...1.0.3) (2019-08-19)
 
 
