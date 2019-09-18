@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent, Dispatch } from "react";
 import SplitPane from "react-split-pane";
 import JSONRPCRequest from "./JSONRPCRequest";
 import PlayCircle from "@material-ui/icons/PlayCircleFilled";
@@ -7,6 +7,7 @@ import { Client, RequestManager, HTTPTransport, WebSocketTransport } from "@open
 import ReactJson, { ReactJsonViewProps } from "react-json-view";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
+import { JSONRPCError } from "@open-rpc/client-js/build/Error";
 
 interface IProps {
   url?: string;
@@ -17,8 +18,9 @@ interface IProps {
   reactJsonTheme?: ReactJsonViewProps["theme"];
 }
 
-const useClient = (url: string): [Client] => {
+const useClient = (url: string): [Client, JSONRPCError | undefined, Dispatch<JSONRPCError | undefined>] => {
   const [client, setClient] = useState();
+  const [error, setError] = useState();
   useEffect(() => {
     let transport;
     if (url.includes("http://") || url.includes("https://")) {
@@ -27,19 +29,21 @@ const useClient = (url: string): [Client] => {
     if (url.includes("ws://")) {
       transport = WebSocketTransport;
     }
-    if (!transport) {
-      return console.error(`No Transport Found for url: ${url}`);
-    }
     try {
-      const t = new transport(url);
+      const clientTransport = transport || HTTPTransport;
+      const t = new clientTransport(url);
       const c = new Client(new RequestManager([t]));
       setClient(c);
+      c.onError((e) => {
+        console.log("onError", e); //tslint:disable-line
+        setError(e);
+      });
     } catch (e) {
-      console.error(e);
+      setError(e);
     }
   }, [url]);
-  return [client];
-}
+  return [client, error, setError];
+};
 
 function useCounter(defaultValue: number): [number, () => void] {
   const [counter, setCounter] = useState(defaultValue);
@@ -62,7 +66,7 @@ const Inspector: React.FC<IProps> = (props) => {
   });
   const [results, setResults] = useState();
   const [url, setUrl] = useState(props.url || "");
-  const [client] = useClient(url);
+  const [client, error, setError] = useClient(url);
 
   useEffect(() => {
     if (props.url) {
@@ -71,22 +75,28 @@ const Inspector: React.FC<IProps> = (props) => {
   }, [props.url]);
 
   const handlePlayButton = async () => {
+    clear();
     if (client) {
       incrementId();
       try {
         const result = await client.request(json.method, json.params);
         setResults({ jsonrpc: "2.0", result });
       } catch (e) {
-        setResults(e);
+        setError(e);
       }
     }
   };
 
-  const handleClearButton = () => {
+  const clear = () => {
     setResults(undefined);
+    setError(undefined);
   };
 
-  const handleToggleDarkMode =  () => {
+  const handleClearButton = () => {
+    clear();
+  };
+
+  const handleToggleDarkMode = () => {
     if (props.onToggleDarkMode) {
       props.onToggleDarkMode();
     }
@@ -134,12 +144,22 @@ const Inspector: React.FC<IProps> = (props) => {
             />
           </div>
           <div style={{ height: "100%", padding: "10px", overflowY: "auto", paddingBottom: "80px" }}>
-            {results &&
+            {(results || error) &&
               <Button
                 style={{ position: "absolute", top: "15px", right: "15px", zIndex: 1 }}
                 onClick={handleClearButton}>
                 Clear
                 </Button>
+            }
+            {
+              error &&
+              <ReactJson
+                src={{ code: error.code, message: error.message, data: error.data }}
+                name={false}
+                displayDataTypes={false}
+                displayObjectSize={false}
+                theme={props.reactJsonTheme || "summerfruit:inverted"}
+              />
             }
             {results &&
               <ReactJson
