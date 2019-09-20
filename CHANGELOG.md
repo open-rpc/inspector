@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/open-rpc/inspector/compare/1.0.6...1.0.7) (2019-09-20)
+
+
+### Bug Fixes
+
+* **client-js:** handle errors ([71b0fb0](https://github.com/open-rpc/inspector/commit/71b0fb0)), closes [#15](https://github.com/open-rpc/inspector/issues/15)
+
 ## [1.0.6](https://github.com/open-rpc/inspector/compare/1.0.5...1.0.6) (2019-08-19)
 
 
