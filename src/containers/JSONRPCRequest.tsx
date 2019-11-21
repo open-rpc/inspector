@@ -1,36 +1,56 @@
-import React, { useState } from "react";
-import ReactJson, { ReactJsonViewProps } from "react-json-view";
+import React from "react";
+import useDarkMode from "use-dark-mode";
+import { monaco, ControlledEditor, Monaco } from "@monaco-editor/react";
 
 interface IProps {
-  json?: any;
-  reactJsonTheme: ReactJsonViewProps["theme"];
   onChange?: (newValue: any) => void;
+  value: any;
 }
+monaco
+  .init()
+  .then((m: Monaco) => {
+    const modelUri = m.Uri.parse(`inmemory:/${Math.random()}/model/userSpec.json`);
+    m.languages.json.jsonDefaults.setDiagnosticsOptions({
+      enableSchemaRequest: true,
+      schemas: [
+        {
+          fileMatch: ["*"],
+          schema: {
+            type: "object",
+            properties: {
+              method: {
+                type: "string",
+              },
+              params: {
+                type: "array",
+              },
+            },
+          },
+          uri: modelUri.toString(),
+        },
+      ],
+      validate: true,
+    });
+    window.addEventListener("resize", m.editor.layout());
+  })
+  .catch((error: Error) => console.error("An error occurred during initialization of Monaco: ", error));
 
 const JSONRPCRequest: React.FC<IProps> = (props) => {
-  const [reactJsonOptions] = useState({
-    collapseStringsAfterLength: 25,
-    displayDataTypes: false,
-    displayObjectSize: false,
-    indentWidth: 2,
-    name: false,
-  });
+  const darkMode = useDarkMode();
 
-  const handleChange = (changed: any) => {
+  const handleChange = (ev: any, value: any) => {
     if (props.onChange) {
-      props.onChange(changed.updated_src);
+      props.onChange(value);
     }
   };
 
   return (
     <>
-      <ReactJson
-        theme={props.reactJsonTheme}
-        src={props.json}
-        {...reactJsonOptions as any}
-        onEdit={handleChange}
-        onAdd={handleChange}
-        onDelete={handleChange}
+      <ControlledEditor
+        theme={darkMode.value ? "dark" : "light"}
+        value={props.value}
+        language="json"
+        onChange={handleChange}
       />
     </>
   );

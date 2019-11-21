@@ -1,13 +1,14 @@
-import React, { useState, useEffect, ChangeEvent, Dispatch } from "react";
+import React, { useState, useEffect, ChangeEvent, Dispatch, useRef } from "react";
 import SplitPane from "react-split-pane";
 import JSONRPCRequest from "./JSONRPCRequest";
 import PlayCircle from "@material-ui/icons/PlayCircleFilled";
 import { IconButton, AppBar, Toolbar, Typography, Button, InputBase } from "@material-ui/core";
 import { Client, RequestManager, HTTPTransport, WebSocketTransport } from "@open-rpc/client-js";
-import ReactJson, { ReactJsonViewProps } from "react-json-view";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import { JSONRPCError } from "@open-rpc/client-js/build/Error";
+import useDarkMode from "use-dark-mode";
+import Editor from "@monaco-editor/react";
 
 interface IProps {
   url?: string;
@@ -15,7 +16,6 @@ interface IProps {
   darkMode?: boolean;
   hideToggleTheme?: boolean;
   onToggleDarkMode?: () => void;
-  reactJsonTheme?: ReactJsonViewProps["theme"];
 }
 
 const useClient = (url: string): [Client, JSONRPCError | undefined, Dispatch<JSONRPCError | undefined>] => {
@@ -56,7 +56,7 @@ function useCounter(defaultValue: number): [number, () => void] {
 }
 
 const Inspector: React.FC<IProps> = (props) => {
-
+  const darkMode = useDarkMode();
   const [id, incrementId] = useCounter(0);
   const [json, setJson] = useState(props.request || {
     jsonrpc: "2.0",
@@ -64,6 +64,7 @@ const Inspector: React.FC<IProps> = (props) => {
     params: [],
     id,
   });
+  const editorRef = useRef();
   const [results, setResults] = useState();
   const [url, setUrl] = useState(props.url || "");
   const [client, error, setError] = useClient(url);
@@ -86,6 +87,9 @@ const Inspector: React.FC<IProps> = (props) => {
       }
     }
   };
+  function handleResponseEditorDidMount(_: any, editor: any) {
+    editorRef.current = editor;
+  }
 
   const clear = () => {
     setResults(undefined);
@@ -135,13 +139,19 @@ const Inspector: React.FC<IProps> = (props) => {
         </Toolbar>
       </AppBar>
       <div style={{ display: "flex", marginBottom: "-80px" }}>
-        <SplitPane split="vertical" minSize={100} maxSize={-100} defaultSize={"35%"} style={{ flexGrow: 1 }}>
+        <SplitPane
+          split="vertical"
+          minSize={100}
+          maxSize={-100}
+          defaultSize={"50%"}
+          style={{ flexGrow: 1 }}
+          onChange={() => {
+            if (editorRef && editorRef.current) {
+              (editorRef.current as any).layout();
+            }
+          }}>
           <div style={{ width: "99%", padding: "10px" }}>
-            <JSONRPCRequest
-              json={{ ...json, id: id.toString() }}
-              onChange={setJson}
-              reactJsonTheme={props.reactJsonTheme || "summerfruit:inverted"}
-            />
+            <JSONRPCRequest onChange={(val) => setJson(JSON.parse(val))} value={JSON.stringify(json, null, 4)} />
           </div>
           <div style={{ height: "100%", padding: "10px", overflowY: "auto", paddingBottom: "80px" }}>
             {(results || error) &&
@@ -151,24 +161,22 @@ const Inspector: React.FC<IProps> = (props) => {
                 Clear
                 </Button>
             }
-            {
-              error &&
-              <ReactJson
-                src={{ code: error.code, message: error.message, data: error.data }}
-                name={false}
-                displayDataTypes={false}
-                displayObjectSize={false}
-                theme={props.reactJsonTheme || "summerfruit:inverted"}
-              />
-            }
-            {results &&
-              <ReactJson
-                src={results ? { ...results, id: (id - 1).toString() } : null}
-                name={false}
-                displayDataTypes={false}
-                displayObjectSize={false}
-                theme={props.reactJsonTheme || "summerfruit:inverted"}
-              />}
+            <Editor
+              options={{
+                minimap: {
+                  enabled: false,
+                },
+                wordWrap: "on",
+                lineNumbers: "off",
+                wrappingIndent: "deepIndent",
+                readOnly: true,
+                showFoldingControls: "always",
+              }}
+              editorDidMount={handleResponseEditorDidMount}
+              theme={darkMode.value ? "dark" : "light"}
+              language="json"
+              value={JSON.stringify(error || results, null, 4) || ""}
+            />
           </div>
         </SplitPane >
       </div>
