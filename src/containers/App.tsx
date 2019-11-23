@@ -10,7 +10,6 @@ const App: React.FC = () => {
   const darkMode = useDarkMode();
   const [query] = useQueryParams();
   const theme = darkMode.value ? darkTheme : lightTheme;
-  const reactJsonTheme = darkMode.value ? "summerfruit" : "summerfruit:inverted";
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -18,7 +17,6 @@ const App: React.FC = () => {
       <Inspector
         onToggleDarkMode={darkMode.toggle}
         darkMode={darkMode.value}
-        reactJsonTheme={reactJsonTheme}
         url={query.url}
         request={query.request}
       />

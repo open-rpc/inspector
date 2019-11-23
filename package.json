@@ -43,6 +43,7 @@
   "dependencies": {
     "@material-ui/core": "^4.3.2",
     "@material-ui/icons": "^4.2.1",
+    "@monaco-editor/react": "^2.3.0",
     "@open-rpc/client-js": "^1.2.1",
     "@open-rpc/meta-schema": "^1.5.3",
     "qs": "^6.8.0",
