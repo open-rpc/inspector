@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/open-rpc/inspector/compare/1.0.7...1.1.0) (2019-11-23)
+
+
+### Features
+
+* improve editor and result views ([8e2988d](https://github.com/open-rpc/inspector/commit/8e2988dc0eb4b154df04b41c44e13b83c1feb503)), closes [#1](https://github.com/open-rpc/inspector/issues/1)
+
 ## [1.0.7](https://github.com/open-rpc/inspector/compare/1.0.6...1.0.7) (2019-09-20)
 
 
