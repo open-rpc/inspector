@@ -9,12 +9,14 @@ import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import { JSONRPCError } from "@open-rpc/client-js/build/Error";
 import useDarkMode from "use-dark-mode";
 import Editor from "@monaco-editor/react";
+import { MethodObject } from "@open-rpc/meta-schema";
 
 interface IProps {
   url?: string;
   request?: any;
   darkMode?: boolean;
   hideToggleTheme?: boolean;
+  openrpcMethodObject?: MethodObject;
   onToggleDarkMode?: () => void;
 }
 
@@ -68,6 +70,16 @@ const Inspector: React.FC<IProps> = (props) => {
   const [results, setResults] = useState();
   const [url, setUrl] = useState(props.url || "");
   const [client, error, setError] = useClient(url);
+  useEffect(() => {
+    if (props.openrpcMethodObject) {
+      setJson({
+        jsonrpc: "2.0",
+        method: props.openrpcMethodObject.name,
+        params: json.params,
+        id,
+      });
+    }
+  }, [props.openrpcMethodObject, json, setJson, id]);
 
   useEffect(() => {
     if (props.url) {
@@ -151,7 +163,11 @@ const Inspector: React.FC<IProps> = (props) => {
             }
           }}>
           <div style={{ width: "99%", padding: "10px" }}>
-            <JSONRPCRequest onChange={(val) => setJson(JSON.parse(val))} value={JSON.stringify(json, null, 4)} />
+            <JSONRPCRequest
+              onChange={(val) => setJson(JSON.parse(val))}
+              openrpcMethodObject={props.openrpcMethodObject}
+              value={JSON.stringify(json, null, 4)}
+            />
           </div>
           <div style={{ height: "100%", padding: "10px", overflowY: "auto", paddingBottom: "80px" }}>
             {(results || error) &&
