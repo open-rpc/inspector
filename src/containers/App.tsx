@@ -20,7 +20,7 @@ const App: React.FC = () => {
         url={query.url}
         openrpcMethodObject={query.openrpcMethodObject}
         request={query.request}
-      />;
+      />
     </MuiThemeProvider>
   );
 };
