@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/open-rpc/inspector/compare/1.1.0...1.2.0) (2019-11-28)
+
+
+### Features
+
+* add openrpc method object support ([bd149fc](https://github.com/open-rpc/inspector/commit/bd149fc1535e1b3ce3cc783172728d96e3b5d2f5))
+
 # [1.1.0](https://github.com/open-rpc/inspector/compare/1.0.7...1.1.0) (2019-11-23)
 
 
