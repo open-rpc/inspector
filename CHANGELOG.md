@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/open-rpc/inspector/compare/1.2.0...1.2.1) (2019-12-04)
+
+
+### Bug Fixes
+
+* move monaco init into editorDidMount + fix resize ([e789b3f](https://github.com/open-rpc/inspector/commit/e789b3fc5a8cd5926d43e32867ea3be6f1248ab9))
+
 # [1.2.0](https://github.com/open-rpc/inspector/compare/1.1.0...1.2.0) (2019-11-28)
 
 
