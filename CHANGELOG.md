@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/open-rpc/inspector/compare/1.2.2...1.2.3) (2019-12-05)
+
+
+### Bug Fixes
+
+* remove extra divs ([49d29be](https://github.com/open-rpc/inspector/commit/49d29be082703ffead16804166439e8bd4bd4d5e))
+
 ## [1.2.2](https://github.com/open-rpc/inspector/compare/1.2.1...1.2.2) (2019-12-05)
 
 
