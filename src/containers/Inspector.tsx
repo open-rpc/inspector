@@ -119,7 +119,7 @@ const Inspector: React.FC<IProps> = (props) => {
   };
 
   return (
-    <div style={{ height: "100%" }}>
+    <>
       <AppBar position="static" elevation={0} color="default">
         <Toolbar>
           <img
@@ -150,53 +150,50 @@ const Inspector: React.FC<IProps> = (props) => {
           }
         </Toolbar>
       </AppBar>
-      <div style={{ display: "flex", marginBottom: "-80px" }}>
-        <SplitPane
-          split="vertical"
-          minSize={100}
-          maxSize={-100}
-          defaultSize={"50%"}
-          style={{ flexGrow: 1 }}
-          onChange={() => {
-            if (editorRef && editorRef.current) {
-              (editorRef.current as any).layout();
-            }
-          }}>
-          <div style={{ width: "99%", padding: "10px" }}>
-            <JSONRPCRequest
-              onChange={(val) => setJson(JSON.parse(val))}
-              openrpcMethodObject={props.openrpcMethodObject}
-              value={JSON.stringify(json, null, 4)}
-            />
-          </div>
-          <div style={{ height: "100%", padding: "10px", overflowY: "auto", paddingBottom: "80px" }}>
-            {(results || error) &&
-              <Button
-                style={{ position: "absolute", top: "15px", right: "15px", zIndex: 1 }}
-                onClick={handleClearButton}>
-                Clear
+      <SplitPane
+        split="vertical"
+        minSize={100}
+        maxSize={-100}
+        defaultSize={"50%"}
+        style={{ flexGrow: 1 }}
+        onChange={() => {
+          if (editorRef && editorRef.current) {
+            (editorRef.current as any).layout();
+          }
+        }}>
+        <JSONRPCRequest
+          onChange={(val) => setJson(JSON.parse(val))}
+          openrpcMethodObject={props.openrpcMethodObject}
+          value={JSON.stringify(json, null, 4)}
+        />
+        <>
+          {(results || error) &&
+            <Button
+              style={{ position: "absolute", top: "15px", right: "15px", zIndex: 1 }}
+              onClick={handleClearButton}>
+              Clear
                 </Button>
-            }
-            <Editor
-              options={{
-                minimap: {
-                  enabled: false,
-                },
-                wordWrap: "on",
-                lineNumbers: "off",
-                wrappingIndent: "deepIndent",
-                readOnly: true,
-                showFoldingControls: "always",
-              }}
-              editorDidMount={handleResponseEditorDidMount}
-              theme={darkMode.value ? "dark" : "light"}
-              language="json"
-              value={JSON.stringify(error || results, null, 4) || ""}
-            />
-          </div>
-        </SplitPane >
-      </div>
-    </div>
+          }
+          <Editor
+            options={{
+              minimap: {
+                enabled: false,
+              },
+              wordWrap: "on",
+              lineNumbers: "off",
+              wrappingIndent: "deepIndent",
+              readOnly: true,
+              showFoldingControls: "always",
+            }}
+            height="100vh"
+            editorDidMount={handleResponseEditorDidMount}
+            theme={darkMode.value ? "dark" : "light"}
+            language="json"
+            value={JSON.stringify(error || results, null, 4) || ""}
+          />
+        </>
+      </SplitPane>
+    </>
   );
 };
 

@@ -95,6 +95,7 @@ const JSONRPCRequest: React.FC<IProps> = (props) => {
   return (
     <>
       <ControlledEditor
+        height="100vh"
         theme={darkMode.value ? "dark" : "light"}
         value={props.value}
         editorDidMount={handleEditorDidMount}
