@@ -3,6 +3,7 @@ import useDarkMode from "use-dark-mode";
 import { monaco, ControlledEditor, Monaco } from "@monaco-editor/react";
 import { MethodObject } from "@open-rpc/meta-schema";
 import useWindowSize from "@rehooks/window-size";
+import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics"
 
 interface IProps {
   onChange?: (newValue: any) => void;
@@ -25,10 +26,14 @@ const JSONRPCRequest: React.FC<IProps> = (props) => {
     editorRef.current = editor;
     // Now you can use the instance of monaco editor
     // in this component whenever you want
+    const modelName = props.openrpcMethodObject ? props.openrpcMethodObject.name : "inspector";
+    const modelUriString = `inmemory://${modelName}.json`;
     monaco
       .init()
       .then((m: Monaco) => {
-        const modelUri = m.Uri.parse(`inmemory:/${Math.random()}/model/userSpec.json`);
+        const modelUri = m.Uri.parse(modelUriString);
+        const model = m.editor.createModel(props.value || "", "json", modelUri);
+        editor.setModel(model);
         let schema: any = {
           type: "object",
           properties: {
@@ -76,17 +81,7 @@ const JSONRPCRequest: React.FC<IProps> = (props) => {
             },
           };
         }
-        m.languages.json.jsonDefaults.setDiagnosticsOptions({
-          enableSchemaRequest: true,
-          schemas: [
-            {
-              fileMatch: ["*"],
-              schema,
-              uri: modelUri.toString(),
-            },
-          ],
-          validate: true,
-        });
+        addDiagnostics(modelUri.toString(), schema, m);
       })
       .catch((error: Error) => console.error("An error occurred during initialization of Monaco: ", error));
   }

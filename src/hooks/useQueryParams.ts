@@ -7,6 +7,9 @@ const useQueryParams = (depth?: number) => {
       ignoreQueryPrefix: true,
       depth: depth || 100,
       decoder(str) {
+        if (/^(\d+|\d*\.\d+)$/.test(str)) {
+          return parseFloat(str);
+      }
         if (str === "false") {
           return false;
         }
