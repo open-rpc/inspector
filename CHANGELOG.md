@@ -1,3 +1,11 @@
+## [1.2.2](https://github.com/open-rpc/inspector/compare/1.2.1...1.2.2) (2019-12-05)
+
+
+### Bug Fixes
+
+* update monaco add diagnostics ([e84af00](https://github.com/open-rpc/inspector/commit/e84af008f03b0ffe211b4e8ae2215c4e97c3e1f7))
+* use monaco add diagnostics ([5aeabfd](https://github.com/open-rpc/inspector/commit/5aeabfddee568ea71fc7ac7b3aa13d5db0c63082))
+
 ## [1.2.1](https://github.com/open-rpc/inspector/compare/1.2.0...1.2.1) (2019-12-04)
 
 
