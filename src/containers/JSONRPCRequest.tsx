@@ -3,7 +3,7 @@ import useDarkMode from "use-dark-mode";
 import { monaco, ControlledEditor, Monaco } from "@monaco-editor/react";
 import { MethodObject } from "@open-rpc/meta-schema";
 import useWindowSize from "@rehooks/window-size";
-import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics"
+import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics";
 
 interface IProps {
   onChange?: (newValue: any) => void;
