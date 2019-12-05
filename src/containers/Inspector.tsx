@@ -76,11 +76,21 @@ const Inspector: React.FC<IProps> = (props) => {
         jsonrpc: "2.0",
         method: props.openrpcMethodObject.name,
         params: json.params,
-        id,
+        id: id.toString(),
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    if (json) {
+      setJson({
+        ...json,
+        jsonrpc: "2.0",
+        id: id.toString(),
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   useEffect(() => {
     if (props.url) {
@@ -94,7 +104,7 @@ const Inspector: React.FC<IProps> = (props) => {
       incrementId();
       try {
         const result = await client.request(json.method, json.params);
-        setResults({ jsonrpc: "2.0", result });
+        setResults({ jsonrpc: "2.0", result, id });
       } catch (e) {
         setError(e);
       }
