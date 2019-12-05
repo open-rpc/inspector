@@ -79,7 +79,8 @@ const Inspector: React.FC<IProps> = (props) => {
         id,
       });
     }
-  }, [props.openrpcMethodObject, json, setJson, id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (props.url) {
