@@ -131,7 +131,7 @@ const Inspector: React.FC<IProps> = (props) => {
 
   return (
     <>
-      <AppBar position="static" elevation={0} color="default">
+      <AppBar position="static" elevation={0}>
         <Toolbar>
           <img
             height="30"
