@@ -1,3 +1,11 @@
+## [1.2.5](https://github.com/open-rpc/inspector/compare/1.2.4...1.2.5) (2019-12-06)
+
+
+### Bug Fixes
+
+* remove appbar color override ([cc82d55](https://github.com/open-rpc/inspector/commit/cc82d5567dd2ed647f8ea18e46ea5fa8d8325329))
+* remove unneeded comments ([fb2f0cb](https://github.com/open-rpc/inspector/commit/fb2f0cbc4dbe5273894d08220fcc91d89566c53a))
+
 ## [1.2.4](https://github.com/open-rpc/inspector/compare/1.2.3...1.2.4) (2019-12-06)
 
 
