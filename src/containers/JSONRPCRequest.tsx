@@ -24,8 +24,6 @@ const JSONRPCRequest: React.FC<IProps> = (props) => {
 
   function handleEditorDidMount(_: any, editor: any) {
     editorRef.current = editor;
-    // Now you can use the instance of monaco editor
-    // in this component whenever you want
     const modelName = props.openrpcMethodObject ? props.openrpcMethodObject.name : "inspector";
     const modelUriString = `inmemory://${modelName}.json`;
     monaco
