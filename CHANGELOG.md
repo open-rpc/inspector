@@ -1,3 +1,11 @@
+## [1.2.4](https://github.com/open-rpc/inspector/compare/1.2.3...1.2.4) (2019-12-06)
+
+
+### Bug Fixes
+
+* ensure id is string and jsonrpc is 2.0 ([5d6841d](https://github.com/open-rpc/inspector/commit/5d6841d177c47d16f615dc4ac6fa461c4a782a46))
+* inspector value update ([766b54d](https://github.com/open-rpc/inspector/commit/766b54d133d46659ac7ae973e8a006e781d01350))
+
 ## [1.2.3](https://github.com/open-rpc/inspector/compare/1.2.2...1.2.3) (2019-12-05)
 
 
