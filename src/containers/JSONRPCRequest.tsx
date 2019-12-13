@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import MonacoEditor from "./MonacoEditor";
+import MonacoEditor from "@etclabscore/react-monaco-editor";
 import * as monaco from "monaco-editor";
 import { MethodObject } from "@open-rpc/meta-schema";
 import useWindowSize from "@rehooks/window-size";

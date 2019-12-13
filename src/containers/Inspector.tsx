@@ -8,7 +8,7 @@ import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import { JSONRPCError } from "@open-rpc/client-js/build/Error";
 import { MethodObject } from "@open-rpc/meta-schema";
-import MonacoEditor from "./MonacoEditor";
+import MonacoEditor from "@etclabscore/react-monaco-editor";
 
 interface IProps {
   url?: string;
@@ -129,7 +129,7 @@ const Inspector: React.FC<IProps> = (props) => {
 
   return (
     <>
-      <AppBar position="static" elevation={0}>
+      <AppBar elevation={0}>
         <Toolbar>
           <img
             height="30"
