@@ -77,7 +77,7 @@ const Inspector: React.FC<IProps> = (props) => {
         id: id.toString(),
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     if (json) {
@@ -87,7 +87,7 @@ const Inspector: React.FC<IProps> = (props) => {
         id: id.toString(),
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
@@ -171,7 +171,9 @@ const Inspector: React.FC<IProps> = (props) => {
           }
         }}>
         <JSONRPCRequest
-          onChange={(val) => setJson(JSON.parse(val))}
+          onChange={(val) => {
+            setJson(JSON.parse(val));
+          }}
           openrpcMethodObject={props.openrpcMethodObject}
           value={JSON.stringify(json, null, 4)}
         />

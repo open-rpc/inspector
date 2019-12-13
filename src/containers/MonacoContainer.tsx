@@ -27,7 +27,6 @@ const MonacoContainer: React.FC<IProps> = ({ width, height, isEditorReady, loadi
   const classes = useStyles({});
   return (
     <section className={classes.wrapper} style={{ width, height }}>
-      {/* {!isEditorReady && <Loading content={loading} />} */}
       <div
         ref={reference}
         className={classes.fullWidth}

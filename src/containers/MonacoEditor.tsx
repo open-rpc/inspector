@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, RefObject } from "react";
 import MonacoContainer from "./MonacoContainer";
 import * as monaco from "monaco-editor";
 
@@ -35,34 +35,31 @@ const MonacoEditor: React.FC<IProps> =
       editorDidMount(editorRef.current.getValue.bind(editorRef.current), editorRef.current);
 
       setIsEditorReady(true);
-      if (controlled) {
-        editorRef.current.onDidChangeModelContent((ev: any) => {
-          const currentValue = editorRef.current.getValue();
-          if ((currentValue !== previousValue.current) && !(ev.isUndoing || ev.isRedoing)) {
-            previousValue.current = currentValue;
-            if (onChange) {
-              const v = onChange(ev, currentValue);
-
-              if (typeof v === "string") {
-                if (currentValue !== v) {
-                  editorRef.current.setValue(v);
-                }
-              }
-            }
+      editorRef.current.onDidChangeModelContent((ev: any) => {
+        const currentValue = editorRef.current!.getValue();
+        if ((currentValue !== previousValue.current) && !(ev.isUndoing || ev.isRedoing)) {
+          previousValue.current = currentValue;
+          if (onChange) {
+            onChange(ev, currentValue);
           }
-        });
-      }
+        }
+      });
     };
 
     useEffect(() => {
-      if (editorRef.current) {
+      if (options && options.readOnly && editorRef.current) {
         editorRef.current.setValue(value);
+      } else if (editorRef.current && editorRef.current.getValue() !== value) {
+        editorRef.current.executeEdits("", [{
+          range: editorRef.current.getModel().getFullModelRange(),
+          text: value,
+        }]);
       }
-    }, [value, editorRef]);
+    }, [value]);
 
     useEffect(() => {
       createEditor();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return <MonacoContainer
