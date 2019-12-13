@@ -6,7 +6,6 @@ interface IProps {
   language: string;
   editorDidMount: (editor: any, ref: React.RefObject<any>) => any;
   options?: any;
-  theme: string;
   line?: number;
   loading?: Element | string;
   width?: string | number;
