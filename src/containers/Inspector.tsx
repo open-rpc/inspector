@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, Dispatch, useRef } from "react";
 import SplitPane from "react-split-pane";
-import JSONRPCRequest from "./JSONRPCRequest";
+import JSONRPCRequestEditor from "./JSONRPCRequestEditor";
 import PlayCircle from "@material-ui/icons/PlayCircleFilled";
 import { IconButton, AppBar, Toolbar, Typography, Button, InputBase } from "@material-ui/core";
 import { Client, RequestManager, HTTPTransport, WebSocketTransport } from "@open-rpc/client-js";
@@ -127,6 +127,7 @@ const Inspector: React.FC<IProps> = (props) => {
     }
   };
 
+
   return (
     <>
       <AppBar elevation={0}>
@@ -170,7 +171,7 @@ const Inspector: React.FC<IProps> = (props) => {
             (editorRef.current as any).layout();
           }
         }}>
-        <JSONRPCRequest
+        <JSONRPCRequestEditor
           onChange={(val) => {
             setJson(JSON.parse(val));
           }}

@@ -11,7 +11,7 @@ interface IProps {
   value: any;
 }
 
-const JSONRPCRequest: React.FC<IProps> = (props) => {
+const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
   const editorRef = useRef();
   const windowSize = useWindowSize();
 
@@ -95,4 +95,4 @@ const JSONRPCRequest: React.FC<IProps> = (props) => {
   );
 };
 
-export default JSONRPCRequest;
+export default JSONRPCRequestEditor;
