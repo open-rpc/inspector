@@ -1,3 +1,16 @@
+## [1.2.6](https://github.com/open-rpc/inspector/compare/1.2.5...1.2.6) (2019-12-16)
+
+
+### Bug Fixes
+
+* clean up editors ([e742005](https://github.com/open-rpc/inspector/commit/e742005cbfc8bbae4557b8e44af090f249c528d4))
+* remove console logs ([73d4e04](https://github.com/open-rpc/inspector/commit/73d4e04650aaf52c5604a24467317f2afa305e2c))
+* unpack npm modules + rename JSONRequest to JSONRequestEditor ([b756454](https://github.com/open-rpc/inspector/commit/b7564548ce54a9b886022f62bb8de60a78ad5f42))
+* update react to latest ([291ee08](https://github.com/open-rpc/inspector/commit/291ee08afb6036e6ce289a7c928213ae6a89a77b))
+* update react-monaco-editor ([c247140](https://github.com/open-rpc/inspector/commit/c24714014db0192627718e285b2b41f37e0539ac))
+* upgrade material-ui and monaco ([aef09f7](https://github.com/open-rpc/inspector/commit/aef09f7d3f8554c8a1490b7d9d4b8b839c4ea814))
+* use @etclabscore/react-monaco-editor ([cb77295](https://github.com/open-rpc/inspector/commit/cb772950de73bd2826ba91e1a6b3ea4e8b6fc13b))
+
 ## [1.2.5](https://github.com/open-rpc/inspector/compare/1.2.4...1.2.5) (2019-12-06)
 
 
