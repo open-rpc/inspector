@@ -1,15 +1,14 @@
 import React, { useState, useEffect, ChangeEvent, Dispatch, useRef } from "react";
 import SplitPane from "react-split-pane";
-import JSONRPCRequest from "./JSONRPCRequest";
+import JSONRPCRequestEditor from "./JSONRPCRequestEditor";
 import PlayCircle from "@material-ui/icons/PlayCircleFilled";
 import { IconButton, AppBar, Toolbar, Typography, Button, InputBase } from "@material-ui/core";
 import { Client, RequestManager, HTTPTransport, WebSocketTransport } from "@open-rpc/client-js";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import { JSONRPCError } from "@open-rpc/client-js/build/Error";
-import useDarkMode from "use-dark-mode";
-import Editor from "@monaco-editor/react";
 import { MethodObject } from "@open-rpc/meta-schema";
+import MonacoEditor from "@etclabscore/react-monaco-editor";
 
 interface IProps {
   url?: string;
@@ -58,7 +57,6 @@ function useCounter(defaultValue: number): [number, () => void] {
 }
 
 const Inspector: React.FC<IProps> = (props) => {
-  const darkMode = useDarkMode();
   const [id, incrementId] = useCounter(0);
   const [json, setJson] = useState(props.request || {
     jsonrpc: "2.0",
@@ -79,7 +77,7 @@ const Inspector: React.FC<IProps> = (props) => {
         id: id.toString(),
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     if (json) {
@@ -89,7 +87,7 @@ const Inspector: React.FC<IProps> = (props) => {
         id: id.toString(),
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
@@ -129,9 +127,10 @@ const Inspector: React.FC<IProps> = (props) => {
     }
   };
 
+
   return (
     <>
-      <AppBar position="static" elevation={0}>
+      <AppBar elevation={0}>
         <Toolbar>
           <img
             height="30"
@@ -172,8 +171,10 @@ const Inspector: React.FC<IProps> = (props) => {
             (editorRef.current as any).layout();
           }
         }}>
-        <JSONRPCRequest
-          onChange={(val) => setJson(JSON.parse(val))}
+        <JSONRPCRequestEditor
+          onChange={(val) => {
+            setJson(JSON.parse(val));
+          }}
           openrpcMethodObject={props.openrpcMethodObject}
           value={JSON.stringify(json, null, 4)}
         />
@@ -185,7 +186,7 @@ const Inspector: React.FC<IProps> = (props) => {
               Clear
                 </Button>
           }
-          <Editor
+          <MonacoEditor
             options={{
               minimap: {
                 enabled: false,
@@ -198,7 +199,6 @@ const Inspector: React.FC<IProps> = (props) => {
             }}
             height="100vh"
             editorDidMount={handleResponseEditorDidMount}
-            theme={darkMode.value ? "dark" : "light"}
             language="json"
             value={JSON.stringify(error || results, null, 4) || ""}
           />
