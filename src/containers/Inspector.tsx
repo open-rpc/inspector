@@ -130,7 +130,7 @@ const Inspector: React.FC<IProps> = (props) => {
 
   return (
     <>
-      <AppBar elevation={0}>
+      <AppBar elevation={0} position="static">
         <Toolbar>
           <img
             height="30"
@@ -197,7 +197,7 @@ const Inspector: React.FC<IProps> = (props) => {
               readOnly: true,
               showFoldingControls: "always",
             }}
-            height="100vh"
+            height="93vh"
             editorDidMount={handleResponseEditorDidMount}
             language="json"
             value={JSON.stringify(error || results, null, 4) || ""}
