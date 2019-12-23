@@ -1,3 +1,11 @@
+## [1.2.7](https://github.com/open-rpc/inspector/compare/1.2.6...1.2.7) (2019-12-23)
+
+
+### Bug Fixes
+
+* appbar should be static ([88305ee](https://github.com/open-rpc/inspector/commit/88305ee9d99b2e2fa62553c41ec1f9028d1d4f9f))
+* remove packed file ([76c9a84](https://github.com/open-rpc/inspector/commit/76c9a842bde278a368fca5dbfcccddff732e9a4c))
+
 ## [1.2.6](https://github.com/open-rpc/inspector/compare/1.2.5...1.2.6) (2019-12-16)
 
 
