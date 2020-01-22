@@ -10,6 +10,17 @@ import { JSONRPCError } from "@open-rpc/client-js/build/Error";
 import { MethodObject } from "@open-rpc/meta-schema";
 import MonacoEditor from "@etclabscore/react-monaco-editor";
 
+const errorToJSON = (error: JSONRPCError | undefined): any => {
+  if (!error) {
+    return;
+  }
+  return {
+    code: error.code,
+    message: error.message,
+    data: error.data,
+  };
+};
+
 interface IProps {
   url?: string;
   request?: any;
@@ -127,7 +138,6 @@ const Inspector: React.FC<IProps> = (props) => {
     }
   };
 
-
   return (
     <>
       <AppBar elevation={0} position="static">
@@ -200,7 +210,7 @@ const Inspector: React.FC<IProps> = (props) => {
             height="93vh"
             editorDidMount={handleResponseEditorDidMount}
             language="json"
-            value={JSON.stringify(error || results, null, 4) || ""}
+            value={JSON.stringify(errorToJSON(error) || results, null, 4) || ""}
           />
         </>
       </SplitPane>
