@@ -1,3 +1,11 @@
+## [1.2.8](https://github.com/open-rpc/inspector/compare/1.2.7...1.2.8) (2020-01-22)
+
+
+### Bug Fixes
+
+* error message display ([97ed459](https://github.com/open-rpc/inspector/commit/97ed45925848e334cf5d37b0c3557401271f1aad))
+* **CI:** disable cache ([c2bb921](https://github.com/open-rpc/inspector/commit/c2bb92129da8715b34e9aad6e94ea38501902206))
+
 ## [1.2.7](https://github.com/open-rpc/inspector/compare/1.2.6...1.2.7) (2019-12-23)
 
 
