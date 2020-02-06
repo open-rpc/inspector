@@ -6,6 +6,7 @@ import useDarkMode from "use-dark-mode";
 import Inspector from "./Inspector";
 import useQueryParams from "../hooks/useQueryParams";
 import * as monaco from "monaco-editor";
+import localStorageMock from "../helpers/localStorageMock";
 
 let localStorageEnabled = true;
 try {
@@ -15,29 +16,8 @@ try {
   console.error(e);
 }
 
-const darkModeOptions = localStorageEnabled ? undefined : {
-  // mock storageProvider for when localStorage is not available via chrome/brave settings
-  storageProvider: {
-    localStorage: {
-      length: 0,
-      clear() {
-        //
-      },
-      getItem() {
-        return "";
-      },
-      key() {
-        return "";
-      },
-      removeItem() {
-        //
-      },
-      setItem() {
-        //
-      },
-    },
-  },
-};
+// mock storageProvider for when localStorage is not available via chrome/brave settings
+const darkModeOptions = localStorageEnabled ? undefined : localStorageMock;
 
 const App: React.FC = () => {
   const darkMode = useDarkMode(undefined, darkModeOptions);
