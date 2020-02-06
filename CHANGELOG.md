@@ -1,3 +1,11 @@
+## [1.2.9](https://github.com/open-rpc/inspector/compare/1.2.8...1.2.9) (2020-02-06)
+
+
+### Bug Fixes
+
+* brave embed ([0924b3c](https://github.com/open-rpc/inspector/commit/0924b3c62bd6e9fb927a35769ee93e48bd7f7522))
+* **localstorage brave:** refactor into localStorageMock ([7a27921](https://github.com/open-rpc/inspector/commit/7a27921c013b0c76da1afe1eb7476e335e4496cd))
+
 ## [1.2.8](https://github.com/open-rpc/inspector/compare/1.2.7...1.2.8) (2020-01-22)
 
 
