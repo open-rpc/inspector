@@ -74,13 +74,14 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
               },
               {
                 type: "object",
-                properties: props.openrpcMethodObject.params.reduce((memo: any, param: any) => {
-                  memo[param.name] = {
-                    ...param.schema,
-                    additionalProperties: false,
-                  };
-                  return memo;
-                }, {}),
+                properties: (props.openrpcMethodObject.params as ContentDescriptorObject[])
+                  .reduce((memo: any, param: ContentDescriptorObject) => {
+                    memo[param.name] = {
+                      ...param.schema,
+                      additionalProperties: false,
+                    };
+                    return memo;
+                  }, {}),
               },
             ],
           },
