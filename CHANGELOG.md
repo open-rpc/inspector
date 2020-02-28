@@ -1,3 +1,11 @@
+## [1.2.10](https://github.com/open-rpc/inspector/compare/1.2.9...1.2.10) (2020-02-28)
+
+
+### Bug Fixes
+
+* add support for params by name ([9470402](https://github.com/open-rpc/inspector/commit/9470402eab1d6f94a9f8f3c410b671c0efc220ab))
+* by-name schema ([8653704](https://github.com/open-rpc/inspector/commit/8653704040fb9d3c5991439b88975246db8d33ca))
+
 ## [1.2.9](https://github.com/open-rpc/inspector/compare/1.2.8...1.2.9) (2020-02-06)
 
 
