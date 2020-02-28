@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import MonacoEditor from "@etclabscore/react-monaco-editor";
 import * as monaco from "monaco-editor";
-import { MethodObject } from "@open-rpc/meta-schema";
+import { MethodObject, ContentDescriptorObject } from "@open-rpc/meta-schema";
 import useWindowSize from "@rehooks/window-size";
 import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics";
 
@@ -48,9 +48,6 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
         method: {
           type: "string",
         },
-        params: {
-          type: "array",
-        },
       },
     };
     if (props.openrpcMethodObject) {
@@ -64,13 +61,41 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
             enum: [props.openrpcMethodObject.name],
           },
           params: {
-            ...schema.properties.params,
-            items: props.openrpcMethodObject.params.map((param: any) => {
-              return {
-                ...param.schema,
-                additionalProperties: false,
-              };
-            }),
+            oneOf: [
+              {
+                type: "array",
+                ...schema.properties.params,
+                items: props.openrpcMethodObject.params.map((param: any) => {
+                  return {
+                    ...param.schema,
+                    additionalProperties: false,
+                  };
+                }),
+              },
+              {
+                type: "object",
+                properties: props.openrpcMethodObject.params.reduce((memo: any, param: any) => {
+                  memo[param.name] = {
+                    ...param.schema,
+                    additionalProperties: false,
+                  };
+                  return memo;
+                }, {}),
+              },
+            ],
+          },
+        },
+      };
+    } else {
+      schema = {
+        additionalProperties: false,
+        properties: {
+          ...schema.properties,
+          params: {
+            oneOf: [
+              { type: "array" },
+              { type: "object" },
+            ],
           },
         },
       };
