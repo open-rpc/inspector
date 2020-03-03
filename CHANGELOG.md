@@ -1,3 +1,10 @@
+## [1.2.11](https://github.com/open-rpc/inspector/compare/1.2.10...1.2.11) (2020-03-03)
+
+
+### Bug Fixes
+
+* remove minimap ([1340aa1](https://github.com/open-rpc/inspector/commit/1340aa1f3e1bf7f5623a69aa8e095a1cd15dea15))
+
 ## [1.2.10](https://github.com/open-rpc/inspector/compare/1.2.9...1.2.10) (2020-02-28)
 
 
