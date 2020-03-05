@@ -1,33 +1,36 @@
 import React, { useRef, useEffect } from "react";
 import MonacoEditor from "@etclabscore/react-monaco-editor";
 import * as monaco from "monaco-editor";
-import { MethodObject, ContentDescriptorObject } from "@open-rpc/meta-schema";
+import { MethodObject, ContentDescriptorObject, OpenRPC } from "@open-rpc/meta-schema";
 import useWindowSize from "@rehooks/window-size";
 import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics";
+import openrpcDocumentToJSONRPCSchema from "../helpers/openrpcDocumentToJSONRPCSchema";
 
 interface IProps {
   onChange?: (newValue: any) => void;
   openrpcMethodObject?: MethodObject;
+  openrpcDocument?: OpenRPC;
   value: any;
 }
 
 const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
-  const editorRef = useRef();
+  const editorRef = useRef<any>();
   const windowSize = useWindowSize();
-
   useEffect(() => {
     if (editorRef !== undefined && editorRef.current !== undefined) {
       (editorRef.current as any).layout();
     }
   }, [windowSize]);
 
-  function handleEditorDidMount(_: any, editor: any) {
-    editorRef.current = editor;
+  useEffect(() => {
+    if (!editorRef.current) {
+      return;
+    }
     const modelName = props.openrpcMethodObject ? props.openrpcMethodObject.name : "inspector";
     const modelUriString = `inmemory://${modelName}-${Math.random()}.json`;
     const modelUri = monaco.Uri.parse(modelUriString);
     const model = monaco.editor.createModel(props.value || "", "json", modelUri);
-    editor.setModel(model);
+    editorRef.current.setModel(model);
     let schema: any = {
       type: "object",
       properties: {
@@ -87,6 +90,8 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
           },
         },
       };
+    } else if (props.openrpcDocument) {
+      schema = openrpcDocumentToJSONRPCSchema(props.openrpcDocument);
     } else {
       schema = {
         additionalProperties: false,
@@ -102,6 +107,12 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
       };
     }
     addDiagnostics(modelUri.toString(), schema, monaco);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.openrpcDocument, props.openrpcMethodObject]);
+
+  function handleEditorDidMount(_: any, editor: any) {
+    editorRef.current = editor;
   }
 
   const handleChange = (ev: any, value: any) => {
@@ -113,11 +124,6 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
   return (
     <MonacoEditor
       height="93vh"
-      options={{
-        minimap: {
-          enabled: false,
-        },
-      }}
       value={props.value}
       editorDidMount={handleEditorDidMount}
       language="json"
