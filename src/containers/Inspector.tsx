@@ -1,6 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, Dispatch, useRef } from "react";
 import SplitPane from "react-split-pane";
-import _ from "lodash";
 import JSONRPCRequestEditor from "./JSONRPCRequestEditor";
 import PlayCircle from "@material-ui/icons/PlayCircleFilled";
 import CloseIcon from "@material-ui/icons/Close";
