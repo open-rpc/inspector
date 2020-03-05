@@ -7,7 +7,7 @@ OpenRPC Inspector is a simple tool to create, modify and execute JSON-RPC reques
 
 It can be used as a standalone tool or included in other projects.
 
-![inspector_test_themed](https://user-images.githubusercontent.com/52548273/63221603-6c4c6080-c150-11e9-9b20-bd37d4981d30.gif)
+![signatory_inspector_test](https://user-images.githubusercontent.com/364566/76027895-4917b180-5ee6-11ea-96b1-3aec4357120e.gif)
 
 https://inspector.open-rpc.org
 
