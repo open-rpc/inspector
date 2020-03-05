@@ -1,3 +1,17 @@
+# [1.3.0](https://github.com/open-rpc/inspector/compare/1.2.11...1.3.0) (2020-03-05)
+
+
+### Bug Fixes
+
+* linting ([07a424a](https://github.com/open-rpc/inspector/commit/07a424ae1fc4220e1ee8f8f990e10b072d55c172))
+* remove lodash from inspector.tsx ([e747550](https://github.com/open-rpc/inspector/commit/e747550e6dc5ae5189674a6294f57a9d24321c50))
+* **README:** update gif ([afceac8](https://github.com/open-rpc/inspector/commit/afceac8783e67afd9461d47065b274338aa1321a))
+
+
+### Features
+
+* add tabs and openrpdocument autocomplete ([1f4aae4](https://github.com/open-rpc/inspector/commit/1f4aae40d8a4a5e4404fe49768a43619564bf80a))
+
 ## [1.2.11](https://github.com/open-rpc/inspector/compare/1.2.10...1.2.11) (2020-03-03)
 
 
