@@ -21,10 +21,6 @@ const useTabs = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const [tabs, setTabs]: [ITab[], Dispatch<any>] = useState([{name: "New Tab", content: emptyJSONRPC, url: undefined}]);
 
-  const handleTabIndexChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setTabIndex(newValue);
-  };
-
   const handleClose = (event: React.MouseEvent<{}>, index: number) => {
     if (tabs.length === 1) {
       return;

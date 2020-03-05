@@ -1,4 +1,4 @@
-import { MethodObject, ContentDescriptorObject, OpenRPC, ExamplePairingObject, ExampleObject } from "@open-rpc/meta-schema";
+import { MethodObject, ContentDescriptorObject, OpenRPC, ExampleObject } from "@open-rpc/meta-schema";
 
 const schema: any = {
   type: "object",

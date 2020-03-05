@@ -108,6 +108,7 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
     }
     addDiagnostics(modelUri.toString(), schema, monaco);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.openrpcDocument, props.openrpcMethodObject]);
 
   function handleEditorDidMount(_: any, editor: any) {

@@ -103,7 +103,7 @@ const Inspector: React.FC<IProps> = (props) => {
   const [results, setResults] = useState();
   const [url, setUrl] = useState(props.url || "");
   const [debouncedUrl] = useDebounce(url, 1000);
-  const [client, error, setError] = useClient(url);
+  const [client, error] = useClient(url);
   useEffect(() => {
     if (props.openrpcMethodObject) {
       setJson({
@@ -131,6 +131,7 @@ const Inspector: React.FC<IProps> = (props) => {
     if (json) {
       setTabContent(tabIndex, json);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [json]);
 
   useEffect(() => {
@@ -138,6 +139,7 @@ const Inspector: React.FC<IProps> = (props) => {
       setUrl(props.url);
       setTabUrl(tabIndex, props.url);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.url]);
 
   const handlePlayButton = async () => {
@@ -188,6 +190,7 @@ const Inspector: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     refreshOpenRpcDocument();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedUrl]);
 
   useEffect(() => {
@@ -197,6 +200,7 @@ const Inspector: React.FC<IProps> = (props) => {
       setOpenRpcDocument(tabs[tabIndex].openrpcDocument);
       setResults(tabs[tabIndex].results);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabIndex]);
 
   const handleTabIndexChange = (event: React.ChangeEvent<{}>, newValue: number) => {
