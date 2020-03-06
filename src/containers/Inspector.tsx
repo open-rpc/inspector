@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, Dispatch, useRef } from "react";
+import React, { useState, useEffect, ChangeEvent, Dispatch } from "react";
 import SplitPane from "react-split-pane";
 import JSONRPCRequestEditor from "./JSONRPCRequestEditor";
 import PlayCircle from "@material-ui/icons/PlayCircleFilled";
@@ -33,6 +33,7 @@ import useTabs from "../hooks/useTabs";
 import { useDebounce } from "use-debounce";
 import { green } from "@material-ui/core/colors";
 import { parseOpenRPCDocument } from "@open-rpc/schema-utils-js";
+import useMonacoVimMode from "../hooks/useMonacoVimMode";
 
 const errorToJSON = (error: JSONRPCError | undefined): any => {
   if (!error) {
@@ -120,6 +121,8 @@ const Inspector: React.FC<IProps> = (props) => {
     ],
   );
   const [id, incrementId] = useCounter(0);
+  const [responseEditor, setResponseEditor] = useState();
+  useMonacoVimMode(responseEditor);
   const [openrpcDocument, setOpenRpcDocument] = useState();
   const [json, setJson] = useState(props.request || {
     jsonrpc: "2.0",
@@ -127,7 +130,6 @@ const Inspector: React.FC<IProps> = (props) => {
     params: [],
     id,
   });
-  const editorRef = useRef();
   const [results, setResults] = useState();
   const [url, setUrl] = useState(props.url || "");
   const [debouncedUrl] = useDebounce(url, 1000);
@@ -193,7 +195,7 @@ const Inspector: React.FC<IProps> = (props) => {
     }
   };
   function handleResponseEditorDidMount(__: any, editor: any) {
-    editorRef.current = editor;
+    setResponseEditor(editor);
   }
 
   const clear = () => {
@@ -363,7 +365,7 @@ const Inspector: React.FC<IProps> = (props) => {
           </Tab>
         </Tabs>
       </div>
-      <AppBar elevation={0} position="static">
+      <AppBar elevation={0} position="static" style={{ zIndex: 1 }}>
         <Toolbar>
           <img
             height="30"
@@ -428,8 +430,8 @@ const Inspector: React.FC<IProps> = (props) => {
         defaultSize={"50%"}
         style={{ flexGrow: 1 }}
         onChange={() => {
-          if (editorRef && editorRef.current) {
-            (editorRef.current as any).layout();
+          if (responseEditor) {
+            responseEditor.layout();
           }
         }}>
         <JSONRPCRequestEditor
@@ -476,7 +478,11 @@ const Inspector: React.FC<IProps> = (props) => {
               value={JSON.stringify(errorToJSON(error) || results, null, 4) || ""}
             />
             : <Grid container justify="center" style={{ paddingTop: "20px" }}>
-              <Typography variant="caption">Press the Play button to see the results here.</Typography>
+              <Typography variant="caption" gutterBottom>Press the Play button to see the results here.</Typography>
+              <Typography variant="caption">
+                Use <Button variant="contained" disabled size="small" style={{marginRight: "3px"}}>CTRL + SPACE</Button>
+                 to auto-complete in the editor.
+              </Typography>
             </Grid>
           }
         </>
