@@ -4,7 +4,19 @@ import JSONRPCRequestEditor from "./JSONRPCRequestEditor";
 import PlayCircle from "@material-ui/icons/PlayCircleFilled";
 import CloseIcon from "@material-ui/icons/Close";
 import PlusIcon from "@material-ui/icons/Add";
-import { IconButton, AppBar, Toolbar, Typography, Button, InputBase, Tab, Tabs } from "@material-ui/core";
+import CheckCircle from "@material-ui/icons/CheckCircle";
+import {
+  IconButton,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  InputBase,
+  Tab,
+  Tabs,
+  Tooltip,
+  Grid,
+} from "@material-ui/core";
 import { Client, RequestManager, HTTPTransport, WebSocketTransport } from "@open-rpc/client-js";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
@@ -13,6 +25,8 @@ import { MethodObject } from "@open-rpc/meta-schema";
 import MonacoEditor from "@etclabscore/react-monaco-editor";
 import useTabs from "../hooks/useTabs";
 import { useDebounce } from "use-debounce";
+import { green } from "@material-ui/core/colors";
+import { parseOpenRPCDocument } from "@open-rpc/schema-utils-js";
 
 const errorToJSON = (error: JSONRPCError | undefined): any => {
   if (!error) {
@@ -90,7 +104,15 @@ const Inspector: React.FC<IProps> = (props) => {
     setTabUrl,
     handleLabelChange,
     setTabResults,
-  } = useTabs();
+  } = useTabs(
+    [
+      {
+        name: "New Tab",
+        content: props.request || { ...emptyJSONRPC },
+        url: props.url || "",
+      },
+    ],
+  );
   const [id, incrementId] = useCounter(0);
   const [openrpcDocument, setOpenRpcDocument] = useState();
   const [json, setJson] = useState(props.request || {
@@ -103,7 +125,7 @@ const Inspector: React.FC<IProps> = (props) => {
   const [results, setResults] = useState();
   const [url, setUrl] = useState(props.url || "");
   const [debouncedUrl] = useDebounce(url, 1000);
-  const [client, error] = useClient(url);
+  const [client, error] = useClient(debouncedUrl);
   useEffect(() => {
     if (props.openrpcMethodObject) {
       setJson({
@@ -179,19 +201,19 @@ const Inspector: React.FC<IProps> = (props) => {
     if (url) {
       try {
         const d = await client.request("rpc.discover", []);
-        setOpenRpcDocument(d);
-        setTabOpenRPCDocument(tabIndex, d);
+        const doc = await parseOpenRPCDocument(d);
+        setOpenRpcDocument(doc);
+        setTabOpenRPCDocument(tabIndex, doc);
       } catch (e) {
         setOpenRpcDocument(undefined);
         setTabOpenRPCDocument(tabIndex, undefined);
       }
     }
   };
-
   useEffect(() => {
     refreshOpenRpcDocument();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedUrl]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [client]);
 
   useEffect(() => {
     if (tabs[tabIndex]) {
@@ -200,7 +222,7 @@ const Inspector: React.FC<IProps> = (props) => {
       setOpenRpcDocument(tabs[tabIndex].openrpcDocument);
       setResults(tabs[tabIndex].results);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabIndex]);
 
   const handleTabIndexChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -247,7 +269,15 @@ const Inspector: React.FC<IProps> = (props) => {
             }></Tab>
           ))}
           <Tab disableRipple style={{ minWidth: "50px" }} label={
-            <IconButton onClick={() => setTabs([...tabs, { name: "New Tab", content: { ...emptyJSONRPC }, url: "" }])}>
+            <IconButton onClick={() => setTabs([
+              ...tabs,
+              {
+                name: "New Tab",
+                content: { ...emptyJSONRPC },
+                url: "",
+              },
+            ],
+            )}>
               <PlusIcon scale={0.5} />
             </IconButton>
           }>
@@ -267,6 +297,21 @@ const Inspector: React.FC<IProps> = (props) => {
             <PlayCircle />
           </IconButton>
           <InputBase
+            startAdornment={openrpcDocument
+              ?
+              <Tooltip title={
+                <div style={{ textAlign: "center" }}>
+                  <Typography>Valid OpenRPC Endpoint.</Typography>
+                  <Typography variant="caption">
+                    The JSON-RPC endpoint responds to the rpc.discover method.
+                    This adds features like auto completion to the inspector.
+                    </Typography>
+                </div>
+              } onClick={() => window.open("https://spec.open-rpc.org/#service-discovery-method")}>
+                <CheckCircle style={{ color: green[500], marginRight: "5px", cursor: "pointer" }} scale={0.1} />
+              </Tooltip>
+              : null
+            }
             value={url}
             placeholder="Enter a JSON-RPC server URL"
             onChange={
@@ -323,22 +368,28 @@ const Inspector: React.FC<IProps> = (props) => {
               Clear
                 </Button>
           }
-          <MonacoEditor
-            options={{
-              minimap: {
-                enabled: false,
-              },
-              wordWrap: "on",
-              lineNumbers: "off",
-              wrappingIndent: "deepIndent",
-              readOnly: true,
-              showFoldingControls: "always",
-            }}
-            height="93vh"
-            editorDidMount={handleResponseEditorDidMount}
-            language="json"
-            value={JSON.stringify(errorToJSON(error) || results, null, 4) || ""}
-          />
+          {results
+            ?
+            <MonacoEditor
+              options={{
+                minimap: {
+                  enabled: false,
+                },
+                wordWrap: "on",
+                lineNumbers: "off",
+                wrappingIndent: "deepIndent",
+                readOnly: true,
+                showFoldingControls: "always",
+              }}
+              height="93vh"
+              editorDidMount={handleResponseEditorDidMount}
+              language="json"
+              value={JSON.stringify(errorToJSON(error) || results, null, 4) || ""}
+            />
+            : <Grid container justify="center" style={{ paddingTop: "20px" }}>
+              <Typography variant="caption">Press the Play button to see the results here.</Typography>
+            </Grid>
+          }
         </>
       </SplitPane>
     </>

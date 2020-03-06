@@ -1,5 +1,5 @@
 import { useState, Dispatch, useEffect } from "react";
-import { OpenRPC } from "@open-rpc/meta-schema";
+import { OpenrpcDocument } from "@open-rpc/meta-schema";
 
 interface ITab {
   name: string;
@@ -7,7 +7,7 @@ interface ITab {
   results?: string;
   editing?: boolean;
   url?: string;
-  openrpcDocument?: OpenRPC;
+  openrpcDocument?: OpenrpcDocument;
 }
 
 const emptyJSONRPC = {
@@ -17,9 +17,11 @@ const emptyJSONRPC = {
   id: "0",
 };
 
-const useTabs = () => {
+const useTabs = (defaultTabs?: ITab[]) => {
   const [tabIndex, setTabIndex] = useState(0);
-  const [tabs, setTabs]: [ITab[], Dispatch<any>] = useState([{name: "New Tab", content: emptyJSONRPC, url: undefined}]);
+  const [tabs, setTabs]: [ITab[], Dispatch<any>] = useState(
+    defaultTabs || [{ name: "New Tab", content: emptyJSONRPC, url: undefined }],
+  );
 
   const handleClose = (event: React.MouseEvent<{}>, index: number) => {
     if (tabs.length === 1) {
@@ -61,7 +63,7 @@ const useTabs = () => {
     setTabs(newTabs);
   };
 
-  const setTabOpenRPCDocument = (ti: number, openrpcDocument: OpenRPC | undefined) => {
+  const setTabOpenRPCDocument = (ti: number, openrpcDocument: OpenrpcDocument | undefined) => {
     const newTabs = tabs.map((innerTab, i) => {
       if (i === ti) {
         if (!openrpcDocument) {
