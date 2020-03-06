@@ -10,9 +10,6 @@ const useQueryParams = (depth?: number) => {
         if (/^([+-]?[0-9]\d*|0)$/.test(str)) {
           return parseInt(str, 10);
         }
-        // if (/^(\d+|\d*\.\d+)$/.test(str)) {
-        //   return parseFloat(str);
-        // }
         if (str === "false") {
           return false;
         }
