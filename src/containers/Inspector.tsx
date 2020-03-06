@@ -4,7 +4,8 @@ import JSONRPCRequestEditor from "./JSONRPCRequestEditor";
 import PlayCircle from "@material-ui/icons/PlayCircleFilled";
 import CloseIcon from "@material-ui/icons/Close";
 import PlusIcon from "@material-ui/icons/Add";
-import { IconButton, AppBar, Toolbar, Typography, Button, InputBase, Tab, Tabs } from "@material-ui/core";
+import CheckCircle from "@material-ui/icons/CheckCircle";
+import { IconButton, AppBar, Toolbar, Typography, Button, InputBase, Tab, Tabs, Tooltip } from "@material-ui/core";
 import { Client, RequestManager, HTTPTransport, WebSocketTransport } from "@open-rpc/client-js";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
@@ -13,6 +14,7 @@ import { MethodObject } from "@open-rpc/meta-schema";
 import MonacoEditor from "@etclabscore/react-monaco-editor";
 import useTabs from "../hooks/useTabs";
 import { useDebounce } from "use-debounce";
+import { green } from "@material-ui/core/colors";
 
 const errorToJSON = (error: JSONRPCError | undefined): any => {
   if (!error) {
@@ -190,7 +192,7 @@ const Inspector: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     refreshOpenRpcDocument();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedUrl]);
 
   useEffect(() => {
@@ -200,7 +202,7 @@ const Inspector: React.FC<IProps> = (props) => {
       setOpenRpcDocument(tabs[tabIndex].openrpcDocument);
       setResults(tabs[tabIndex].results);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabIndex]);
 
   const handleTabIndexChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -267,6 +269,18 @@ const Inspector: React.FC<IProps> = (props) => {
             <PlayCircle />
           </IconButton>
           <InputBase
+            startAdornment={openrpcDocument
+              ?
+              <Tooltip title={
+                <div style={{textAlign: "center"}}>
+                  <Typography>Valid OpenRPC Endpoint.</Typography>
+                  <Typography variant="caption">The JSON-RPC endpoint responds to the rpc.discover method. This adds features like auto completion to the inspector.</Typography>
+                </div>
+              } onClick={() => window.open("https://spec.open-rpc.org/#service-discovery-method")}>
+                <CheckCircle style={{ color: green[500], marginRight: "5px", cursor: "pointer" }} scale={0.1} />
+              </Tooltip>
+              : null
+            }
             value={url}
             placeholder="Enter a JSON-RPC server URL"
             onChange={
