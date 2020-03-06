@@ -5,7 +5,18 @@ import PlayCircle from "@material-ui/icons/PlayCircleFilled";
 import CloseIcon from "@material-ui/icons/Close";
 import PlusIcon from "@material-ui/icons/Add";
 import CheckCircle from "@material-ui/icons/CheckCircle";
-import { IconButton, AppBar, Toolbar, Typography, Button, InputBase, Tab, Tabs, Tooltip, Grid } from "@material-ui/core";
+import {
+  IconButton,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  InputBase,
+  Tab,
+  Tabs,
+  Tooltip,
+  Grid,
+} from "@material-ui/core";
 import { Client, RequestManager, HTTPTransport, WebSocketTransport } from "@open-rpc/client-js";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
@@ -99,8 +110,8 @@ const Inspector: React.FC<IProps> = (props) => {
         name: "New Tab",
         content: props.request || { ...emptyJSONRPC },
         url: props.url || "",
-      }
-    ]
+      },
+    ],
   );
   const [id, incrementId] = useCounter(0);
   const [openrpcDocument, setOpenRpcDocument] = useState();
@@ -203,7 +214,6 @@ const Inspector: React.FC<IProps> = (props) => {
     refreshOpenRpcDocument();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client]);
-
 
   useEffect(() => {
     if (tabs[tabIndex]) {
@@ -376,7 +386,7 @@ const Inspector: React.FC<IProps> = (props) => {
               language="json"
               value={JSON.stringify(errorToJSON(error) || results, null, 4) || ""}
             />
-            : <Grid container justify="center" style={{paddingTop: "20px"}}>
+            : <Grid container justify="center" style={{ paddingTop: "20px" }}>
               <Typography variant="caption">Press the Play button to see the results here.</Typography>
             </Grid>
           }
