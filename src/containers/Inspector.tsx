@@ -272,9 +272,12 @@ const Inspector: React.FC<IProps> = (props) => {
             startAdornment={openrpcDocument
               ?
               <Tooltip title={
-                <div style={{textAlign: "center"}}>
+                <div style={{ textAlign: "center" }}>
                   <Typography>Valid OpenRPC Endpoint.</Typography>
-                  <Typography variant="caption">The JSON-RPC endpoint responds to the rpc.discover method. This adds features like auto completion to the inspector.</Typography>
+                  <Typography variant="caption">
+                    The JSON-RPC endpoint responds to the rpc.discover method.
+                    This adds features like auto completion to the inspector.
+                    </Typography>
                 </div>
               } onClick={() => window.open("https://spec.open-rpc.org/#service-discovery-method")}>
                 <CheckCircle style={{ color: green[500], marginRight: "5px", cursor: "pointer" }} scale={0.1} />
