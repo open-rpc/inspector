@@ -372,16 +372,6 @@ const Inspector: React.FC<IProps> = (props) => {
             src="https://github.com/open-rpc/design/raw/master/icons/open-rpc-logo-noText/open-rpc-logo-noText%20(PNG)/128x128.png" //tslint:disable-line
           />
           <Typography variant="h6" color="textSecondary">Inspector</Typography>
-          {/* <Button
-            onClick={() => setHistoryOpen(true)}
-            variant="outlined"
-            style={{
-              fontSize: "0.6rem",
-              marginRight: "5px",
-              marginLeft: "15px",
-              paddingLeft: "10px",
-              paddingRight: "10px",
-            }}>History</Button> */}
           <Tooltip title="Play">
             <IconButton onClick={handlePlayButton}>
               <PlayCircle />
