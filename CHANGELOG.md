@@ -1,3 +1,17 @@
+## [1.3.1](https://github.com/open-rpc/inspector/compare/1.3.0...1.3.1) (2020-03-06)
+
+
+### Bug Fixes
+
+* add helper text to press play button when no results ([170c34d](https://github.com/open-rpc/inspector/commit/170c34d0c7ecffd041e6c6b97c5756713a60e080))
+* add openrpc check circle and tooltip ([3138fd0](https://github.com/open-rpc/inspector/commit/3138fd047fa348e62e79e95f96bdc71addc9b94c))
+* add parseOpenRpcDocument ([6e67d51](https://github.com/open-rpc/inspector/commit/6e67d512e73b487989b74f3d2a942e5ddd4f7475))
+* linting ([fe93536](https://github.com/open-rpc/inspector/commit/fe93536157226ec46e4cd74eb339829d160432e5))
+* linting ++ ([4af6074](https://github.com/open-rpc/inspector/commit/4af60749077e0668bd101d8196e11f3fe17631a9))
+* openrpcdoc validation issue on new tab ([774ab07](https://github.com/open-rpc/inspector/commit/774ab07d15a30d49134cf664a6df47f09a55ac25))
+* remove commented code ([7e6b7b5](https://github.com/open-rpc/inspector/commit/7e6b7b5e63d7f100686c307181ec1fb5d4d71f50))
+* request passed from url ([93848bb](https://github.com/open-rpc/inspector/commit/93848bb268c8709189b5f3abf870af0f1491f781))
+
 # [1.3.0](https://github.com/open-rpc/inspector/compare/1.2.11...1.3.0) (2020-03-05)
 
 
