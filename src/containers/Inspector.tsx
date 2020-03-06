@@ -92,7 +92,15 @@ const Inspector: React.FC<IProps> = (props) => {
     setTabUrl,
     handleLabelChange,
     setTabResults,
-  } = useTabs();
+  } = useTabs(
+    [
+      {
+        name: "New Tab",
+        content: props.request || { ...emptyJSONRPC },
+        url: props.url || "",
+      }
+    ]
+  );
   const [id, incrementId] = useCounter(0);
   const [openrpcDocument, setOpenRpcDocument] = useState();
   const [json, setJson] = useState(props.request || {
@@ -105,7 +113,7 @@ const Inspector: React.FC<IProps> = (props) => {
   const [results, setResults] = useState();
   const [url, setUrl] = useState(props.url || "");
   const [debouncedUrl] = useDebounce(url, 1000);
-  const [client, error] = useClient(url);
+  const [client, error] = useClient(debouncedUrl);
   useEffect(() => {
     if (props.openrpcMethodObject) {
       setJson({
@@ -189,11 +197,15 @@ const Inspector: React.FC<IProps> = (props) => {
       }
     }
   };
+  useEffect(() => {
+    refreshOpenRpcDocument();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [client]);
 
   useEffect(() => {
     refreshOpenRpcDocument();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedUrl]);
+  }, [debouncedUrl, tabIndex]);
 
   useEffect(() => {
     if (tabs[tabIndex]) {
@@ -249,7 +261,15 @@ const Inspector: React.FC<IProps> = (props) => {
             }></Tab>
           ))}
           <Tab disableRipple style={{ minWidth: "50px" }} label={
-            <IconButton onClick={() => setTabs([...tabs, { name: "New Tab", content: { ...emptyJSONRPC }, url: "" }])}>
+            <IconButton onClick={() => setTabs([
+              ...tabs,
+              {
+                name: "New Tab",
+                content: { ...emptyJSONRPC },
+                url: "",
+              },
+            ],
+            )}>
               <PlusIcon scale={0.5} />
             </IconButton>
           }>

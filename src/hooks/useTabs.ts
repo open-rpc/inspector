@@ -17,9 +17,11 @@ const emptyJSONRPC = {
   id: "0",
 };
 
-const useTabs = () => {
+const useTabs = (defaultTabs?: ITab[]) => {
   const [tabIndex, setTabIndex] = useState(0);
-  const [tabs, setTabs]: [ITab[], Dispatch<any>] = useState([{name: "New Tab", content: emptyJSONRPC, url: undefined}]);
+  const [tabs, setTabs]: [ITab[], Dispatch<any>] = useState(
+    defaultTabs || [{ name: "New Tab", content: emptyJSONRPC, url: undefined }],
+  );
 
   const handleClose = (event: React.MouseEvent<{}>, index: number) => {
     if (tabs.length === 1) {
