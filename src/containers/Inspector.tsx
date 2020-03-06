@@ -202,10 +202,6 @@ const Inspector: React.FC<IProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client]);
 
-  useEffect(() => {
-    refreshOpenRpcDocument();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedUrl, tabIndex]);
 
   useEffect(() => {
     if (tabs[tabIndex]) {
