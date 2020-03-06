@@ -15,6 +15,7 @@ import MonacoEditor from "@etclabscore/react-monaco-editor";
 import useTabs from "../hooks/useTabs";
 import { useDebounce } from "use-debounce";
 import { green } from "@material-ui/core/colors";
+import { parseOpenRPCDocument } from "@open-rpc/schema-utils-js";
 
 const errorToJSON = (error: JSONRPCError | undefined): any => {
   if (!error) {
@@ -189,8 +190,9 @@ const Inspector: React.FC<IProps> = (props) => {
     if (url) {
       try {
         const d = await client.request("rpc.discover", []);
-        setOpenRpcDocument(d);
-        setTabOpenRPCDocument(tabIndex, d);
+        const doc = await parseOpenRPCDocument(d);
+        setOpenRpcDocument(doc);
+        setTabOpenRPCDocument(tabIndex, doc);
       } catch (e) {
         setOpenRpcDocument(undefined);
         setTabOpenRPCDocument(tabIndex, undefined);
