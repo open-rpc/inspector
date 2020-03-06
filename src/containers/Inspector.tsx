@@ -3,6 +3,7 @@ import SplitPane from "react-split-pane";
 import JSONRPCRequestEditor from "./JSONRPCRequestEditor";
 import PlayCircle from "@material-ui/icons/PlayCircleFilled";
 import CloseIcon from "@material-ui/icons/Close";
+import History from "@material-ui/icons/History";
 import PlusIcon from "@material-ui/icons/Add";
 import CheckCircle from "@material-ui/icons/CheckCircle";
 import {
@@ -16,6 +17,11 @@ import {
   Tabs,
   Tooltip,
   Grid,
+  Dialog,
+  ListItem,
+  List,
+  ListItemText,
+  Container,
 } from "@material-ui/core";
 import { Client, RequestManager, HTTPTransport, WebSocketTransport } from "@open-rpc/client-js";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
@@ -126,6 +132,9 @@ const Inspector: React.FC<IProps> = (props) => {
   const [url, setUrl] = useState(props.url || "");
   const [debouncedUrl] = useDebounce(url, 1000);
   const [client, error] = useClient(debouncedUrl);
+  const [historyOpen, setHistoryOpen] = useState();
+  const [requestHistory, setRequestHistory]: [any[], Dispatch<any>] = useState([]);
+  const [historySelectedIndex, setHistorySelectedIndex] = useState(0);
   useEffect(() => {
     if (props.openrpcMethodObject) {
       setJson({
@@ -173,7 +182,11 @@ const Inspector: React.FC<IProps> = (props) => {
         const r = { jsonrpc: "2.0", result, id };
         setResults(r);
         setTabResults(tabIndex, r);
+        const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
+        setRequestHistory(newHistory);
       } catch (e) {
+        const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
+        setRequestHistory(newHistory);
         setResults(e);
         setTabResults(tabIndex, e);
       }
@@ -229,8 +242,70 @@ const Inspector: React.FC<IProps> = (props) => {
     setTabIndex(newValue);
   };
 
+  const onHistoryPlayClick = () => {
+    if (requestHistory[historySelectedIndex]) {
+      setJson(requestHistory[historySelectedIndex].content);
+      setUrl(requestHistory[historySelectedIndex].url);
+      setOpenRpcDocument(requestHistory[historySelectedIndex].openrpcDocument);
+      setResults(undefined);
+      setHistoryOpen(false);
+    }
+  };
+
   return (
     <>
+      <Dialog onClose={() => setHistoryOpen(false)} aria-labelledby="simple-dialog-title" open={historyOpen} >
+        <Container maxWidth="sm">
+          <Grid
+            container
+            justify="space-between"
+            alignItems="center"
+            style={{ padding: "30px", paddingTop: "10px", paddingBottom: "10px" }}>
+            <Typography color="textPrimary">History</Typography>
+            {
+              requestHistory.length === 0
+                ? null
+                : <Tooltip title="Use">
+                  <IconButton onClick={onHistoryPlayClick}>
+                    <PlayCircle />
+                  </IconButton>
+                </Tooltip>
+            }
+          </Grid>
+          {
+            requestHistory.length === 0
+              ? <Typography style={{ padding: "30px" }}>No History Yet.</Typography>
+              : <Grid container style={{ paddingBottom: "30px" }}>
+                <List style={{ padding: "10px", overflowY: "scroll", height: "250px", width: "200px" }}>
+                  {requestHistory.map((requestHistoryItem: any, historyIndex: number) => (
+                    <ListItem button
+                      onClick={() => setHistorySelectedIndex(historyIndex)}
+                      selected={historyIndex === historySelectedIndex}>
+                      <ListItemText
+                        primary={requestHistoryItem.content.method || "Empty Method"}
+                        secondary={requestHistoryItem.url || "Empty Url"}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+                <MonacoEditor
+                  width="300px"
+                  height="250px"
+                  value={
+                    requestHistory[historySelectedIndex]
+                      ? JSON.stringify(requestHistory[historySelectedIndex].content, null, 4)
+                      : ""
+                  }
+                  language="json"
+                  editorDidMount={() => {
+                    // noop
+                  }}
+                />
+              </Grid>
+          }
+        </Container>
+      </Dialog>
+
       <div style={{ position: "relative" }}>
         <Tabs
           style={{ background: "transparent" }}
@@ -258,28 +333,32 @@ const Inspector: React.FC<IProps> = (props) => {
                 }
                 {tabIndex === index
                   ?
-                  <IconButton onClick={
-                    (ev) => handleClose(ev, index)
-                  } style={{ position: "absolute", right: "10px", top: "25%" }} size="small">
-                    <CloseIcon />
-                  </IconButton>
+                  <Tooltip title="Close Tab">
+                    <IconButton onClick={
+                      (ev) => handleClose(ev, index)
+                    } style={{ position: "absolute", right: "10px", top: "25%" }} size="small">
+                      <CloseIcon />
+                    </IconButton>
+                  </Tooltip>
                   : null
                 }
               </div>
             }></Tab>
           ))}
           <Tab disableRipple style={{ minWidth: "50px" }} label={
-            <IconButton onClick={() => setTabs([
-              ...tabs,
-              {
-                name: "New Tab",
-                content: { ...emptyJSONRPC },
-                url: "",
-              },
-            ],
-            )}>
-              <PlusIcon scale={0.5} />
-            </IconButton>
+            <Tooltip title="Create New Tab">
+              <IconButton onClick={() => setTabs([
+                ...tabs,
+                {
+                  name: "New Tab",
+                  content: { ...emptyJSONRPC },
+                  url: "",
+                },
+              ],
+              )}>
+                <PlusIcon scale={0.5} />
+              </IconButton>
+            </Tooltip>
           }>
           </Tab>
         </Tabs>
@@ -293,9 +372,11 @@ const Inspector: React.FC<IProps> = (props) => {
             src="https://github.com/open-rpc/design/raw/master/icons/open-rpc-logo-noText/open-rpc-logo-noText%20(PNG)/128x128.png" //tslint:disable-line
           />
           <Typography variant="h6" color="textSecondary">Inspector</Typography>
-          <IconButton onClick={handlePlayButton}>
-            <PlayCircle />
-          </IconButton>
+          <Tooltip title="Play">
+            <IconButton onClick={handlePlayButton}>
+              <PlayCircle />
+            </IconButton>
+          </Tooltip>
           <InputBase
             startAdornment={openrpcDocument
               ?
@@ -323,12 +404,20 @@ const Inspector: React.FC<IProps> = (props) => {
             fullWidth
             style={{ background: "rgba(0,0,0,0.1)", borderRadius: "4px", padding: "0px 10px", marginRight: "5px" }}
           />
+          <Tooltip title="History">
+            <IconButton onClick={() => setHistoryOpen(true)}>
+              <History />
+            </IconButton>
+          </Tooltip>
           {
             props.hideToggleTheme
               ? null
-              : <IconButton onClick={handleToggleDarkMode}>
-                {props.darkMode ? <Brightness3Icon /> : <WbSunnyIcon />}
-              </IconButton>
+              :
+              <Tooltip title="Toggle Theme">
+                <IconButton onClick={handleToggleDarkMode}>
+                  {props.darkMode ? <Brightness3Icon /> : <WbSunnyIcon />}
+                </IconButton>
+              </Tooltip>
           }
         </Toolbar>
       </AppBar>
