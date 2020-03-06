@@ -1,3 +1,13 @@
+## [1.3.2](https://github.com/open-rpc/inspector/compare/1.3.1...1.3.2) (2020-03-06)
+
+
+### Bug Fixes
+
+* add history ([d13845c](https://github.com/open-rpc/inspector/commit/d13845c7b655b6ce38a2e1f0b435c7d41e69f296))
+* remove dead code ([3443c44](https://github.com/open-rpc/inspector/commit/3443c44266845bb1eeb1d24d6d1a4af9933c5693))
+* remove unused hook ([cfb7776](https://github.com/open-rpc/inspector/commit/cfb7776b83027ccb92e0bf500ad24258fed4708f))
+* **README:** update demo gif ([9f34ad3](https://github.com/open-rpc/inspector/commit/9f34ad3c09ef03352c6fb66e66332e1ab6cc4ac3))
+
 ## [1.3.1](https://github.com/open-rpc/inspector/compare/1.3.0...1.3.1) (2020-03-06)
 
 
