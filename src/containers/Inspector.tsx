@@ -5,7 +5,7 @@ import PlayCircle from "@material-ui/icons/PlayCircleFilled";
 import CloseIcon from "@material-ui/icons/Close";
 import PlusIcon from "@material-ui/icons/Add";
 import CheckCircle from "@material-ui/icons/CheckCircle";
-import { IconButton, AppBar, Toolbar, Typography, Button, InputBase, Tab, Tabs, Tooltip } from "@material-ui/core";
+import { IconButton, AppBar, Toolbar, Typography, Button, InputBase, Tab, Tabs, Tooltip, Grid } from "@material-ui/core";
 import { Client, RequestManager, HTTPTransport, WebSocketTransport } from "@open-rpc/client-js";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
@@ -358,22 +358,28 @@ const Inspector: React.FC<IProps> = (props) => {
               Clear
                 </Button>
           }
-          <MonacoEditor
-            options={{
-              minimap: {
-                enabled: false,
-              },
-              wordWrap: "on",
-              lineNumbers: "off",
-              wrappingIndent: "deepIndent",
-              readOnly: true,
-              showFoldingControls: "always",
-            }}
-            height="93vh"
-            editorDidMount={handleResponseEditorDidMount}
-            language="json"
-            value={JSON.stringify(errorToJSON(error) || results, null, 4) || ""}
-          />
+          {results
+            ?
+            <MonacoEditor
+              options={{
+                minimap: {
+                  enabled: false,
+                },
+                wordWrap: "on",
+                lineNumbers: "off",
+                wrappingIndent: "deepIndent",
+                readOnly: true,
+                showFoldingControls: "always",
+              }}
+              height="93vh"
+              editorDidMount={handleResponseEditorDidMount}
+              language="json"
+              value={JSON.stringify(errorToJSON(error) || results, null, 4) || ""}
+            />
+            : <Grid container justify="center" style={{paddingTop: "20px"}}>
+              <Typography variant="caption">Press the Play button to see the results here.</Typography>
+            </Grid>
+          }
         </>
       </SplitPane>
     </>
