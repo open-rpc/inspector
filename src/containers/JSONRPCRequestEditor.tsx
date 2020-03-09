@@ -128,6 +128,12 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
       height="93vh"
       value={props.value}
       editorDidMount={handleEditorDidMount}
+      editorOptions={{
+        minimap: {
+          enabled: false,
+        },
+        fixedOverflowWidgets: true,
+      }}
       language="json"
       onChange={handleChange}
     />
