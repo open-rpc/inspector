@@ -35,7 +35,11 @@ import { green } from "@material-ui/core/colors";
 import { parseOpenRPCDocument } from "@open-rpc/schema-utils-js";
 import useMonacoVimMode from "../hooks/useMonacoVimMode";
 
-const errorToJSON = (error: JSONRPCError | undefined): any => {
+const errorToJSON = (error: JSONRPCError | any): any => {
+  const isError = error instanceof Error;
+  if (!isError) {
+    return;
+  }
   if (!error) {
     return;
   }
@@ -130,7 +134,7 @@ const Inspector: React.FC<IProps> = (props) => {
     params: [],
     id,
   });
-  const [results, setResults] = useState();
+  const [results, setResults]: [any, Dispatch<any>] = useState();
   const [url, setUrl] = useState(props.url || "");
   const [debouncedUrl] = useDebounce(url, 1000);
   const [client, error] = useClient(debouncedUrl);
@@ -462,7 +466,7 @@ const Inspector: React.FC<IProps> = (props) => {
           {results
             ?
             <MonacoEditor
-              options={{
+              editorOptions={{
                 minimap: {
                   enabled: false,
                 },
@@ -471,11 +475,13 @@ const Inspector: React.FC<IProps> = (props) => {
                 wrappingIndent: "deepIndent",
                 readOnly: true,
                 showFoldingControls: "always",
+                fixedOverflowWidgets: true,
+                automaticLayout: true,
               }}
               height="93vh"
               editorDidMount={handleResponseEditorDidMount}
               language="json"
-              value={JSON.stringify(errorToJSON(error) || results, null, 4) || ""}
+              value={JSON.stringify(errorToJSON(results) || results, null, 4) || ""}
             />
             : <Grid container justify="center" style={{ paddingTop: "20px" }} direction="column" alignItems="center">
               <Typography variant="body1" gutterBottom color="textSecondary" style={{paddingBottom: "15px"}}>
