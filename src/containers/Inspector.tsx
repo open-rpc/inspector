@@ -478,9 +478,13 @@ const Inspector: React.FC<IProps> = (props) => {
               value={JSON.stringify(errorToJSON(error) || results, null, 4) || ""}
             />
             : <Grid container justify="center" style={{ paddingTop: "20px" }} direction="column" alignItems="center">
-              <Typography variant="body1" gutterBottom color="textSecondary">Press the Play button to see the results here.</Typography>
+              <Typography variant="body1" gutterBottom color="textSecondary" style={{paddingBottom: "15px"}}>
+                Press the Play button to see the results here.
+                </Typography>
               <Typography variant="body1" color="textSecondary">
-                Use <Button variant="contained" disabled size="small" style={{ marginRight: "3px" }}>CTRL + SPACE</Button>
+                Use <Button variant="contained" disabled size="small" style={{ marginRight: "3px" }}>
+                  CTRL + SPACE
+                </Button>
                 to auto-complete in the editor.
               </Typography>
             </Grid>
