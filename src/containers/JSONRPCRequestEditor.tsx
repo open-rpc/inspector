@@ -1,10 +1,11 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import MonacoEditor from "@etclabscore/react-monaco-editor";
 import * as monaco from "monaco-editor";
 import { MethodObject, ContentDescriptorObject, OpenrpcDocument } from "@open-rpc/meta-schema";
 import useWindowSize from "@rehooks/window-size";
 import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics";
 import openrpcDocumentToJSONRPCSchema from "../helpers/openrpcDocumentToJSONRPCSchema";
+import useMonacoVimMode from "../hooks/useMonacoVimMode";
 
 interface IProps {
   onChange?: (newValue: any) => void;
@@ -14,23 +15,24 @@ interface IProps {
 }
 
 const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
-  const editorRef = useRef<any>();
+  const [editor, setEditor] = useState();
+  useMonacoVimMode(editor);
   const windowSize = useWindowSize();
   useEffect(() => {
-    if (editorRef !== undefined && editorRef.current !== undefined) {
-      (editorRef.current as any).layout();
+    if (editor) {
+      editor.layout();
     }
-  }, [windowSize]);
+  }, [windowSize, editor]);
 
   useEffect(() => {
-    if (!editorRef.current) {
+    if (!editor) {
       return;
     }
     const modelName = props.openrpcMethodObject ? props.openrpcMethodObject.name : "inspector";
     const modelUriString = `inmemory://${modelName}-${Math.random()}.json`;
     const modelUri = monaco.Uri.parse(modelUriString);
     const model = monaco.editor.createModel(props.value || "", "json", modelUri);
-    editorRef.current.setModel(model);
+    editor.setModel(model);
     let schema: any = {
       type: "object",
       properties: {
@@ -108,11 +110,11 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
     }
     addDiagnostics(modelUri.toString(), schema, monaco);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.openrpcDocument, props.openrpcMethodObject]);
 
-  function handleEditorDidMount(_: any, editor: any) {
-    editorRef.current = editor;
+  function handleEditorDidMount(_: any, ed: any) {
+    setEditor(ed);
   }
 
   const handleChange = (ev: any, value: any) => {

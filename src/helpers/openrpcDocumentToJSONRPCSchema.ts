@@ -38,7 +38,8 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
         oneOf: openrpcDocument.methods.map((method) => {
           return {
             const: method.name,
-            description: method.description || method.summary,
+            markdownDescription: method.description || method.summary,
+            description: method.summary,
           };
         }),
       },
@@ -54,9 +55,6 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
         },
         then: {
           properties: {
-            method: {
-              description: method.description || method.summary,
-            },
             params: {
               oneOf: [
                 {
@@ -66,13 +64,15 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
                   defaultSnippets: method.examples ? method.examples.map((example: any) => {
                     return {
                       label: example.name,
-                      description: example.description,
+                      description: example.description || example.summary,
                       body: example.params.map((ex: ExampleObject) => ex.value),
                     };
                   }) : [],
                   items: method.params.map((param: any) => {
                     return {
                       ...param.schema,
+                      markdownDescription: param.description || param.summary,
+                      description: param.summary,
                       additionalProperties: false,
                     };
                   }),
@@ -83,6 +83,8 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
                     .reduce((memo: any, param: ContentDescriptorObject) => {
                       memo[param.name] = {
                         ...param.schema,
+                        markdownDescription: param.description || param.summary,
+                        description: param.summary,
                         additionalProperties: false,
                       };
                       return memo;

@@ -58,6 +58,7 @@
     "@rehooks/window-size": "^1.0.2",
     "acorn-dynamic-import": "^4.0.0",
     "monaco-editor": "^0.18.1",
+    "monaco-vim": "0.0.14",
     "qs": "^6.8.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
