@@ -1,3 +1,12 @@
+## [1.3.3](https://github.com/open-rpc/inspector/compare/1.3.2...1.3.3) (2020-03-09)
+
+
+### Bug Fixes
+
+* markdown descriptions + add vim mode + add text to show ctrl+space help ([4ea9456](https://github.com/open-rpc/inspector/commit/4ea9456fd14070b118d016bdad6ac627d4b0905c)), closes [#120](https://github.com/open-rpc/inspector/issues/120)
+* resize help ([5167c13](https://github.com/open-rpc/inspector/commit/5167c1382ad9e5ca0ff2857189a639ff149aef27))
+* spacing + linting ([5bd70b2](https://github.com/open-rpc/inspector/commit/5bd70b242872c9d4265f157c31b4cbe721da01c4))
+
 ## [1.3.2](https://github.com/open-rpc/inspector/compare/1.3.1...1.3.2) (2020-03-06)
 
 
