@@ -132,6 +132,7 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
         minimap: {
           enabled: false,
         },
+        automaticLayout: true,
         fixedOverflowWidgets: true,
       }}
       language="json"

@@ -476,6 +476,7 @@ const Inspector: React.FC<IProps> = (props) => {
                 readOnly: true,
                 showFoldingControls: "always",
                 fixedOverflowWidgets: true,
+                automaticLayout: true,
               }}
               height="93vh"
               editorDidMount={handleResponseEditorDidMount}
