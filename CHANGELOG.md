@@ -1,3 +1,11 @@
+## [1.3.4](https://github.com/open-rpc/inspector/compare/1.3.3...1.3.4) (2020-03-09)
+
+
+### Bug Fixes
+
+* add automaticLayout monaco option ([fb20fa3](https://github.com/open-rpc/inspector/commit/fb20fa3ecbf559f06774d149b49f649eb4041922))
+* monaco widgets overflow and better json-rpc error handling ([5e0c4ed](https://github.com/open-rpc/inspector/commit/5e0c4edd92c36a2ea80a22c7af9286b076317f9b))
+
 ## [1.3.3](https://github.com/open-rpc/inspector/compare/1.3.2...1.3.3) (2020-03-09)
 
 
