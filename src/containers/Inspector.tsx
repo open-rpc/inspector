@@ -159,6 +159,7 @@ const Inspector: React.FC<IProps> = (props) => {
       },
     ]);
     setTabIndex(tabs.length);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.request]);
   useEffect(() => {
     if (json) {
@@ -189,6 +190,7 @@ const Inspector: React.FC<IProps> = (props) => {
     const model = monaco.editor.createModel(results ? JSON.stringify(results, null, 4) : "", "json", modelUri);
     responseEditor.setModel(model);
     addDiagnostics(modelUri.toString(), schema, monaco);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [results, responseEditor, openrpcDocument]);
 
   useEffect(() => {
@@ -273,6 +275,7 @@ const Inspector: React.FC<IProps> = (props) => {
   useEffect(() => {
     setOpenRpcDocument(props.openrpcDocument);
     setTabOpenRPCDocument(tabIndex, undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.openrpcDocument]);
 
   const handleTabIndexChange = (event: React.ChangeEvent<{}>, newValue: number) => {

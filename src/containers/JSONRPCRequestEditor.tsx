@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MonacoEditor from "@etclabscore/react-monaco-editor";
 import * as monaco from "monaco-editor";
-import { MethodObject, ContentDescriptorObject, OpenrpcDocument } from "@open-rpc/meta-schema";
+import { MethodObject, OpenrpcDocument } from "@open-rpc/meta-schema";
 import useWindowSize from "@rehooks/window-size";
 import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics";
 import openrpcDocumentToJSONRPCSchema from "../helpers/openrpcDocumentToJSONRPCSchema";
