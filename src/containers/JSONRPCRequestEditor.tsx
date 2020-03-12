@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MonacoEditor from "@etclabscore/react-monaco-editor";
 import * as monaco from "monaco-editor";
-import { MethodObject, ContentDescriptorObject, OpenrpcDocument } from "@open-rpc/meta-schema";
+import { MethodObject, OpenrpcDocument } from "@open-rpc/meta-schema";
 import useWindowSize from "@rehooks/window-size";
 import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics";
 import openrpcDocumentToJSONRPCSchema from "../helpers/openrpcDocumentToJSONRPCSchema";
@@ -28,7 +28,7 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
     if (!editor) {
       return;
     }
-    const modelName = props.openrpcMethodObject ? props.openrpcMethodObject.name : "inspector";
+    const modelName = (props.openrpcDocument && props.openrpcDocument.info) ? props.openrpcDocument.info.title : "inspector";
     const modelUriString = `inmemory://${modelName}-${Math.random()}.json`;
     const modelUri = monaco.Uri.parse(modelUriString);
     const model = monaco.editor.createModel(props.value || "", "json", modelUri);
@@ -38,7 +38,7 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
       properties: {
         jsonrpc: {
           type: "string",
-          enum: ["2.0"],
+          const: "2.0",
         },
         id: {
           oneOf: [
@@ -55,44 +55,8 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
         },
       },
     };
-    if (props.openrpcMethodObject) {
-      schema = {
-        ...schema,
-        additionalProperties: false,
-        properties: {
-          ...schema.properties,
-          method: {
-            type: "string",
-            enum: [props.openrpcMethodObject.name],
-          },
-          params: {
-            oneOf: [
-              {
-                type: "array",
-                ...schema.properties.params,
-                items: props.openrpcMethodObject.params.map((param: any) => {
-                  return {
-                    ...param.schema,
-                    additionalProperties: false,
-                  };
-                }),
-              },
-              {
-                type: "object",
-                properties: (props.openrpcMethodObject.params as ContentDescriptorObject[])
-                  .reduce((memo: any, param: ContentDescriptorObject) => {
-                    memo[param.name] = {
-                      ...param.schema,
-                      additionalProperties: false,
-                    };
-                    return memo;
-                  }, {}),
-              },
-            ],
-          },
-        },
-      };
-    } else if (props.openrpcDocument) {
+
+    if (props.openrpcDocument) {
       schema = openrpcDocumentToJSONRPCSchema(props.openrpcDocument);
     } else {
       schema = {
@@ -111,7 +75,7 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
     addDiagnostics(modelUri.toString(), schema, monaco);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.openrpcDocument, props.openrpcMethodObject]);
+  }, [props.openrpcDocument]);
 
   function handleEditorDidMount(_: any, ed: any) {
     setEditor(ed);

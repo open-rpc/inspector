@@ -25,7 +25,7 @@ const App: React.FC = () => {
         onToggleDarkMode={darkMode.toggle}
         darkMode={darkMode.value}
         url={query.url}
-        openrpcMethodObject={query.openrpcMethodObject}
+        openrpcDocument={query.openrpcDocument}
         request={query.request}
       />
     </MuiThemeProvider>

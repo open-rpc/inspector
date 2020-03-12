@@ -1,6 +1,7 @@
 import React, { useState, useEffect, ChangeEvent, Dispatch } from "react";
 import SplitPane from "react-split-pane";
 import JSONRPCRequestEditor from "./JSONRPCRequestEditor";
+import * as monaco from "monaco-editor";
 import PlayCircle from "@material-ui/icons/PlayCircleFilled";
 import CloseIcon from "@material-ui/icons/Close";
 import History from "@material-ui/icons/History";
@@ -27,13 +28,15 @@ import { Client, RequestManager, HTTPTransport, WebSocketTransport } from "@open
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import { JSONRPCError } from "@open-rpc/client-js/build/Error";
-import { MethodObject } from "@open-rpc/meta-schema";
+import { OpenrpcDocument } from "@open-rpc/meta-schema";
 import MonacoEditor from "@etclabscore/react-monaco-editor";
 import useTabs from "../hooks/useTabs";
 import { useDebounce } from "use-debounce";
 import { green } from "@material-ui/core/colors";
 import { parseOpenRPCDocument } from "@open-rpc/schema-utils-js";
 import useMonacoVimMode from "../hooks/useMonacoVimMode";
+import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics";
+import openrpcDocumentToJSONRPCSchemaResult from "../helpers/openrpcDocumentToJSONRPCSchemaResult";
 
 const errorToJSON = (error: JSONRPCError | any): any => {
   const isError = error instanceof Error;
@@ -55,7 +58,7 @@ interface IProps {
   request?: any;
   darkMode?: boolean;
   hideToggleTheme?: boolean;
-  openrpcMethodObject?: MethodObject;
+  openrpcDocument?: OpenrpcDocument;
   onToggleDarkMode?: () => void;
 }
 
@@ -64,6 +67,10 @@ const useClient = (url: string): [Client, JSONRPCError | undefined, Dispatch<JSO
   const [error, setError] = useState();
   useEffect(() => {
     let transport;
+    if (url === "" || url === undefined) {
+      setClient(undefined);
+      return;
+    }
     if (url.includes("http://") || url.includes("https://")) {
       transport = HTTPTransport;
     }
@@ -79,6 +86,7 @@ const useClient = (url: string): [Client, JSONRPCError | undefined, Dispatch<JSO
         console.log("onError", e); //tslint:disable-line
       });
     } catch (e) {
+      setClient(undefined);
       setError(e);
     }
   }, [url]);
@@ -118,7 +126,7 @@ const Inspector: React.FC<IProps> = (props) => {
   } = useTabs(
     [
       {
-        name: "New Tab",
+        name: props.request ? props.request.method : "New Tab",
         content: props.request || { ...emptyJSONRPC },
         url: props.url || "",
       },
@@ -127,7 +135,7 @@ const Inspector: React.FC<IProps> = (props) => {
   const [id, incrementId] = useCounter(0);
   const [responseEditor, setResponseEditor] = useState();
   useMonacoVimMode(responseEditor);
-  const [openrpcDocument, setOpenRpcDocument] = useState();
+  const [openrpcDocument, setOpenRpcDocument] = useState(props.openrpcDocument);
   const [json, setJson] = useState(props.request || {
     jsonrpc: "2.0",
     method: "",
@@ -142,16 +150,17 @@ const Inspector: React.FC<IProps> = (props) => {
   const [requestHistory, setRequestHistory]: [any[], Dispatch<any>] = useState([]);
   const [historySelectedIndex, setHistorySelectedIndex] = useState(0);
   useEffect(() => {
-    if (props.openrpcMethodObject) {
-      setJson({
-        jsonrpc: "2.0",
-        method: props.openrpcMethodObject.name,
-        params: json.params,
-        id: id.toString(),
-      });
-    }
+    setTabs([
+      ...tabs,
+      {
+        name: props.request ? props.request.method || "New Tab" : "New Tab",
+        content: props.request,
+        url: props.url,
+      },
+    ]);
+    setTabIndex(tabs.length);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props.request]);
   useEffect(() => {
     if (json) {
       const jsonResult = {
@@ -163,6 +172,26 @@ const Inspector: React.FC<IProps> = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  useEffect(() => {
+    if (!openrpcDocument) {
+      return;
+    }
+    if (!responseEditor) {
+      return;
+    }
+    if (!results) {
+      return;
+    }
+    const schema = openrpcDocumentToJSONRPCSchemaResult(openrpcDocument, json.method);
+    const modelName = "inspector-results";
+    const modelUriString = `inmemory://${modelName}-${Math.random()}.json`;
+    const modelUri = monaco.Uri.parse(modelUriString);
+    const model = monaco.editor.createModel(results ? JSON.stringify(results, null, 4) : "", "json", modelUri);
+    responseEditor.setModel(model);
+    addDiagnostics(modelUri.toString(), schema, monaco);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [results, responseEditor, openrpcDocument]);
 
   useEffect(() => {
     if (json) {
@@ -217,13 +246,13 @@ const Inspector: React.FC<IProps> = (props) => {
     }
   };
   const refreshOpenRpcDocument = async () => {
-    if (url) {
-      try {
-        const d = await client.request("rpc.discover", []);
-        const doc = await parseOpenRPCDocument(d);
-        setOpenRpcDocument(doc);
-        setTabOpenRPCDocument(tabIndex, doc);
-      } catch (e) {
+    try {
+      const d = await client.request("rpc.discover", []);
+      const doc = await parseOpenRPCDocument(d);
+      setOpenRpcDocument(doc);
+      setTabOpenRPCDocument(tabIndex, doc);
+    } catch (e) {
+      if (!props.openrpcDocument) {
         setOpenRpcDocument(undefined);
         setTabOpenRPCDocument(tabIndex, undefined);
       }
@@ -232,17 +261,22 @@ const Inspector: React.FC<IProps> = (props) => {
   useEffect(() => {
     refreshOpenRpcDocument();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [client]);
+  }, [client, tabIndex]);
 
   useEffect(() => {
     if (tabs[tabIndex]) {
       setJson(tabs[tabIndex].content);
       setUrl(tabs[tabIndex].url || "");
-      setOpenRpcDocument(tabs[tabIndex].openrpcDocument);
       setResults(tabs[tabIndex].results);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabIndex]);
+
+  useEffect(() => {
+    setOpenRpcDocument(props.openrpcDocument);
+    setTabOpenRPCDocument(tabIndex, undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.openrpcDocument]);
 
   const handleTabIndexChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setTabIndex(newValue);
@@ -358,6 +392,7 @@ const Inspector: React.FC<IProps> = (props) => {
                 {
                   name: "New Tab",
                   content: { ...emptyJSONRPC },
+                  openrpcDocument: undefined,
                   url: "",
                 },
               ],
@@ -388,9 +423,10 @@ const Inspector: React.FC<IProps> = (props) => {
               ?
               <Tooltip title={
                 <div style={{ textAlign: "center" }}>
-                  <Typography>Valid OpenRPC Endpoint.</Typography>
+                  <Typography>OpenRPC Document Detected</Typography>
                   <Typography variant="caption">
-                    The JSON-RPC endpoint responds to the rpc.discover method.
+                    A JSON-RPC endpoint may respond to the rpc.discover method
+                    or a provide a static document.
                     This adds features like auto completion to the inspector.
                     </Typography>
                 </div>
@@ -452,7 +488,6 @@ const Inspector: React.FC<IProps> = (props) => {
             }
           }}
           openrpcDocument={openrpcDocument}
-          openrpcMethodObject={props.openrpcMethodObject}
           value={JSON.stringify(json, null, 4)}
         />
         <>
@@ -484,7 +519,7 @@ const Inspector: React.FC<IProps> = (props) => {
               value={JSON.stringify(errorToJSON(results) || results, null, 4) || ""}
             />
             : <Grid container justify="center" style={{ paddingTop: "20px" }} direction="column" alignItems="center">
-              <Typography variant="body1" gutterBottom color="textSecondary" style={{paddingBottom: "15px"}}>
+              <Typography variant="body1" gutterBottom color="textSecondary" style={{ paddingBottom: "15px" }}>
                 Press the Play button to see the results here.
                 </Typography>
               <Typography variant="body1" color="textSecondary">
