@@ -6,8 +6,10 @@ const schema: any = {
     jsonrpc: {
       type: "string",
       enum: ["2.0"],
+      description: "JSON-RPC version string",
     },
     id: {
+      description: "unique identifier for the JSON-RPC request",
       oneOf: [
         {
           type: "string",
@@ -35,6 +37,7 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
       },
       method: {
         type: "string",
+        description: "Method Name",
         oneOf: openrpcDocument.methods.map((method) => {
           return {
             const: method.name,
@@ -72,7 +75,7 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
                     return {
                       ...param.schema,
                       markdownDescription: param.description || param.summary,
-                      description: param.summary,
+                      description: param.description || param.summary,
                       additionalProperties: false,
                     };
                   }),
@@ -84,7 +87,7 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
                       memo[param.name] = {
                         ...param.schema,
                         markdownDescription: param.description || param.summary,
-                        description: param.summary,
+                        description: param.description || param.summary,
                         additionalProperties: false,
                       };
                       return memo;
