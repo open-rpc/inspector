@@ -1,3 +1,11 @@
+## [1.3.5](https://github.com/open-rpc/inspector/compare/1.3.4...1.3.5) (2020-03-12)
+
+
+### Bug Fixes
+
+* add props updates ([9c85d55](https://github.com/open-rpc/inspector/commit/9c85d5590dbb5d80144a684d01e325352d8755df))
+* linting ([5b8b058](https://github.com/open-rpc/inspector/commit/5b8b0581df396ed9df5b1e21de74a9a16891c61a))
+
 ## [1.3.4](https://github.com/open-rpc/inspector/compare/1.3.3...1.3.4) (2020-03-09)
 
 
