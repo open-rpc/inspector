@@ -38,7 +38,7 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
       method: {
         type: "string",
         description: "Method Name",
-        oneOf: openrpcDocument.methods.map((method) => {
+        oneOf: openrpcDocument && openrpcDocument.methods && openrpcDocument.methods.map((method) => {
           return {
             const: method.name,
             markdownDescription: method.description || method.summary,
@@ -47,7 +47,7 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
         }),
       },
     },
-    allOf: openrpcDocument.methods.map((method: MethodObject) => {
+    allOf: openrpcDocument && openrpcDocument.methods && openrpcDocument.methods.map((method: MethodObject) => {
       return {
         if: {
           properties: {
@@ -62,13 +62,13 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
               oneOf: [
                 {
                   type: "array",
-                  minItems: method.params.filter((param: any) => param.required).length,
-                  maxItems: method.params.length,
+                  minItems: method.params && method.params.filter((param: any) => param.required).length,
+                  maxItems: method.params && method.params.length,
                   defaultSnippets: method.examples ? method.examples.map((example: any) => {
                     return {
                       label: example.name,
                       description: example.description || example.summary,
-                      body: example.params.map((ex: ExampleObject) => ex.value),
+                      body: example.params && example.params.map((ex: ExampleObject) => ex.value),
                     };
                   }) : [],
                   items: method.params.map((param: any) => {
@@ -82,7 +82,7 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
                 },
                 {
                   type: "object",
-                  properties: (method.params as ContentDescriptorObject[])
+                  properties: method.params && (method.params as ContentDescriptorObject[])
                     .reduce((memo: any, param: ContentDescriptorObject) => {
                       memo[param.name] = {
                         ...param.schema,
