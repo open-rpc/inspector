@@ -1,3 +1,10 @@
+## [1.3.6](https://github.com/open-rpc/inspector/compare/1.3.5...1.3.6) (2020-03-13)
+
+
+### Bug Fixes
+
+* **openrpc jsonrpc schema:** guard against methods and params not existing ([ebe3ca5](https://github.com/open-rpc/inspector/commit/ebe3ca52bc0be915d5cdcb70080b096ae0aaf226))
+
 ## [1.3.5](https://github.com/open-rpc/inspector/compare/1.3.4...1.3.5) (2020-03-12)
 
 
