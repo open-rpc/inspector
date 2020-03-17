@@ -1,3 +1,10 @@
+## [1.3.7](https://github.com/open-rpc/inspector/compare/1.3.6...1.3.7) (2020-03-17)
+
+
+### Bug Fixes
+
+* keep existing url for new tabs ([f91ca01](https://github.com/open-rpc/inspector/commit/f91ca01bade696364c322dbe77203d3acb23e972)), closes [#135](https://github.com/open-rpc/inspector/issues/135)
+
 ## [1.3.6](https://github.com/open-rpc/inspector/compare/1.3.5...1.3.6) (2020-03-13)
 
 
