@@ -14,7 +14,7 @@ const emptyJSONRPC = {
   jsonrpc: "2.0",
   method: "",
   params: [],
-  id: "0",
+  id: 0,
 };
 
 const useTabs = (defaultTabs?: ITab[]) => {

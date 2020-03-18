@@ -24,7 +24,8 @@ import {
   ListItemText,
   Container,
 } from "@material-ui/core";
-import { Client, RequestManager, HTTPTransport, WebSocketTransport } from "@open-rpc/client-js";
+import { HTTPTransport, WebSocketTransport } from "@open-rpc/client-js";
+import { Transport } from "@open-rpc/client-js/build/transports/Transport";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import { JSONRPCError } from "@open-rpc/client-js/build/Error";
@@ -38,7 +39,7 @@ import useMonacoVimMode from "../hooks/useMonacoVimMode";
 import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics";
 import openrpcDocumentToJSONRPCSchemaResult from "../helpers/openrpcDocumentToJSONRPCSchemaResult";
 
-const errorToJSON = (error: JSONRPCError | any): any => {
+const errorToJSON = (error: JSONRPCError | any, id: string | number): any => {
   const isError = error instanceof Error;
   if (!isError) {
     return;
@@ -46,10 +47,28 @@ const errorToJSON = (error: JSONRPCError | any): any => {
   if (!error) {
     return;
   }
+  const emptyErrorResponse = {
+    jsonrpc: "2.0",
+    id,
+  };
+  // this is an internal wrapped client-js error
+  if (error.data instanceof Error) {
+    return {
+      ...emptyErrorResponse,
+      error: {
+        code: error.data.code,
+        message: error.data.message,
+        data: error.data.data,
+      },
+    };
+  }
   return {
-    code: error.code,
-    message: error.message,
-    data: error.data,
+    ...emptyErrorResponse,
+    error: {
+      code: error.code,
+      message: error.message,
+      data: error.data,
+    },
   };
 };
 
@@ -62,35 +81,36 @@ interface IProps {
   onToggleDarkMode?: () => void;
 }
 
-const useClient = (url: string): [Client, JSONRPCError | undefined, Dispatch<JSONRPCError | undefined>] => {
-  const [client, setClient] = useState();
-  const [error, setError] = useState();
+type TUseTransport = (url: string) =>
+  [Transport | undefined, JSONRPCError | undefined, Dispatch<JSONRPCError | undefined>];
+
+const useTransport: TUseTransport = (url) => {
+  const [transport, setTransport]: [Transport | undefined, Dispatch<Transport | undefined>] = useState();
+  const [error, setError]: [JSONRPCError | undefined, Dispatch<JSONRPCError | undefined>] = useState();
   useEffect(() => {
-    let transport;
+    let localTransport;
     if (url === "" || url === undefined) {
-      setClient(undefined);
+      setTransport(undefined);
       return;
     }
     if (url.includes("http://") || url.includes("https://")) {
-      transport = HTTPTransport;
+      localTransport = HTTPTransport;
     }
     if (url.includes("ws://")) {
-      transport = WebSocketTransport;
+      localTransport = WebSocketTransport;
     }
     try {
-      const clientTransport = transport || HTTPTransport;
-      const t = new clientTransport(url);
-      const c = new Client(new RequestManager([t]));
-      setClient(c);
-      c.onError((e) => {
-        console.log("onError", e); //tslint:disable-line
+      const transportTransport = localTransport || HTTPTransport;
+      const t = new transportTransport(url);
+      t.connect().then(() => {
+        setTransport(t);
       });
     } catch (e) {
-      setClient(undefined);
+      setTransport(undefined);
       setError(e);
     }
   }, [url]);
-  return [client, error, setError];
+  return [transport, error, setError];
 };
 
 function useCounter(defaultValue: number): [number, () => void] {
@@ -107,7 +127,7 @@ const emptyJSONRPC = {
   jsonrpc: "2.0",
   method: "",
   params: [],
-  id: "0",
+  id: 0,
 };
 
 const Inspector: React.FC<IProps> = (props) => {
@@ -145,8 +165,8 @@ const Inspector: React.FC<IProps> = (props) => {
   const [results, setResults]: [any, Dispatch<any>] = useState();
   const [url, setUrl] = useState(props.url || "");
   const [debouncedUrl] = useDebounce(url, 1000);
-  const [client, error] = useClient(debouncedUrl);
-  const [historyOpen, setHistoryOpen] = useState();
+  const [transport, error] = useTransport(debouncedUrl);
+  const [historyOpen, setHistoryOpen] = useState(false);
   const [requestHistory, setRequestHistory]: [any[], Dispatch<any>] = useState([]);
   const [historySelectedIndex, setHistorySelectedIndex] = useState(0);
   useEffect(() => {
@@ -166,7 +186,7 @@ const Inspector: React.FC<IProps> = (props) => {
       const jsonResult = {
         ...json,
         jsonrpc: "2.0",
-        id: id.toString(),
+        id,
       };
       setJson(jsonResult);
     }
@@ -187,7 +207,9 @@ const Inspector: React.FC<IProps> = (props) => {
     const modelName = "inspector-results";
     const modelUriString = `inmemory://${modelName}-${Math.random()}.json`;
     const modelUri = monaco.Uri.parse(modelUriString);
-    const model = monaco.editor.createModel(results ? JSON.stringify(results, null, 4) : "", "json", modelUri);
+    const model = monaco.editor.createModel(
+      results ? JSON.stringify(results, null, 4) : ""
+      , "json", modelUri);
     responseEditor.setModel(model);
     addDiagnostics(modelUri.toString(), schema, monaco);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -210,21 +232,25 @@ const Inspector: React.FC<IProps> = (props) => {
 
   const handlePlayButton = async () => {
     clear();
-    if (client) {
-      incrementId();
+    if (transport) {
       try {
-        const result = await client.request(json.method, json.params);
+        const result = await transport.sendData({
+          internalID: id,
+          request: json,
+        });
         const r = { jsonrpc: "2.0", result, id };
         setResults(r);
         setTabResults(tabIndex, r);
         const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
         setRequestHistory(newHistory);
       } catch (e) {
+        const convertedError = errorToJSON(e, id);
         const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
         setRequestHistory(newHistory);
-        setResults(e);
-        setTabResults(tabIndex, e);
+        setResults(convertedError);
+        setTabResults(tabIndex, convertedError);
       }
+      incrementId();
     }
   };
   function handleResponseEditorDidMount(__: any, editor: any) {
@@ -246,8 +272,19 @@ const Inspector: React.FC<IProps> = (props) => {
     }
   };
   const refreshOpenRpcDocument = async () => {
+    if (!transport) {
+      return;
+    }
     try {
-      const d = await client.request("rpc.discover", []);
+      const d = await transport.sendData({
+        internalID: id,
+        request: {
+          jsonrpc: "2.0",
+          params: [],
+          id,
+          method: "rpc.discover",
+        },
+      });
       const doc = await parseOpenRPCDocument(d);
       setOpenRpcDocument(doc);
       setTabOpenRPCDocument(tabIndex, doc);
@@ -261,7 +298,7 @@ const Inspector: React.FC<IProps> = (props) => {
   useEffect(() => {
     refreshOpenRpcDocument();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [client, tabIndex]);
+  }, [transport, tabIndex]);
 
   useEffect(() => {
     if (tabs[tabIndex]) {
@@ -516,7 +553,7 @@ const Inspector: React.FC<IProps> = (props) => {
               height="93vh"
               editorDidMount={handleResponseEditorDidMount}
               language="json"
-              value={JSON.stringify(errorToJSON(results) || results, null, 4) || ""}
+              value={JSON.stringify(results, null, 4) || ""}
             />
             : <Grid container justify="center" style={{ paddingTop: "20px" }} direction="column" alignItems="center">
               <Typography variant="body1" gutterBottom color="textSecondary" style={{ paddingBottom: "15px" }}>
