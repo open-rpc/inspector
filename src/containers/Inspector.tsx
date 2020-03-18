@@ -428,7 +428,7 @@ const Inspector: React.FC<IProps> = (props) => {
                 ...tabs,
                 {
                   name: "New Tab",
-                  content: { ...emptyJSONRPC },
+                  content: { ...emptyJSONRPC, id },
                   openrpcDocument: undefined,
                   url,
                 },
