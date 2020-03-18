@@ -1,3 +1,11 @@
+## [1.3.8](https://github.com/open-rpc/inspector/compare/1.3.7...1.3.8) (2020-03-18)
+
+
+### Bug Fixes
+
+* errors + ids + transports ([b69f42f](https://github.com/open-rpc/inspector/commit/b69f42f49d7170b92632ccbdf055c85f33e9e81c))
+* update id with new tab ([034a4dd](https://github.com/open-rpc/inspector/commit/034a4dda5275782f76053fc48464a758e2ba9848))
+
 ## [1.3.7](https://github.com/open-rpc/inspector/compare/1.3.6...1.3.7) (2020-03-17)
 
 
