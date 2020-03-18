@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch } from "react";
 import * as monaco from "monaco-editor";
 const { initVimMode } = require("monaco-vim"); //tslint:disable-line
 
 // Vim Mode:
 // Press Chord Ctrl-K, Ctrl-V => the action will run if it is enabled
-const useMonacoVimMode = (editor: monaco.editor.IStandaloneCodeEditor) => {
-  const [vimMode, setVimMode] = useState();
+const useMonacoVimMode = (editor: monaco.editor.IStandaloneCodeEditor | undefined) => {
+  const [vimMode, setVimMode]: [any, Dispatch<any>] = useState();
 
   useEffect(() => {
     if (!editor) { return; }
