@@ -38,6 +38,7 @@ import { parseOpenRPCDocument } from "@open-rpc/schema-utils-js";
 import useMonacoVimMode from "../hooks/useMonacoVimMode";
 import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics";
 import openrpcDocumentToJSONRPCSchemaResult from "../helpers/openrpcDocumentToJSONRPCSchemaResult";
+import MetaMaskTransport from "../transports/MetaMaskTransport";
 
 const errorToJSON = (error: JSONRPCError | any, id: string | number): any => {
   const isError = error instanceof Error;
@@ -93,10 +94,11 @@ const useTransport: TUseTransport = (url) => {
       setTransport(undefined);
       return;
     }
-    if (url.includes("http://") || url.includes("https://")) {
+    if (url.includes("wallet_plugin_http")) {
+      localTransport = MetaMaskTransport;
+    } else if (url.includes("http://") || url.includes("https://")) {
       localTransport = HTTPTransport;
-    }
-    if (url.includes("ws://")) {
+    } else if(url.includes("ws://")) {
       localTransport = WebSocketTransport;
     }
     try {
