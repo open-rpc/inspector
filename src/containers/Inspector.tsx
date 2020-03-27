@@ -4,9 +4,11 @@ import JSONRPCRequestEditor from "./JSONRPCRequestEditor";
 import * as monaco from "monaco-editor";
 import PlayCircle from "@material-ui/icons/PlayCircleFilled";
 import CloseIcon from "@material-ui/icons/Close";
+import FlashOn from "@material-ui/icons/FlashOn";
+import FlashOff from "@material-ui/icons/FlashOff";
 import History from "@material-ui/icons/History";
 import PlusIcon from "@material-ui/icons/Add";
-import CheckCircle from "@material-ui/icons/CheckCircle";
+import DocumentIcon from "@material-ui/icons/Description";
 import {
   IconButton,
   AppBar,
@@ -24,8 +26,6 @@ import {
   ListItemText,
   Container,
 } from "@material-ui/core";
-import { HTTPTransport, WebSocketTransport } from "@open-rpc/client-js";
-import { Transport } from "@open-rpc/client-js/build/transports/Transport";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import { JSONRPCError } from "@open-rpc/client-js/build/Error";
@@ -38,6 +38,23 @@ import { parseOpenRPCDocument } from "@open-rpc/schema-utils-js";
 import useMonacoVimMode from "../hooks/useMonacoVimMode";
 import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics";
 import openrpcDocumentToJSONRPCSchemaResult from "../helpers/openrpcDocumentToJSONRPCSchemaResult";
+import TransportDropdown from "../components/TransportDropdown";
+import useTransport, { ITransport } from "../hooks/useTransport";
+
+const defaultTransports: ITransport[] = [
+  {
+    type: "http",
+    name: "HTTP",
+  },
+  {
+    type: "websocket",
+    name: "WebSocket",
+  },
+  {
+    type: "postmessage",
+    name: "PostMessage",
+  },
+];
 
 const errorToJSON = (error: JSONRPCError | any, id: string | number): any => {
   const isError = error instanceof Error;
@@ -80,38 +97,6 @@ interface IProps {
   openrpcDocument?: OpenrpcDocument;
   onToggleDarkMode?: () => void;
 }
-
-type TUseTransport = (url: string) =>
-  [Transport | undefined, JSONRPCError | undefined, Dispatch<JSONRPCError | undefined>];
-
-const useTransport: TUseTransport = (url) => {
-  const [transport, setTransport]: [Transport | undefined, Dispatch<Transport | undefined>] = useState();
-  const [error, setError]: [JSONRPCError | undefined, Dispatch<JSONRPCError | undefined>] = useState();
-  useEffect(() => {
-    let localTransport;
-    if (url === "" || url === undefined) {
-      setTransport(undefined);
-      return;
-    }
-    if (url.includes("http://") || url.includes("https://")) {
-      localTransport = HTTPTransport;
-    }
-    if (url.includes("ws://")) {
-      localTransport = WebSocketTransport;
-    }
-    try {
-      const transportTransport = localTransport || HTTPTransport;
-      const t = new transportTransport(url);
-      t.connect().then(() => {
-        setTransport(t);
-      });
-    } catch (e) {
-      setTransport(undefined);
-      setError(e);
-    }
-  }, [url]);
-  return [transport, error, setError];
-};
 
 function useCounter(defaultValue: number): [number, () => void] {
   const [counter, setCounter] = useState(defaultValue);
@@ -163,9 +148,11 @@ const Inspector: React.FC<IProps> = (props) => {
     id,
   });
   const [results, setResults]: [any, Dispatch<any>] = useState();
+  const [transportList, setTransportList] = useState(defaultTransports);
   const [url, setUrl] = useState(props.url || "");
   const [debouncedUrl] = useDebounce(url, 1000);
-  const [transport, error] = useTransport(debouncedUrl);
+  const [selectedTransport, setSelectedTransport] = useState(defaultTransports[0]);
+  const [transport, setTransport, , connected] = useTransport(transportList, debouncedUrl, defaultTransports[0]);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [requestHistory, setRequestHistory]: [any[], Dispatch<any>] = useState([]);
   const [historySelectedIndex, setHistorySelectedIndex] = useState(0);
@@ -192,6 +179,13 @@ const Inspector: React.FC<IProps> = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  useEffect(() => {
+    if (selectedTransport !== undefined) {
+      setTransport(selectedTransport!);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTransport]);
 
   useEffect(() => {
     if (!openrpcDocument) {
@@ -273,6 +267,8 @@ const Inspector: React.FC<IProps> = (props) => {
   };
   const refreshOpenRpcDocument = async () => {
     if (!transport) {
+      setOpenRpcDocument(undefined);
+      setTabOpenRPCDocument(tabIndex, undefined);
       return;
     }
     try {
@@ -296,6 +292,7 @@ const Inspector: React.FC<IProps> = (props) => {
     }
   };
   useEffect(() => {
+    setOpenRpcDocument(undefined);
     refreshOpenRpcDocument();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transport, tabIndex]);
@@ -450,27 +447,52 @@ const Inspector: React.FC<IProps> = (props) => {
             src="https://github.com/open-rpc/design/raw/master/icons/open-rpc-logo-noText/open-rpc-logo-noText%20(PNG)/128x128.png" //tslint:disable-line
           />
           <Typography variant="h6" color="textSecondary">Inspector</Typography>
+          <TransportDropdown
+            transports={transportList}
+            onAddTransport={(addedTransport: ITransport) => {
+              setTransportList([
+                ...transportList,
+                addedTransport,
+              ]);
+            }}
+            selectedTransport={selectedTransport}
+            onChange={(changedTransport) => setSelectedTransport(changedTransport)}
+            style={{
+              marginLeft: "10px",
+            }}
+          />
           <Tooltip title="Play">
             <IconButton onClick={handlePlayButton}>
-              <PlayCircle />
+              <PlayCircle fontSize="large" />
             </IconButton>
           </Tooltip>
           <InputBase
-            startAdornment={openrpcDocument
-              ?
-              <Tooltip title={
-                <div style={{ textAlign: "center" }}>
-                  <Typography>OpenRPC Document Detected</Typography>
-                  <Typography variant="caption">
-                    A JSON-RPC endpoint may respond to the rpc.discover method
-                    or a provide a static document.
-                    This adds features like auto completion to the inspector.
+            startAdornment={
+              <>
+                <Tooltip title={connected ? "Connected" : "Not Connected"}>
+                  {connected
+                    ? <FlashOn style={{ color: green[500] }} />
+                    : <FlashOff color="error" />
+                  }
+                </Tooltip>
+                {
+                  openrpcDocument
+                    ?
+                    <Tooltip title={
+                      <div style={{ textAlign: "center" }}>
+                        <Typography>OpenRPC Document Detected</Typography>
+                        <Typography variant="caption">
+                          A JSON-RPC endpoint may respond to the rpc.discover method
+                          or a provide a static document.
+                          This adds features like auto completion to the inspector.
                     </Typography>
-                </div>
-              } onClick={() => window.open("https://spec.open-rpc.org/#service-discovery-method")}>
-                <CheckCircle style={{ color: green[500], marginRight: "5px", cursor: "pointer" }} scale={0.1} />
-              </Tooltip>
-              : null
+                      </div>
+                    } onClick={() => window.open("https://spec.open-rpc.org/#service-discovery-method")}>
+                      <DocumentIcon style={{ color: green[500], marginRight: "5px", cursor: "pointer" }} scale={0.1} />
+                    </Tooltip>
+                    : null
+                }
+              </>
             }
             value={url}
             placeholder="Enter a JSON-RPC server URL"
@@ -528,12 +550,12 @@ const Inspector: React.FC<IProps> = (props) => {
           value={JSON.stringify(json, null, 4)}
         />
         <>
-          {(results || error) &&
+          {results &&
             <Button
               style={{ position: "absolute", top: "15px", right: "15px", zIndex: 1 }}
               onClick={handleClearButton}>
               Clear
-                </Button>
+            </Button>
           }
           {results
             ?
