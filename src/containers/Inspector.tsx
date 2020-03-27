@@ -54,14 +54,6 @@ const defaultTransports: ITransport[] = [
     type: "postmessage",
     name: "PostMessage",
   },
-  // {
-  //   type: "plugin",
-  //   name: "metamask",
-  //   uri: "http://localhost:3001",
-  //   transport: {
-  //     type: "postmessage",
-  //   },
-  // },
 ];
 
 const errorToJSON = (error: JSONRPCError | any, id: string | number): any => {
