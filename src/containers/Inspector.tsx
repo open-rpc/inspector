@@ -184,6 +184,7 @@ const Inspector: React.FC<IProps> = (props) => {
     if (selectedTransport !== undefined) {
       setTransport(selectedTransport!);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTransport]);
 
   useEffect(() => {
