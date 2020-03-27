@@ -1,3 +1,17 @@
+# [1.4.0](https://github.com/open-rpc/inspector/compare/1.3.8...1.4.0) (2020-03-27)
+
+
+### Bug Fixes
+
+* change default transports ([479eaeb](https://github.com/open-rpc/inspector/commit/479eaeb6fcf69bd2b74ff3e9509c548c52312bca))
+* linting ([2c5c871](https://github.com/open-rpc/inspector/commit/2c5c871015920706f53f09d297afabc274f94780))
+
+
+### Features
+
+* metamask ([2239b81](https://github.com/open-rpc/inspector/commit/2239b8108ad23bab667101d6ab924a18e82ef818))
+* transport plugins ([a377a8e](https://github.com/open-rpc/inspector/commit/a377a8e1fd55362889926b2585b52be0559f192c)), closes [#121](https://github.com/open-rpc/inspector/issues/121)
+
 ## [1.3.8](https://github.com/open-rpc/inspector/compare/1.3.7...1.3.8) (2020-03-18)
 
 
