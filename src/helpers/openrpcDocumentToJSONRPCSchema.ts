@@ -37,12 +37,11 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
       },
       method: {
         type: "string",
-        description: "Method Name",
         oneOf: openrpcDocument && openrpcDocument.methods && openrpcDocument.methods.map((method) => {
           return {
             const: method.name,
+            description: method.description || method.summary,
             markdownDescription: method.description || method.summary,
-            description: method.summary,
           };
         }),
       },
@@ -71,7 +70,7 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
                       body: example.params && example.params.map((ex: ExampleObject) => ex.value),
                     };
                   }) : [],
-                  items: method.params.map((param: any) => {
+                  items: method.params && method.params.map((param: any) => {
                     return {
                       ...param.schema,
                       markdownDescription: param.description || param.summary,
