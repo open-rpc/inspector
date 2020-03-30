@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/open-rpc/inspector/compare/1.4.0...1.4.1) (2020-03-30)
+
+
+### Bug Fixes
+
+* json schema validation ([4d49cc5](https://github.com/open-rpc/inspector/commit/4d49cc563c58493f8658e2636f18c18e25674536))
+
 # [1.4.0](https://github.com/open-rpc/inspector/compare/1.3.8...1.4.0) (2020-03-27)
 
 
