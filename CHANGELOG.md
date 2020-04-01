@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/open-rpc/inspector/compare/1.4.1...1.4.2) (2020-04-01)
+
+
+### Bug Fixes
+
+* remove counter + fix issue with props.openrpcDoc ([a78ece9](https://github.com/open-rpc/inspector/commit/a78ece935a1e3f4d04078d5cae12be3f2e293223))
+
 ## [1.4.1](https://github.com/open-rpc/inspector/compare/1.4.0...1.4.1) (2020-03-30)
 
 
