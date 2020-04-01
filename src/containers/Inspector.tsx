@@ -98,16 +98,6 @@ interface IProps {
   onToggleDarkMode?: () => void;
 }
 
-function useCounter(defaultValue: number): [number, () => void] {
-  const [counter, setCounter] = useState(defaultValue);
-
-  const incrementCounter = () => {
-    setCounter(counter + 1);
-  };
-
-  return [counter, incrementCounter];
-}
-
 const emptyJSONRPC = {
   jsonrpc: "2.0",
   method: "",
@@ -134,10 +124,11 @@ const Inspector: React.FC<IProps> = (props) => {
         name: props.request ? props.request.method : "New Tab",
         content: props.request || { ...emptyJSONRPC },
         url: props.url || "",
+        openrpcDocument: props.openrpcDocument,
       },
     ],
   );
-  const [id, incrementId] = useCounter(0);
+  const id = 0;
   const [responseEditor, setResponseEditor] = useState();
   useMonacoVimMode(responseEditor);
   const [openrpcDocument, setOpenRpcDocument] = useState(props.openrpcDocument);
@@ -163,6 +154,7 @@ const Inspector: React.FC<IProps> = (props) => {
         name: props.request ? props.request.method || "New Tab" : "New Tab",
         content: props.request,
         url: props.url,
+        openrpcDocument,
       },
     ]);
     setTabIndex(tabs.length);
@@ -244,7 +236,6 @@ const Inspector: React.FC<IProps> = (props) => {
         setResults(convertedError);
         setTabResults(tabIndex, convertedError);
       }
-      incrementId();
     }
   };
   function handleResponseEditorDidMount(__: any, editor: any) {
@@ -266,13 +257,8 @@ const Inspector: React.FC<IProps> = (props) => {
     }
   };
   const refreshOpenRpcDocument = async () => {
-    if (!transport) {
-      setOpenRpcDocument(undefined);
-      setTabOpenRPCDocument(tabIndex, undefined);
-      return;
-    }
     try {
-      const d = await transport.sendData({
+      const d = await transport?.sendData({
         internalID: id,
         request: {
           jsonrpc: "2.0",
@@ -292,7 +278,9 @@ const Inspector: React.FC<IProps> = (props) => {
     }
   };
   useEffect(() => {
-    setOpenRpcDocument(undefined);
+    if (!props.openrpcDocument) {
+      setOpenRpcDocument(undefined);
+    }
     refreshOpenRpcDocument();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transport, tabIndex]);
@@ -308,7 +296,7 @@ const Inspector: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     setOpenRpcDocument(props.openrpcDocument);
-    setTabOpenRPCDocument(tabIndex, undefined);
+    setTabOpenRPCDocument(tabIndex, props.openrpcDocument);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.openrpcDocument]);
 
@@ -426,7 +414,7 @@ const Inspector: React.FC<IProps> = (props) => {
                 {
                   name: "New Tab",
                   content: { ...emptyJSONRPC, id },
-                  openrpcDocument: undefined,
+                  openrpcDocument,
                   url,
                 },
               ],
