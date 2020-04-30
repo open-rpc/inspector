@@ -1,7 +1,6 @@
 
 import { Transport } from "@open-rpc/client-js/build/transports/Transport";
 import { JSONRPCRequestData, IJSONRPCData } from "@open-rpc/client-js/build/Request";
-import { JSONRPCError } from "@open-rpc/client-js";
 
 const postmessageID = "post-message-transport";
 
