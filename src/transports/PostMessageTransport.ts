@@ -31,26 +31,23 @@ class PostMessageTransport extends Transport {
       });
       const el = document.getElementById("root");
       el?.parentNode?.insertBefore(this.iframe, el);
+      window.addEventListener("message", (ev: MessageEvent) => {
+        if (ev.origin === window.origin) {
+          return;
+        }
+        this.transportRequestManager.resolveResponse(JSON.stringify(ev.data));
+      });
     });
   }
 
   public async sendData(data: JSONRPCRequestData, timeout: number | undefined = 5000): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.iframe.contentWindow?.postMessage((data as IJSONRPCData).request, this.uri);
-      const handleMessage = (ev: MessageEvent) => {
-        if (ev.origin === window.origin) {
-          return;
-        }
-        window.removeEventListener("message", handleMessage);
-        if (ev.data.error) {
-          reject(new JSONRPCError(ev.data.error.message, ev.data.error.code, ev.data.error.data));
-        }
-        if (ev.data.id === (data as IJSONRPCData).request.id) {
-          resolve(ev.data.result);
-        }
-      };
-      window.addEventListener("message", handleMessage, false);
-    });
+    const prom = this.transportRequestManager.addRequest(data, undefined);
+    if (this.iframe) {
+      this.iframe?.contentWindow?.postMessage((data as IJSONRPCData).request, this.uri);
+    } else {
+      return;
+    }
+    return prom;
   }
 
   public close(): void {

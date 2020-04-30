@@ -221,7 +221,7 @@ const Inspector: React.FC<IProps> = (props) => {
     if (transport) {
       try {
         const result = await transport.sendData({
-          internalID: id,
+          internalID: json.id,
           request: json,
         });
         const r = { jsonrpc: "2.0", result, id };
