@@ -21,7 +21,7 @@ You can configure the default request and url via url params:
 
 here is a full example:
 
-https://inspector.open-rpc.org/?url=http://localhost:8002/multi-geth/mainnet/1.9.0&request[jsonrpc]=2.0&request[method]=eth_chainId&request[params][0]=foo
+https://inspector.open-rpc.org/?url=https://mock.open-rpc.org/petstore-1.0.0&?request[jsonrpc]=2.0&request[method]=list_pets&request[id]=0
 
 ### Contributing
 
