@@ -128,7 +128,6 @@ const Inspector: React.FC<IProps> = (props) => {
       },
     ],
   );
-  const id = 0;
   const [responseEditor, setResponseEditor] = useState();
   useMonacoVimMode(responseEditor);
   const [openrpcDocument, setOpenRpcDocument] = useState(props.openrpcDocument);
@@ -136,7 +135,7 @@ const Inspector: React.FC<IProps> = (props) => {
     jsonrpc: "2.0",
     method: "",
     params: [],
-    id,
+    id: 0,
   });
   const [results, setResults]: [any, Dispatch<any>] = useState();
   const [transportList, setTransportList] = useState(defaultTransports);
@@ -160,17 +159,6 @@ const Inspector: React.FC<IProps> = (props) => {
     setTabIndex(tabs.length);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.request]);
-  useEffect(() => {
-    if (json) {
-      const jsonResult = {
-        ...json,
-        jsonrpc: "2.0",
-        id,
-      };
-      setJson(jsonResult);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
 
   useEffect(() => {
     if (selectedTransport !== undefined) {
@@ -221,16 +209,16 @@ const Inspector: React.FC<IProps> = (props) => {
     if (transport) {
       try {
         const result = await transport.sendData({
-          internalID: id,
+          internalID: json.id,
           request: json,
         });
-        const r = { jsonrpc: "2.0", result, id };
+        const r = { jsonrpc: "2.0", result, id: json.id };
         setResults(r);
         setTabResults(tabIndex, r);
         const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
         setRequestHistory(newHistory);
       } catch (e) {
-        const convertedError = errorToJSON(e, id);
+        const convertedError = errorToJSON(e, json.id);
         const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
         setRequestHistory(newHistory);
         setResults(convertedError);
@@ -259,11 +247,11 @@ const Inspector: React.FC<IProps> = (props) => {
   const refreshOpenRpcDocument = async () => {
     try {
       const d = await transport?.sendData({
-        internalID: id,
+        internalID: 999999,
         request: {
           jsonrpc: "2.0",
           params: [],
-          id,
+          id: 999999,
           method: "rpc.discover",
         },
       });
@@ -413,7 +401,7 @@ const Inspector: React.FC<IProps> = (props) => {
                 ...tabs,
                 {
                   name: "New Tab",
-                  content: { ...emptyJSONRPC, id },
+                  content: { ...emptyJSONRPC, id: 0 },
                   openrpcDocument,
                   url,
                 },
