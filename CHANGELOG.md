@@ -1,3 +1,10 @@
+## [1.4.4](https://github.com/open-rpc/inspector/compare/1.4.3...1.4.4) (2020-05-06)
+
+
+### Bug Fixes
+
+* **README:** update url params example with id ([42dba2a](https://github.com/open-rpc/inspector/commit/42dba2aacb5cbd1608722f5107fdf918feab7627))
+
 ## [1.4.3](https://github.com/open-rpc/inspector/compare/1.4.2...1.4.3) (2020-05-06)
 
 
