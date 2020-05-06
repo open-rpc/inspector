@@ -17,7 +17,7 @@ You can configure the default request and url via url params:
 
 `?url=http://localhost:8545`
 
-`?request[jsonrpc]=2.0&request[method]=eth_chainId`
+`?request[jsonrpc]=2.0&request[method]=eth_chainId&request[id]=0`
 
 here is a full example:
 
