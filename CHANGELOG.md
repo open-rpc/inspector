@@ -1,3 +1,10 @@
+## [1.4.5](https://github.com/open-rpc/inspector/compare/1.4.4...1.4.5) (2020-05-06)
+
+
+### Bug Fixes
+
+* update readme url to mock server ([646e6aa](https://github.com/open-rpc/inspector/commit/646e6aae6aa66e02ef9f3c7da99d658bdef6a873))
+
 ## [1.4.4](https://github.com/open-rpc/inspector/compare/1.4.3...1.4.4) (2020-05-06)
 
 
