@@ -1,9 +1,0 @@
-node_modules
-coverage
-build
-docs
-.DS_Store
-dist
-/**/build
-package/
-*.tgz
