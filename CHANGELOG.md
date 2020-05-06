@@ -1,3 +1,12 @@
+## [1.4.3](https://github.com/open-rpc/inspector/compare/1.4.2...1.4.3) (2020-05-06)
+
+
+### Bug Fixes
+
+* remove id variable ([d5cf345](https://github.com/open-rpc/inspector/commit/d5cf3455fb31cdafd72493ed0d4320a1826e1e25))
+* simplify postmessage transport ([bdafb5a](https://github.com/open-rpc/inspector/commit/bdafb5a4e1fca2aa1262f2baf504d254a2d8a340))
+* **postmessage transport:** remove guard from iframe ([fd6dc94](https://github.com/open-rpc/inspector/commit/fd6dc944dd36ef4c68144812e638f73454efaf55))
+
 ## [1.4.2](https://github.com/open-rpc/inspector/compare/1.4.1...1.4.2) (2020-04-01)
 
 
