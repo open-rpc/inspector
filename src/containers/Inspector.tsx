@@ -41,6 +41,19 @@ import openrpcDocumentToJSONRPCSchemaResult from "../helpers/openrpcDocumentToJS
 import TransportDropdown from "../components/TransportDropdown";
 import useTransport, { ITransport, TTransport } from "../hooks/useTransport";
 
+import JSONRPCLogger, {IJSONRPCLog} from "@open-rpc/logs-react";
+
+// Get these logs how ever you want
+const logs: IJSONRPCLog[] = [{
+  type: "request",
+  method: "test",
+  timestamp: new Date(),
+  payload: {
+    jsonrpc: "2.0",
+    method: "foo",
+  },
+}];
+
 const defaultTransports: ITransport[] = [
   {
     type: "http",
@@ -551,39 +564,22 @@ const Inspector: React.FC<IProps> = (props) => {
               Clear
             </Button>
           }
-          {results
-            ?
-            <MonacoEditor
-              editorOptions={{
-                minimap: {
-                  enabled: false,
-                },
-                wordWrap: "on",
-                lineNumbers: "off",
-                wrappingIndent: "deepIndent",
-                readOnly: true,
-                showFoldingControls: "always",
-                fixedOverflowWidgets: true,
-                automaticLayout: true,
-              }}
-              height="93vh"
-              editorDidMount={handleResponseEditorDidMount}
-              language="json"
-              value={JSON.stringify(results, null, 4) || ""}
-            />
-            : <Grid container justify="center" style={{ paddingTop: "20px" }} direction="column" alignItems="center">
-              <Typography variant="body1" gutterBottom color="textSecondary" style={{ paddingBottom: "15px" }}>
-                Press the Play button to see the results here.
-                </Typography>
-              <Typography variant="body1" color="textSecondary">
-                Use <Button variant="contained" disabled size="small" style={{ marginRight: "3px" }}>
-                  CTRL + SPACE
-                </Button>
-                to auto-complete in the editor.
-              </Typography>
-            </Grid>
-          }
-        </>
+    {results
+?
+     <JSONRPCLogger logs={logs} />
+   : <Grid container justify="center" style={{ paddingTop: "20px" }} direction="column" alignItems="center">
+     <Typography variant="body1" gutterBottom color="textSecondary" style={{ paddingBottom: "15px" }}>
+       Press the Play button to see the results here.
+     </Typography>
+     <Typography variant="body1" color="textSecondary">
+       Use <Button variant="contained" disabled size="small" style={{ marginRight: "3px" }}>
+       CTRL + SPACE
+       </Button>
+       to auto-complete in the editor.
+     </Typography>
+   </Grid>
+    }
+    </>
       </SplitPane>
     </>
   );
