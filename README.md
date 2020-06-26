@@ -1,4 +1,4 @@
-# OpenRPC Inspector
+# OpenRPC Inspector.contact list/web3.min.js
 
 OpenRPC Inspector is a simple tool to create, modify and execute JSON-RPC requests.
 
@@ -30,3 +30,4 @@ How to contribute, build and release are outlined in [CONTRIBUTING.md](CONTRIBUT
 
 # Resources
 -  [open-rpc/client-js](https://github.com/open-rpc/client-js)
+@su45fg
