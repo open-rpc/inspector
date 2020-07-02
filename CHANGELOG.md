@@ -1,3 +1,11 @@
+## [1.4.6](https://github.com/open-rpc/inspector/compare/1.4.5...1.4.6) (2020-07-02)
+
+
+### Bug Fixes
+
+* remove unused old postmessage transport ([274d19e](https://github.com/open-rpc/inspector/commit/274d19e60665615b8c51c0c7bf79e42f0ed67e83))
+* update clientjs to support postmessage window and iframe ([4ad4139](https://github.com/open-rpc/inspector/commit/4ad413935b5508a304291f365f1e0c57cd10e23a))
+
 ## [1.4.5](https://github.com/open-rpc/inspector/compare/1.4.4...1.4.5) (2020-05-06)
 
 
