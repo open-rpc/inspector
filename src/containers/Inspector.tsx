@@ -51,8 +51,12 @@ const defaultTransports: ITransport[] = [
     name: "WebSocket",
   },
   {
-    type: "postmessage",
-    name: "PostMessage",
+    type: "postmessagewindow",
+    name: "PostMessageWindow",
+  },
+  {
+    type: "postmessageiframe",
+    name: "PostMessageIframe",
   },
 ];
 
