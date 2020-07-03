@@ -211,7 +211,6 @@ const Inspector: React.FC<IProps> = (props) => {
         setRequestHistory(newHistory);
         setLogs((prevLogs) => [...prevLogs, reqObj, resObj]);
         setTabLogs(tabIndex, [...tabs[tabIndex].logs, reqObj, resObj]);
-        debugger;
       } catch (e) {
         const convertedError = errorToJSON(e, json.id);
         const reqObj: JSONRPCLog = { type: "request", method: json.method, timestamp: new Date(), payload: json };
@@ -220,7 +219,6 @@ const Inspector: React.FC<IProps> = (props) => {
         setRequestHistory(newHistory);
         setLogs((prevLogs) => [...prevLogs, reqObj, resObj]);
         setTabLogs(tabIndex, [...tabs[tabIndex].logs, reqObj, resObj]);
-        debugger;
       }
     }
   };
