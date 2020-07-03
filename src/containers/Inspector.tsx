@@ -182,23 +182,27 @@ const Inspector: React.FC<IProps> = (props) => {
   }, [props.url]);
 
   const handlePlayButton = async () => {
+    var requestTimestamp = new Date();
     if (transport) {
       try {
+        requestTimestamp = new Date();
         const result = await transport.sendData({
           internalID: json.id,
           request: json,
         });
+        const responseTimestamp = new Date();
         const r = { jsonrpc: "2.0", result, id: json.id };
-        const reqObj: JSONRPCLog = { type: "request", method: json.method, timestamp: new Date(), payload: json };
-        const resObj: JSONRPCLog = { type: "response", method: json.method, timestamp: new Date(), payload: r};
+        const reqObj: JSONRPCLog = { type: "request", method: json.method, timestamp: requestTimestamp, payload: json };
+        const resObj: JSONRPCLog = { type: "response", method: json.method, timestamp: responseTimestamp, payload: r};
         const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
         setRequestHistory(newHistory);
         setLogs((prevLogs) => [...prevLogs, reqObj, resObj]);
         setTabLogs(tabIndex, [...tabs[tabIndex].logs, reqObj, resObj]);
       } catch (e) {
+        const responseTimestamp = new Date();
         const convertedError = errorToJSON(e, json.id);
-        const reqObj: JSONRPCLog = { type: "request", method: json.method, timestamp: new Date(), payload: json };
-        const resObj: JSONRPCLog = { type: "response", method: json.method, timestamp: new Date(), payload: convertedError};
+        const reqObj: JSONRPCLog = { type: "request", method: json.method, timestamp: requestTimestamp, payload: json };
+        const resObj: JSONRPCLog = { type: "response", method: json.method, timestamp: responseTimestamp, payload: convertedError};
         const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
         setRequestHistory(newHistory);
         setLogs((prevLogs) => [...prevLogs, reqObj, resObj]);
@@ -212,7 +216,7 @@ const Inspector: React.FC<IProps> = (props) => {
 
   const clear = () => {
     setLogs([]);
-    setTabLogs(tabIndex, logs);
+    setTabLogs(tabIndex, []);
   };
 
   const handleClearButton = () => {
