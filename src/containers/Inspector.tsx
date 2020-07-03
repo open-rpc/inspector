@@ -1,12 +1,12 @@
 import React, { useState, useEffect, ChangeEvent, Dispatch } from "react";
 import SplitPane from "react-split-pane";
 import JSONRPCRequestEditor from "./JSONRPCRequestEditor";
-import * as monaco from "monaco-editor";
 import PlayCircle from "@material-ui/icons/PlayCircleFilled";
 import CloseIcon from "@material-ui/icons/Close";
 import FlashOn from "@material-ui/icons/FlashOn";
 import FlashOff from "@material-ui/icons/FlashOff";
 import History from "@material-ui/icons/History";
+import MonacoEditor from "@etclabscore/react-monaco-editor";
 import PlusIcon from "@material-ui/icons/Add";
 import DocumentIcon from "@material-ui/icons/Description";
 import {
@@ -30,29 +30,14 @@ import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import { JSONRPCError } from "@open-rpc/client-js/build/Error";
 import { OpenrpcDocument } from "@open-rpc/meta-schema";
-import MonacoEditor from "@etclabscore/react-monaco-editor";
 import useTabs from "../hooks/useTabs";
 import { useDebounce } from "use-debounce";
 import { green } from "@material-ui/core/colors";
 import { parseOpenRPCDocument } from "@open-rpc/schema-utils-js";
 import useMonacoVimMode from "../hooks/useMonacoVimMode";
-import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics";
-import openrpcDocumentToJSONRPCSchemaResult from "../helpers/openrpcDocumentToJSONRPCSchemaResult";
 import TransportDropdown from "../components/TransportDropdown";
-import useTransport, { ITransport, TTransport } from "../hooks/useTransport";
-
-import JSONRPCLogger, {IJSONRPCLog} from "@open-rpc/logs-react";
-
-// Get these logs how ever you want
-const logs: IJSONRPCLog[] = [{
-  type: "request",
-  method: "test",
-  timestamp: new Date(),
-  payload: {
-    jsonrpc: "2.0",
-    method: "foo",
-  },
-}];
+import useTransport, { ITransport } from "../hooks/useTransport";
+import JSONRPCLogger, {JSONRPCLog} from "@open-rpc/logs-react";
 
 const defaultTransports: ITransport[] = [
   {
@@ -135,12 +120,13 @@ const Inspector: React.FC<IProps> = (props) => {
     setTabOpenRPCDocument,
     setTabUrl,
     handleLabelChange,
-    setTabResults,
+    setTabLogs,
   } = useTabs(
     [
       {
         name: props.request ? props.request.method : "New Tab",
         content: props.request || { ...emptyJSONRPC },
+        logs: [],
         url: props.url || "",
         openrpcDocument: props.openrpcDocument,
       },
@@ -155,7 +141,6 @@ const Inspector: React.FC<IProps> = (props) => {
     params: [],
     id: 0,
   });
-  const [results, setResults]: [any, Dispatch<any>] = useState();
   const [transportList, setTransportList] = useState(defaultTransports);
   const [url, setUrl] = useState(props.url || "");
   const [debouncedUrl] = useDebounce(url, 1000);
@@ -164,6 +149,7 @@ const Inspector: React.FC<IProps> = (props) => {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [requestHistory, setRequestHistory]: [any[], Dispatch<any>] = useState([]);
   const [historySelectedIndex, setHistorySelectedIndex] = useState(0);
+  const [logs, setLogs] = useState<JSONRPCLog[]>([]);
   useEffect(() => {
     setTabs([
       ...tabs,
@@ -184,30 +170,6 @@ const Inspector: React.FC<IProps> = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTransport]);
-
-  useEffect(() => {
-    if (!openrpcDocument) {
-      return;
-    }
-    if (!responseEditor) {
-      return;
-    }
-    if (!results) {
-      return;
-    }
-    const schema = openrpcDocumentToJSONRPCSchemaResult(openrpcDocument, json.method);
-    const modelName = "inspector-results";
-    const modelUriString = `inmemory://${modelName}-${Math.random()}.json`;
-    const modelUri = monaco.Uri.parse(modelUriString);
-    const model = monaco.editor.createModel(
-      results ? JSON.stringify(results, null, 4) : ""
-      , "json", modelUri);
-    if (responseEditor) {
-      responseEditor.setModel(model);
-    }
-    addDiagnostics(modelUri.toString(), schema, monaco);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [results, responseEditor, openrpcDocument]);
 
   useEffect(() => {
     if (json) {
@@ -236,7 +198,6 @@ const Inspector: React.FC<IProps> = (props) => {
   }, [props.url]);
 
   const handlePlayButton = async () => {
-    clear();
     if (transport) {
       try {
         const result = await transport.sendData({
@@ -244,16 +205,22 @@ const Inspector: React.FC<IProps> = (props) => {
           request: json,
         });
         const r = { jsonrpc: "2.0", result, id: json.id };
-        setResults(r);
-        setTabResults(tabIndex, r);
+        const reqObj: JSONRPCLog = { type: "request", method: json.method, timestamp: new Date(), payload: json };
+        const resObj: JSONRPCLog = { type: "response", method: json.method, timestamp: new Date(), payload: r};
         const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
         setRequestHistory(newHistory);
+        setLogs((prevLogs) => [...prevLogs, reqObj, resObj]);
+        setTabLogs(tabIndex, [...tabs[tabIndex].logs, reqObj, resObj]);
+        debugger;
       } catch (e) {
         const convertedError = errorToJSON(e, json.id);
+        const reqObj: JSONRPCLog = { type: "request", method: json.method, timestamp: new Date(), payload: json };
+        const resObj: JSONRPCLog = { type: "response", method: json.method, timestamp: new Date(), payload: convertedError};
         const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
         setRequestHistory(newHistory);
-        setResults(convertedError);
-        setTabResults(tabIndex, convertedError);
+        setLogs((prevLogs) => [...prevLogs, reqObj, resObj]);
+        setTabLogs(tabIndex, [...tabs[tabIndex].logs, reqObj, resObj]);
+        debugger;
       }
     }
   };
@@ -262,8 +229,8 @@ const Inspector: React.FC<IProps> = (props) => {
   }
 
   const clear = () => {
-    setResults(undefined);
-    setTabResults(tabIndex, undefined);
+    setLogs([]);
+    setTabLogs(tabIndex, logs);
   };
 
   const handleClearButton = () => {
@@ -308,7 +275,7 @@ const Inspector: React.FC<IProps> = (props) => {
     if (tabs[tabIndex]) {
       setJson(tabs[tabIndex].content);
       setUrl(tabs[tabIndex].url || "");
-      setResults(tabs[tabIndex].results);
+      setLogs(tabs[tabIndex].logs);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabIndex]);
@@ -328,7 +295,6 @@ const Inspector: React.FC<IProps> = (props) => {
       setJson(requestHistory[historySelectedIndex].content);
       setUrl(requestHistory[historySelectedIndex].url);
       setOpenRpcDocument(requestHistory[historySelectedIndex].openrpcDocument);
-      setResults(undefined);
       setHistoryOpen(false);
     }
   };
@@ -433,6 +399,7 @@ const Inspector: React.FC<IProps> = (props) => {
                 {
                   name: "New Tab",
                   content: { ...emptyJSONRPC, id: 0 },
+                  logs: [],
                   openrpcDocument,
                   url,
                 },
@@ -557,28 +524,16 @@ const Inspector: React.FC<IProps> = (props) => {
           value={JSON.stringify(json, null, 4)}
         />
         <>
-          {results &&
+          { (logs.length > 0 ? true : false) &&
             <Button
               style={{ position: "absolute", top: "15px", right: "15px", zIndex: 1 }}
               onClick={handleClearButton}>
               Clear
             </Button>
           }
-    {results
-?
-     <JSONRPCLogger logs={logs} />
-   : <Grid container justify="center" style={{ paddingTop: "20px" }} direction="column" alignItems="center">
-     <Typography variant="body1" gutterBottom color="textSecondary" style={{ paddingBottom: "15px" }}>
-       Press the Play button to see the results here.
-     </Typography>
-     <Typography variant="body1" color="textSecondary">
-       Use <Button variant="contained" disabled size="small" style={{ marginRight: "3px" }}>
-       CTRL + SPACE
-       </Button>
-       to auto-complete in the editor.
-     </Typography>
-   </Grid>
-    }
+      <div style={{height: `calc(100% - 128px)`}}>
+          <JSONRPCLogger logs={logs}/>
+      </div>
     </>
       </SplitPane>
     </>

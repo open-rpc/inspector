@@ -1,10 +1,11 @@
 import { useState, Dispatch, useEffect } from "react";
 import { OpenrpcDocument } from "@open-rpc/meta-schema";
+import { JSONRPCLog } from "@open-rpc/logs-react";
 
 interface ITab {
   name: string;
   content?: any;
-  results?: string;
+  logs: JSONRPCLog[];
   editing?: boolean;
   url?: string;
   openrpcDocument?: OpenrpcDocument;
@@ -20,7 +21,7 @@ const emptyJSONRPC = {
 const useTabs = (defaultTabs?: ITab[]) => {
   const [tabIndex, setTabIndex] = useState(0);
   const [tabs, setTabs]: [ITab[], Dispatch<any>] = useState(
-    defaultTabs || [{ name: "New Tab", content: emptyJSONRPC, url: undefined }],
+    defaultTabs || [{ name: "New Tab", content: emptyJSONRPC, url: undefined, logs: [] }],
   );
 
   const handleClose = (event: React.MouseEvent<{}>, index: number) => {
@@ -70,7 +71,7 @@ const useTabs = (defaultTabs?: ITab[]) => {
           return {
             name: innerTab.name,
             content: innerTab.content,
-            results: innerTab.results,
+            logs: innerTab.logs,
             editing: innerTab.editing,
             url: innerTab.url,
           };
@@ -98,18 +99,18 @@ const useTabs = (defaultTabs?: ITab[]) => {
     setTabs(newTabs);
   };
 
-  const setTabResults = (ti: number, results: any) => {
+  const setTabLogs = (ti: number, logs: JSONRPCLog[]) => {
     const newTabs = tabs.map((innerTab, i) => {
       if (i === ti) {
         return {
           ...innerTab,
-          results,
-        };
+          logs,
+        }
       }
       return innerTab;
     });
     setTabs(newTabs);
-  };
+  }
 
   const setTabContent = (ti: number, content: any) => {
     const newTabs = tabs.map((innerTab, i) => {
@@ -138,7 +139,7 @@ const useTabs = (defaultTabs?: ITab[]) => {
     tabIndex,
     handleLabelChange,
     setTabUrl,
-    setTabResults,
+    setTabLogs,
     setTabOpenRPCDocument,
   };
 };
