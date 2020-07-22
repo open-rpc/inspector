@@ -39,7 +39,7 @@ import useMonacoVimMode from "../hooks/useMonacoVimMode";
 import { addDiagnostics } from "@etclabscore/monaco-add-json-schema-diagnostics";
 import openrpcDocumentToJSONRPCSchemaResult from "../helpers/openrpcDocumentToJSONRPCSchemaResult";
 import TransportDropdown from "../components/TransportDropdown";
-import useTransport, { ITransport } from "../hooks/useTransport";
+import useTransport, { ITransport, TTransport } from "../hooks/useTransport";
 
 const defaultTransports: ITransport[] = [
   {
@@ -99,6 +99,7 @@ interface IProps {
   darkMode?: boolean;
   hideToggleTheme?: boolean;
   openrpcDocument?: OpenrpcDocument;
+  transport?: TTransport;
   onToggleDarkMode?: () => void;
 }
 
@@ -188,7 +189,9 @@ const Inspector: React.FC<IProps> = (props) => {
     const model = monaco.editor.createModel(
       results ? JSON.stringify(results, null, 4) : ""
       , "json", modelUri);
-    responseEditor.setModel(model);
+    if (responseEditor) {
+      responseEditor.setModel(model);
+    }
     addDiagnostics(modelUri.toString(), schema, monaco);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [results, responseEditor, openrpcDocument]);
@@ -199,6 +202,17 @@ const Inspector: React.FC<IProps> = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [json]);
+
+  useEffect(() => {
+    if (props.transport) {
+      const t = defaultTransports
+        .find((tp: ITransport) => tp.type === props.transport);
+      if (t) {
+        setSelectedTransport(t);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.transport]);
 
   useEffect(() => {
     if (props.url) {
