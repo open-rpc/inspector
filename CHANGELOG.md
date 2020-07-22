@@ -1,3 +1,11 @@
+## [1.4.7](https://github.com/open-rpc/inspector/compare/1.4.6...1.4.7) (2020-07-22)
+
+
+### Bug Fixes
+
+* add transport as prop and query string ([1f480b1](https://github.com/open-rpc/inspector/commit/1f480b1fc1a14700c41484495447ede874d1f962))
+* **README:** add docs for transport query param ([c92155b](https://github.com/open-rpc/inspector/commit/c92155b6580b79f5fab4ab549c1c001e03d25cc5))
+
 ## [1.4.6](https://github.com/open-rpc/inspector/compare/1.4.5...1.4.6) (2020-07-02)
 
 
