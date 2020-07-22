@@ -5,7 +5,7 @@ import { HTTPTransport, WebSocketTransport, PostMessageWindowTransport, PostMess
 import { Transport } from "@open-rpc/client-js/build/transports/Transport";
 import { IJSONRPCData } from "@open-rpc/client-js/build/Request";
 
-type TTransport = "http" | "websocket" | "postmessagewindow" | "postmessageiframe";
+export type TTransport = "http" | "websocket" | "postmessagewindow" | "postmessageiframe";
 
 export interface IWebTransport {
   type: TTransport;
