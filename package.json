@@ -24,7 +24,7 @@
   "devDependencies": {
     "@rescripts/cli": "0.0.13",
     "@rescripts/utilities": "0.0.6",
-    "@types/jest": "^24.0.13",
+    "@types/jest": "^26.0.8",
     "@types/qs": "^6.5.3",
     "@types/react-dom": "^16.8.4",
     "jest": "24.9.0",
