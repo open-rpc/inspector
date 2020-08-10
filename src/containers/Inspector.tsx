@@ -512,13 +512,13 @@ const Inspector: React.FC<IProps> = (props) => {
         <>
           { (logs.length > 0 ? true : false) &&
             <Button
-              style={{ position: "absolute", top: "15px", right: "15px", zIndex: 1 }}
+              style={{ position: "absolute", top: "5px", right: "50px", zIndex: 1 }}
               onClick={handleClearButton}>
               Clear
             </Button>
           }
       <div style={{height: `calc(100% - 128px)`}}>
-          <JSONRPCLogger logs={logs}/>
+          <JSONRPCLogger logs={logs} sidebarAlign={"right"} openRecentPayload={true} />
       </div>
     </>
       </SplitPane>
