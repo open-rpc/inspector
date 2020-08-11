@@ -34,7 +34,6 @@ import useTabs from "../hooks/useTabs";
 import { useDebounce } from "use-debounce";
 import { green } from "@material-ui/core/colors";
 import { parseOpenRPCDocument } from "@open-rpc/schema-utils-js";
-import useMonacoVimMode from "../hooks/useMonacoVimMode";
 import TransportDropdown from "../components/TransportDropdown";
 import useTransport, { ITransport } from "../hooks/useTransport";
 import JSONRPCLogger, {JSONRPCLog} from "@open-rpc/logs-react";
@@ -132,8 +131,6 @@ const Inspector: React.FC<IProps> = (props) => {
       },
     ],
   );
-  const [responseEditor, setResponseEditor] = useState();
-  useMonacoVimMode(responseEditor);
   const [openrpcDocument, setOpenRpcDocument] = useState(props.openrpcDocument);
   const [json, setJson] = useState(props.request || {
     jsonrpc: "2.0",
@@ -198,7 +195,7 @@ const Inspector: React.FC<IProps> = (props) => {
   }, [props.url]);
 
   const handlePlayButton = async () => {
-    var requestTimestamp = new Date();
+    let requestTimestamp = new Date();
     if (transport) {
       try {
         requestTimestamp = new Date();
@@ -208,8 +205,18 @@ const Inspector: React.FC<IProps> = (props) => {
         });
         const responseTimestamp = new Date();
         const r = { jsonrpc: "2.0", result, id: json.id };
-        const reqObj: JSONRPCLog = { type: "request", method: json.method, timestamp: requestTimestamp, payload: json };
-        const resObj: JSONRPCLog = { type: "response", method: json.method, timestamp: responseTimestamp, payload: r};
+        const reqObj: JSONRPCLog = {
+          type: "request",
+          method: json.method,
+          timestamp: requestTimestamp,
+          payload: json,
+        };
+        const resObj: JSONRPCLog = {
+          type: "response",
+          method: json.method,
+          timestamp: responseTimestamp,
+          payload: r,
+        };
         const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
         setRequestHistory(newHistory);
         setLogs((prevLogs) => [...prevLogs, reqObj, resObj]);
@@ -217,8 +224,18 @@ const Inspector: React.FC<IProps> = (props) => {
       } catch (e) {
         const responseTimestamp = new Date();
         const convertedError = errorToJSON(e, json.id);
-        const reqObj: JSONRPCLog = { type: "request", method: json.method, timestamp: requestTimestamp, payload: json };
-        const resObj: JSONRPCLog = { type: "response", method: json.method, timestamp: responseTimestamp, payload: convertedError};
+        const reqObj: JSONRPCLog = {
+          type: "request",
+          method: json.method,
+          timestamp: requestTimestamp,
+          payload: json,
+        };
+        const resObj: JSONRPCLog = {
+          type: "response",
+          method: json.method,
+          timestamp: responseTimestamp,
+          payload: convertedError,
+        };
         const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
         setRequestHistory(newHistory);
         setLogs((prevLogs) => [...prevLogs, reqObj, resObj]);
@@ -226,9 +243,6 @@ const Inspector: React.FC<IProps> = (props) => {
       }
     }
   };
-  function handleResponseEditorDidMount(__: any, editor: any) {
-    setResponseEditor(editor);
-  }
 
   const clear = () => {
     setLogs([]);
@@ -503,12 +517,7 @@ const Inspector: React.FC<IProps> = (props) => {
         minSize={100}
         maxSize={-100}
         defaultSize={"50%"}
-        style={{ flexGrow: 1 }}
-        onChange={() => {
-          if (responseEditor) {
-            responseEditor.layout();
-          }
-        }}>
+        style={{ flexGrow: 1 }}>
         <JSONRPCRequestEditor
           onChange={(val) => {
             let jsonResult;
