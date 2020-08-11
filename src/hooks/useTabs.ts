@@ -105,12 +105,12 @@ const useTabs = (defaultTabs?: ITab[]) => {
         return {
           ...innerTab,
           logs,
-        }
+        };
       }
       return innerTab;
     });
     setTabs(newTabs);
-  }
+  };
 
   const setTabContent = (ti: number, content: any) => {
     const newTabs = tabs.map((innerTab, i) => {
