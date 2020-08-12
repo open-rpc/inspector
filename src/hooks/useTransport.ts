@@ -1,12 +1,11 @@
 
 import { JSONRPCError } from "@open-rpc/client-js/build/Error";
 import { Dispatch, useEffect, useState } from "react";
-import PostMessageTransport from "../transports/PostMessageTransport";
-import { HTTPTransport, WebSocketTransport } from "@open-rpc/client-js";
+import { HTTPTransport, WebSocketTransport, PostMessageWindowTransport, PostMessageIframeTransport } from "@open-rpc/client-js";
 import { Transport } from "@open-rpc/client-js/build/transports/Transport";
 import { IJSONRPCData } from "@open-rpc/client-js/build/Request";
 
-type TTransport = "http" | "websocket" | "postmessage";
+export type TTransport = "http" | "websocket" | "postmessagewindow" | "postmessageiframe";
 
 export interface IWebTransport {
   type: TTransport;
@@ -32,8 +31,10 @@ const getTransportFromType = async (
     localTransport = new WebSocketTransport(uri);
   } else if (localTransportType?.type === "http") {
     localTransport = new HTTPTransport(uri);
-  } else if (localTransportType?.type === "postmessage") {
-    localTransport = new PostMessageTransport(uri);
+  } else if (localTransportType?.type === "postmessageiframe") {
+    localTransport = new PostMessageIframeTransport(uri);
+  } else if (localTransportType?.type === "postmessagewindow") {
+    localTransport = new PostMessageWindowTransport(uri);
   } else if (localTransportType?.type === "plugin") {
     const intermediateTransport = await getTransportFromType(
       localTransportType.uri,

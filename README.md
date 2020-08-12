@@ -13,11 +13,13 @@ https://inspector.open-rpc.org
 
 ### Url configuration
 
-You can configure the default request and url via url params:
+You can configure the default request, url and transport via url params:
 
 `?url=http://localhost:8545`
 
 `?request[jsonrpc]=2.0&request[method]=eth_chainId&request[id]=0`
+
+`?transport=websocket`
 
 here is a full example:
 

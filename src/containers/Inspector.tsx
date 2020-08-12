@@ -48,8 +48,12 @@ const defaultTransports: ITransport[] = [
     name: "WebSocket",
   },
   {
-    type: "postmessage",
-    name: "PostMessage",
+    type: "postmessagewindow",
+    name: "PostMessageWindow",
+  },
+  {
+    type: "postmessageiframe",
+    name: "PostMessageIframe",
   },
 ];
 
@@ -92,6 +96,7 @@ interface IProps {
   darkMode?: boolean;
   hideToggleTheme?: boolean;
   openrpcDocument?: OpenrpcDocument;
+  transport?: TTransport;
   onToggleDarkMode?: () => void;
 }
 
@@ -169,6 +174,17 @@ const Inspector: React.FC<IProps> = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [json]);
+
+  useEffect(() => {
+    if (props.transport) {
+      const t = defaultTransports
+        .find((tp: ITransport) => tp.type === props.transport);
+      if (t) {
+        setSelectedTransport(t);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.transport]);
 
   useEffect(() => {
     if (props.url) {
