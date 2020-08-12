@@ -306,6 +306,7 @@ const Inspector: React.FC<IProps> = (props) => {
     if (!historyOpen) {
       handlePlayButton();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [historyOpen]);
 
   const handleTabIndexChange = (event: React.ChangeEvent<{}>, newValue: number) => {
