@@ -35,7 +35,7 @@ import { useDebounce } from "use-debounce";
 import { green } from "@material-ui/core/colors";
 import { parseOpenRPCDocument } from "@open-rpc/schema-utils-js";
 import TransportDropdown from "../components/TransportDropdown";
-import useTransport, { ITransport } from "../hooks/useTransport";
+import useTransport, { ITransport, TTransport } from "../hooks/useTransport";
 import JSONRPCLogger, {JSONRPCLog} from "@open-rpc/logs-react";
 
 const defaultTransports: ITransport[] = [
