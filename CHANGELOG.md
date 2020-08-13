@@ -1,3 +1,10 @@
+## [1.4.8](https://github.com/open-rpc/inspector/compare/1.4.7...1.4.8) (2020-08-13)
+
+
+### Bug Fixes
+
+* **README:** add logs react to resources ([02a80be](https://github.com/open-rpc/inspector/commit/02a80bedc42d733ba76ac83075c48927f98c8b01))
+
 ## [1.4.7](https://github.com/open-rpc/inspector/compare/1.4.6...1.4.7) (2020-07-22)
 
 
