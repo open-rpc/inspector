@@ -32,3 +32,4 @@ How to contribute, build and release are outlined in [CONTRIBUTING.md](CONTRIBUT
 
 # Resources
 -  [open-rpc/client-js](https://github.com/open-rpc/client-js)
+-  [open-rpc/logs-react](https://github.com/open-rpc/logs-react)
