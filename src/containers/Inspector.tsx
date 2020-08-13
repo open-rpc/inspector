@@ -542,7 +542,7 @@ const Inspector: React.FC<IProps> = (props) => {
           value={JSON.stringify(json, null, 4)}
         />
         <>
-          { (logs.length > 0 ? true : false) &&
+          {logs.length > 0 &&
             <Button
               style={{ position: "absolute", top: "5px", right: "50px", zIndex: 1 }}
               onClick={handleClearButton}>
