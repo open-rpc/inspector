@@ -1,3 +1,11 @@
+## [1.4.10](https://github.com/open-rpc/inspector/compare/1.4.9...1.4.10) (2020-10-14)
+
+
+### Bug Fixes
+
+* default to empty if no tab logs ([5c5f4f7](https://github.com/open-rpc/inspector/commit/5c5f4f7914df6e2393e2c08a1599f6ace3982767))
+* tab log empty ([48b7ffe](https://github.com/open-rpc/inspector/commit/48b7ffe5c00af4b94f0dcbd1463d1607ee8f973e))
+
 ## [1.4.9](https://github.com/open-rpc/inspector/compare/1.4.8...1.4.9) (2020-10-14)
 
 
