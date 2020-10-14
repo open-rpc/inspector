@@ -1,3 +1,10 @@
+## [1.4.11](https://github.com/open-rpc/inspector/compare/1.4.10...1.4.11) (2020-10-14)
+
+
+### Bug Fixes
+
+* update logs-react ([60196e6](https://github.com/open-rpc/inspector/commit/60196e69f53ff9746b28f6bdc861911d4bf236dc))
+
 ## [1.4.10](https://github.com/open-rpc/inspector/compare/1.4.9...1.4.10) (2020-10-14)
 
 
