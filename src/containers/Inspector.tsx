@@ -220,7 +220,7 @@ const Inspector: React.FC<IProps> = (props) => {
         const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
         setRequestHistory(newHistory);
         setLogs((prevLogs) => [...prevLogs, reqObj, resObj]);
-        setTabLogs(tabIndex, [...tabs[tabIndex].logs, reqObj, resObj]);
+        setTabLogs(tabIndex, [...(tabs[tabIndex].logs || []), reqObj, resObj]);
       } catch (e) {
         const responseTimestamp = new Date();
         const convertedError = errorToJSON(e, json.id);
