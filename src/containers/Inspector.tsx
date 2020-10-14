@@ -291,7 +291,7 @@ const Inspector: React.FC<IProps> = (props) => {
     if (tabs[tabIndex]) {
       setJson(tabs[tabIndex].content);
       setUrl(tabs[tabIndex].url || "");
-      setLogs(tabs[tabIndex].logs);
+      setLogs(tabs[tabIndex].logs || []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabIndex]);
