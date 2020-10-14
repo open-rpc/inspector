@@ -239,7 +239,7 @@ const Inspector: React.FC<IProps> = (props) => {
         const newHistory: any = [...requestHistory, { ...tabs[tabIndex] }];
         setRequestHistory(newHistory);
         setLogs((prevLogs) => [...prevLogs, reqObj, resObj]);
-        setTabLogs(tabIndex, [...tabs[tabIndex].logs, reqObj, resObj]);
+        setTabLogs(tabIndex, [...(tabs[tabIndex].logs || []), reqObj, resObj]);
       }
     }
   };
