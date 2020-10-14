@@ -1,3 +1,11 @@
+## [1.4.12](https://github.com/open-rpc/inspector/compare/1.4.11...1.4.12) (2020-10-14)
+
+
+### Bug Fixes
+
+* update logs-react ([7d9c226](https://github.com/open-rpc/inspector/commit/7d9c226e1758de2d60ecdc622d07a13ef51477cc))
+* update logs-react to remove scroll to bottom ([65c3b01](https://github.com/open-rpc/inspector/commit/65c3b01533e08dfec40e8deb884bf27322499b0a))
+
 ## [1.4.11](https://github.com/open-rpc/inspector/compare/1.4.10...1.4.11) (2020-10-14)
 
 
