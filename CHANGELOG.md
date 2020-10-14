@@ -1,3 +1,14 @@
+## [1.4.9](https://github.com/open-rpc/inspector/compare/1.4.8...1.4.9) (2020-10-14)
+
+
+### Bug Fixes
+
+* **deps:** update material ui deps ([cb1905e](https://github.com/open-rpc/inspector/commit/cb1905e9ed41d4821e248665f862e73ba95ac73f))
+* default logs to empty array when switching tabs ([ae7c23f](https://github.com/open-rpc/inspector/commit/ae7c23fa79704ebb80b149bac9a2fbc581782b59))
+* lock material-ui versions ([d6693d7](https://github.com/open-rpc/inspector/commit/d6693d78da796e38680192c9198e8284e9d763df))
+* material deps ([7ec066c](https://github.com/open-rpc/inspector/commit/7ec066cddefba21aa86f34c3a2e7b03ff07c1738))
+* update logs-react ([60b8ad5](https://github.com/open-rpc/inspector/commit/60b8ad5f6fdb205e9a62316326c9aed548999c50))
+
 ## [1.4.8](https://github.com/open-rpc/inspector/compare/1.4.7...1.4.8) (2020-08-13)
 
 
