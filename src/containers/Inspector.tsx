@@ -36,7 +36,7 @@ import { green } from "@material-ui/core/colors";
 import { parseOpenRPCDocument } from "@open-rpc/schema-utils-js";
 import TransportDropdown from "../components/TransportDropdown";
 import useTransport, { ITransport, TTransport } from "../hooks/useTransport";
-import JSONRPCLogger, {JSONRPCLog} from "@open-rpc/logs-react";
+import JSONRPCLogger, { JSONRPCLog } from "@open-rpc/logs-react";
 
 const defaultTransports: ITransport[] = [
   {
@@ -549,10 +549,10 @@ const Inspector: React.FC<IProps> = (props) => {
               Clear
             </Button>
           }
-      <div style={{height: `calc(100% - 128px)`}}>
-          <JSONRPCLogger logs={logs} sidebarAlign={"right"} openRecentPayload={true} />
-      </div>
-    </>
+          <div style={{ height: "100%", paddingBottom: "128px" }}>
+            <JSONRPCLogger logs={logs} sidebarAlign={"right"} openRecentPayload={true} />
+          </div>
+        </>
       </SplitPane>
     </>
   );
