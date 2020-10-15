@@ -1,3 +1,10 @@
+## [1.4.13](https://github.com/open-rpc/inspector/compare/1.4.12...1.4.13) (2020-10-15)
+
+
+### Bug Fixes
+
+* update logs-react and add empty message/tutorial back ([a52ce92](https://github.com/open-rpc/inspector/commit/a52ce92e136bfb886b201244d4d26d48496848b0))
+
 ## [1.4.12](https://github.com/open-rpc/inspector/compare/1.4.11...1.4.12) (2020-10-14)
 
 
