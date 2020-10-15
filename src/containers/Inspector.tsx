@@ -6,6 +6,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import FlashOn from "@material-ui/icons/FlashOn";
 import FlashOff from "@material-ui/icons/FlashOff";
 import History from "@material-ui/icons/History";
+import Keyboard from "@material-ui/icons/Keyboard";
 import MonacoEditor from "@etclabscore/react-monaco-editor";
 import PlusIcon from "@material-ui/icons/Add";
 import DocumentIcon from "@material-ui/icons/Description";
@@ -552,11 +553,17 @@ const Inspector: React.FC<IProps> = (props) => {
           }
           {logs.length === 0 &&
             <Container maxWidth="sm">
-              <Grid container justify="center" style={{ paddingTop: "20px" }}>
-                <Typography variant="caption" gutterBottom>Press the Play button to see the results here.</Typography>
-                <Typography variant="caption">
+              <Grid container justify="center" style={{ paddingTop: "40px" }}>
+                <Typography gutterBottom>Press the Play button to see the results here.</Typography>
+                <Typography>
                   Use&nbsp;
-                  <Button variant="contained" disabled size="small" style={{ marginRight: "3px" }}>
+                  <Button
+                    startIcon={<Keyboard />}
+                    variant="contained"
+                    disabled
+                    size="small"
+                    style={{ marginRight: "3px" }}
+                  >
                     CTRL + SPACE
                    </Button>
                   to auto-complete in the editor.
@@ -566,7 +573,11 @@ const Inspector: React.FC<IProps> = (props) => {
           }
           {logs.length !== 0 &&
             <div style={{ height: "100%" }}>
-              <JSONRPCLogger logs={logs} sidebarAlign={"right"} openRecentPayload={true} />
+              <JSONRPCLogger
+                openrpcDocument={openrpcDocument}
+                logs={logs}
+                sidebarAlign={"right"}
+                openRecentPayload={true} />
             </div>
           }
         </>
