@@ -555,9 +555,15 @@ const Inspector: React.FC<IProps> = (props) => {
             <Container maxWidth="sm">
               <Grid container justify="center" style={{ paddingTop: "40px" }}>
                 <Typography gutterBottom>Press the Play button to see the results here.</Typography>
-                <Typography >
+                <Typography>
                   Use&nbsp;
-                  <Button startIcon={<Keyboard />} variant="contained" disabled size="small" style={{ marginRight: "3px" }}>
+                  <Button
+                    startIcon={<Keyboard />}
+                    variant="contained"
+                    disabled
+                    size="small"
+                    style={{ marginRight: "3px" }}
+                  >
                     CTRL + SPACE
                    </Button>
                   to auto-complete in the editor.
@@ -567,7 +573,11 @@ const Inspector: React.FC<IProps> = (props) => {
           }
           {logs.length !== 0 &&
             <div style={{ height: "100%" }}>
-              <JSONRPCLogger openrpcDocument={openrpcDocument} logs={logs} sidebarAlign={"right"} openRecentPayload={true} />
+              <JSONRPCLogger
+                openrpcDocument={openrpcDocument}
+                logs={logs}
+                sidebarAlign={"right"}
+                openRecentPayload={true} />
             </div>
           }
         </>
