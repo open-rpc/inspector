@@ -1,3 +1,10 @@
+## [1.4.17](https://github.com/open-rpc/inspector/compare/1.4.16...1.4.17) (2020-10-15)
+
+
+### Bug Fixes
+
+* monaco editor height 100% ([65b7fa2](https://github.com/open-rpc/inspector/commit/65b7fa2dde5892b7261a6c8771f03472ecc083ec))
+
 ## [1.4.16](https://github.com/open-rpc/inspector/compare/1.4.15...1.4.16) (2020-10-15)
 
 
