@@ -524,7 +524,8 @@ const Inspector: React.FC<IProps> = (props) => {
         minSize={100}
         maxSize={-100}
         defaultSize={"50%"}
-        style={{ flexGrow: 1 }}>
+        pane2Style={{ height: "100%", width: "100%", overflow: "auto" }}
+        style={{ flexGrow: 1, height: "calc(100% - 128px)" }}>
         <JSONRPCRequestEditor
           onChange={(val) => {
             let jsonResult;
@@ -549,9 +550,25 @@ const Inspector: React.FC<IProps> = (props) => {
               Clear
             </Button>
           }
-          <div style={{ height: "100%", paddingBottom: "128px" }}>
-            <JSONRPCLogger logs={logs} sidebarAlign={"right"} openRecentPayload={true} />
-          </div>
+          {logs.length === 0 &&
+            <Container maxWidth="sm">
+              <Grid container justify="center" style={{ paddingTop: "20px" }}>
+                <Typography variant="caption" gutterBottom>Press the Play button to see the results here.</Typography>
+                <Typography variant="caption">
+                  Use&nbsp;
+                  <Button variant="contained" disabled size="small" style={{ marginRight: "3px" }}>
+                    CTRL + SPACE
+                   </Button>
+                  to auto-complete in the editor.
+            </Typography>
+              </Grid>
+            </Container>
+          }
+          {logs.length !== 0 &&
+            <div style={{ height: "100%" }}>
+              <JSONRPCLogger logs={logs} sidebarAlign={"right"} openRecentPayload={true} />
+            </div>
+          }
         </>
       </SplitPane>
     </>
