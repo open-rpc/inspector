@@ -1,3 +1,11 @@
+## [1.4.15](https://github.com/open-rpc/inspector/compare/1.4.14...1.4.15) (2020-10-15)
+
+
+### Bug Fixes
+
+* linting ([8373306](https://github.com/open-rpc/inspector/commit/8373306646529e80a466aa6f157cf47bf801e46e))
+* update logs-react to support openrpc document ([753a78d](https://github.com/open-rpc/inspector/commit/753a78daf2e1a2d2d52dc829e6ff742d0d289d1e))
+
 ## [1.4.14](https://github.com/open-rpc/inspector/compare/1.4.13...1.4.14) (2020-10-15)
 
 
