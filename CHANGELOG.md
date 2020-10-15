@@ -1,3 +1,10 @@
+## [1.4.18](https://github.com/open-rpc/inspector/compare/1.4.17...1.4.18) (2020-10-15)
+
+
+### Bug Fixes
+
+* update logs react to get smaller card list sizing ([1ed9296](https://github.com/open-rpc/inspector/commit/1ed9296ca626c7af87d605d9916c090703c45c86))
+
 ## [1.4.17](https://github.com/open-rpc/inspector/compare/1.4.16...1.4.17) (2020-10-15)
 
 
