@@ -1,3 +1,10 @@
+## [1.4.16](https://github.com/open-rpc/inspector/compare/1.4.15...1.4.16) (2020-10-15)
+
+
+### Bug Fixes
+
+* logs-react scroll bottom ([516e440](https://github.com/open-rpc/inspector/commit/516e4409369669ea7e9fc61d6b98424090deda54))
+
 ## [1.4.15](https://github.com/open-rpc/inspector/compare/1.4.14...1.4.15) (2020-10-15)
 
 
