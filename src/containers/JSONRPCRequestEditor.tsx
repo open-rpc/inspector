@@ -89,7 +89,7 @@ const JSONRPCRequestEditor: React.FC<IProps> = (props) => {
 
   return (
     <MonacoEditor
-      height="85vh"
+      height="100%"
       value={props.value}
       editorDidMount={handleEditorDidMount}
       editorOptions={{
