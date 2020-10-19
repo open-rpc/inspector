@@ -11,6 +11,8 @@ It can be used as a standalone tool or included in other projects.
 
 https://inspector.open-rpc.org
 
+Need help or have a question? Join us on [Discord](https://discord.gg/gREUKuF)!
+
 ### Url configuration
 
 You can configure the default request, url and transport via url params:
@@ -28,7 +30,6 @@ https://inspector.open-rpc.org/?url=https://mock.open-rpc.org/petstore-1.0.0&?re
 ### Contributing
 
 How to contribute, build and release are outlined in [CONTRIBUTING.md](CONTRIBUTING.md), [BUILDING.md](BUILDING.md) and [RELEASING.md](RELEASING.md) respectively. Commits in this repository follow the [CONVENTIONAL_COMMITS.md](CONVENTIONAL_COMMITS.md) specification.
-
 
 # Resources
 -  [open-rpc/client-js](https://github.com/open-rpc/client-js)
