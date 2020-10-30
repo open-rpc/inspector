@@ -4,12 +4,14 @@ import { Dispatch, useEffect, useState } from "react";
 import { HTTPTransport, WebSocketTransport, PostMessageWindowTransport, PostMessageIframeTransport } from "@open-rpc/client-js";
 import { Transport } from "@open-rpc/client-js/build/transports/Transport";
 import { IJSONRPCData } from "@open-rpc/client-js/build/Request";
+import { JSONSchema } from "@open-rpc/meta-schema";
 
 export type TTransport = "http" | "websocket" | "postmessagewindow" | "postmessageiframe";
 
 export interface IWebTransport {
   type: TTransport;
   name?: string;
+  schema?: JSONSchema;
 }
 
 export interface IPluginTransport {
@@ -22,6 +24,7 @@ const getTransportFromType = async (
   uri: string,
   transports: ITransport[],
   transport: ITransport,
+  transportOptions?: any,
 ): Promise<Transport> => {
   let localTransport: any;
   const localTransportType = transports.find((value) => {
@@ -30,7 +33,7 @@ const getTransportFromType = async (
   if (localTransportType?.type === "websocket") {
     localTransport = new WebSocketTransport(uri);
   } else if (localTransportType?.type === "http") {
-    localTransport = new HTTPTransport(uri);
+    localTransport = new HTTPTransport(uri, transportOptions);
   } else if (localTransportType?.type === "postmessageiframe") {
     localTransport = new PostMessageIframeTransport(uri);
   } else if (localTransportType?.type === "postmessagewindow") {
@@ -86,10 +89,14 @@ const getTransportFromType = async (
 
 export type ITransport = IWebTransport | IPluginTransport;
 
-type TUseTransport = (transports: ITransport[], url: string, defaultTransportType: ITransport) =>
-  [Transport | undefined, (t: ITransport) => void, JSONRPCError | undefined, boolean];
+type TUseTransport = (
+  transports: ITransport[],
+  url: string,
+  defaultTransportType: ITransport,
+  transportOptions?: any,
+) => [Transport | undefined, (t: ITransport) => void, JSONRPCError | undefined, boolean];
 
-const useTransport: TUseTransport = (transports, url, defaultTransportType) => {
+const useTransport: TUseTransport = (transports, url, defaultTransportType, transportOptions) => {
   const [transport, setTransport] = useState<Transport>();
   const [transportConnected, setTransportConnected] = useState<boolean>(false);
   const [transportType, setTransportType]:
@@ -104,7 +111,7 @@ const useTransport: TUseTransport = (transports, url, defaultTransportType) => {
       return;
     }
     const doSetTransport = async () => {
-      const localTransport = await getTransportFromType(url, transports, transportType);
+      const localTransport = await getTransportFromType(url, transports, transportType, transportOptions);
       return localTransport.connect().then(() => {
         setTransportConnected(true);
         setTransport(localTransport);
@@ -117,7 +124,7 @@ const useTransport: TUseTransport = (transports, url, defaultTransportType) => {
         setTransport(undefined);
         setError(e);
       });
-  }, [transportType, url, transports]);
+  }, [transportType, url, transports, transportOptions]);
   const setSelectedTransportType = async (t: ITransport) => {
     setTransportConnected(false);
     setTransportType(t);
