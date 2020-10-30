@@ -39,6 +39,7 @@ import TransportDropdown from "../components/TransportDropdown";
 import useTransport, { ITransport, IWebTransport, TTransport } from "../hooks/useTransport";
 import JSONRPCLogger, { JSONRPCLog } from "@open-rpc/logs-react";
 import OptionsEditor from "./OptionsEditor";
+import { JSONRPCMessage } from "@open-rpc/client-js/build/ClientInterface";
 
 const defaultTransports: ITransport[] = [
   {
@@ -200,7 +201,7 @@ const Inspector: React.FC<IProps> = (props) => {
     if (selectedTransport !== undefined) {
       setTransport(selectedTransport!);
       const s: IWebTransport = selectedTransport as IWebTransport;
-      if (s.schema && s.schema?.examples) {
+      if (s.schema && typeof s.schema === "object") {
         setTransportOptions(s.schema.examples[0]);
       }
     }
@@ -232,6 +233,24 @@ const Inspector: React.FC<IProps> = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.url]);
+
+  useEffect(() => {
+    if (transport) {
+      transport.subscribe("notification", (notification: any) => {
+        const responseTimestamp = new Date();
+        const notificationObj: JSONRPCLog = {
+          type: "response",
+          notification: true,
+          method: notification.method,
+          timestamp: responseTimestamp,
+          payload: notification,
+        };
+        setLogs((prevLogs) => [...prevLogs, notificationObj]);
+        setTabLogs(tabIndex, [...(tabs[tabIndex].logs || []), notificationObj]);
+      });
+    }
+
+  }, [transport]);
 
   const handlePlayButton = async () => {
     let requestTimestamp = new Date();

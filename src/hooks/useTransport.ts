@@ -111,6 +111,10 @@ const useTransport: TUseTransport = (transports, url, defaultTransportType, tran
       return;
     }
     const doSetTransport = async () => {
+      if (transport) {
+        transport.unsubscribe();
+        transport.close();
+      }
       const localTransport = await getTransportFromType(url, transports, transportType, transportOptions);
       return localTransport.connect().then(() => {
         setTransportConnected(true);
