@@ -83,12 +83,16 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
                   type: "object",
                   properties: method.params && (method.params as ContentDescriptorObject[])
                     .reduce((memo: any, param: ContentDescriptorObject) => {
-                      memo[param.name] = {
-                        ...param.schema,
-                        markdownDescription: param.description || param.summary,
-                        description: param.description || param.summary,
-                        additionalProperties: false,
-                      };
+                      if (typeof param.schema === "object") {
+                        memo[param.name] = {
+                          ...param.schema,
+                          markdownDescription: param.description || param.summary,
+                          description: param.description || param.summary,
+                          additionalProperties: false,
+                        };
+                      } else {
+                        memo[param.name] = param.schema;
+                      }
                       return memo;
                     }, {}),
                 },
