@@ -36,13 +36,40 @@ import { useDebounce } from "use-debounce";
 import { green } from "@material-ui/core/colors";
 import { parseOpenRPCDocument } from "@open-rpc/schema-utils-js";
 import TransportDropdown from "../components/TransportDropdown";
-import useTransport, { ITransport, TTransport } from "../hooks/useTransport";
+import useTransport, { ITransport, IWebTransport, TTransport } from "../hooks/useTransport";
 import JSONRPCLogger, { JSONRPCLog } from "@open-rpc/logs-react";
+import OptionsEditor from "./OptionsEditor";
 
 const defaultTransports: ITransport[] = [
   {
     type: "http",
     name: "HTTP",
+    schema: {
+      type: "object",
+      properties: {
+        headers: {
+          patternProperties: {
+            "": {
+              type: "string",
+            },
+          },
+        },
+        credentials: {
+          type: "string",
+          enum: [
+            "omit",
+            "same-origin",
+            "include",
+          ],
+        },
+      },
+      examples: [
+        {
+          headers: {
+          },
+        },
+      ],
+    },
   },
   {
     type: "websocket",
@@ -143,7 +170,14 @@ const Inspector: React.FC<IProps> = (props) => {
   const [url, setUrl] = useState(props.url || "");
   const [debouncedUrl] = useDebounce(url, 1000);
   const [selectedTransport, setSelectedTransport] = useState(defaultTransports[0]);
-  const [transport, setTransport, , connected] = useTransport(transportList, debouncedUrl, defaultTransports[0]);
+  const [transportOptions, setTransportOptions] = useState();
+  const [debouncedtransportOptions] = useDebounce(transportOptions, 1000);
+  const [transport, setTransport, , connected] = useTransport(
+    transportList,
+    debouncedUrl,
+    defaultTransports[0],
+    debouncedtransportOptions,
+  );
   const [historyOpen, setHistoryOpen] = useState(false);
   const [requestHistory, setRequestHistory]: [any[], Dispatch<any>] = useState([]);
   const [historySelectedIndex, setHistorySelectedIndex] = useState(0);
@@ -165,6 +199,10 @@ const Inspector: React.FC<IProps> = (props) => {
   useEffect(() => {
     if (selectedTransport !== undefined) {
       setTransport(selectedTransport!);
+      const s: IWebTransport = selectedTransport as IWebTransport;
+      if (s.schema && s.schema?.examples) {
+        setTransportOptions(s.schema.examples[0]);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTransport]);
@@ -320,6 +358,14 @@ const Inspector: React.FC<IProps> = (props) => {
       setUrl(requestHistory[historySelectedIndex].url);
       setOpenRpcDocument(requestHistory[historySelectedIndex].openrpcDocument);
       setHistoryOpen(false);
+    }
+  };
+
+  const handleTransportOptionsChange = (optionsString: string) => {
+    try {
+      setTransportOptions(JSON.parse(optionsString));
+    } catch (e) {
+      // cannot parse transport options
     }
   };
 
@@ -527,22 +573,36 @@ const Inspector: React.FC<IProps> = (props) => {
         defaultSize={"50%"}
         pane2Style={{ height: "100%", width: "100%", overflow: "auto" }}
         style={{ flexGrow: 1, height: "calc(100% - 128px)" }}>
-        <JSONRPCRequestEditor
-          onChange={(val) => {
-            let jsonResult;
-            try {
-              jsonResult = JSON.parse(val);
-            } catch (e) {
-              console.error(e);
-            }
-            if (jsonResult) {
-              setJson(jsonResult);
-              setTabContent(tabIndex, jsonResult);
-            }
-          }}
-          openrpcDocument={openrpcDocument}
-          value={JSON.stringify(json, null, 4)}
-        />
+        <SplitPane
+          split="horizontal"
+          minSize={100}
+          maxSize={-100}
+          defaultSize={(selectedTransport as IWebTransport).schema ? "85%" : "100%"}
+          pane2Style={{ height: "100%", width: "100%", overflow: "auto" }}
+          style={{ flexGrow: 1, height: "calc(100% - 128px)" }}>
+          <JSONRPCRequestEditor
+            onChange={(val) => {
+              let jsonResult;
+              try {
+                jsonResult = JSON.parse(val);
+              } catch (e) {
+                console.error(e);
+              }
+              if (jsonResult) {
+                setJson(jsonResult);
+                setTabContent(tabIndex, jsonResult);
+              }
+            }}
+            openrpcDocument={openrpcDocument}
+            value={JSON.stringify(json, null, 4)}
+          />
+          {(selectedTransport as IWebTransport).schema && <OptionsEditor
+            schema={(selectedTransport as IWebTransport).schema}
+            value={JSON.stringify(transportOptions, null, 4)}
+            onChange={handleTransportOptionsChange}>
+          </OptionsEditor>
+          }
+        </SplitPane>
         <>
           {logs.length > 0 &&
             <Button
