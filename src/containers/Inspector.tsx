@@ -30,7 +30,7 @@ import {
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import { JSONRPCError } from "@open-rpc/client-js/build/Error";
-import { OpenrpcDocument } from "@open-rpc/meta-schema";
+import { OpenrpcDocument, ExampleObject } from "@open-rpc/meta-schema";
 import useTabs from "../hooks/useTabs";
 import { useDebounce } from "use-debounce";
 import { green } from "@material-ui/core/colors";
@@ -39,7 +39,6 @@ import TransportDropdown from "../components/TransportDropdown";
 import useTransport, { ITransport, IWebTransport, TTransport } from "../hooks/useTransport";
 import JSONRPCLogger, { JSONRPCLog } from "@open-rpc/logs-react";
 import OptionsEditor from "./OptionsEditor";
-import { JSONRPCMessage } from "@open-rpc/client-js/build/ClientInterface";
 
 const defaultTransports: ITransport[] = [
   {
@@ -171,7 +170,7 @@ const Inspector: React.FC<IProps> = (props) => {
   const [url, setUrl] = useState(props.url || "");
   const [debouncedUrl] = useDebounce(url, 1000);
   const [selectedTransport, setSelectedTransport] = useState(defaultTransports[0]);
-  const [transportOptions, setTransportOptions] = useState();
+  const [transportOptions, setTransportOptions] = useState<any>();
   const [debouncedtransportOptions] = useDebounce(transportOptions, 1000);
   const [transport, setTransport, , connected] = useTransport(
     transportList,
@@ -201,8 +200,8 @@ const Inspector: React.FC<IProps> = (props) => {
     if (selectedTransport !== undefined) {
       setTransport(selectedTransport!);
       const s: IWebTransport = selectedTransport as IWebTransport;
-      if (s.schema && typeof s.schema === "object") {
-        setTransportOptions(s.schema.examples[0]);
+      if (s.schema !== undefined && s.schema !== true && s.schema !== false) {
+        setTransportOptions((s.schema.examples as ExampleObject[])[0]);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -249,7 +248,7 @@ const Inspector: React.FC<IProps> = (props) => {
         setTabLogs(tabIndex, [...(tabs[tabIndex].logs || []), notificationObj]);
       });
     }
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transport]);
 
   const handlePlayButton = async () => {
@@ -653,6 +652,7 @@ const Inspector: React.FC<IProps> = (props) => {
           {logs.length !== 0 &&
             <div style={{ height: "100%" }}>
               <JSONRPCLogger
+                sidebarOpen={false}
                 openrpcDocument={openrpcDocument}
                 logs={logs}
                 sidebarAlign={"right"}

@@ -128,6 +128,7 @@ const useTransport: TUseTransport = (transports, url, defaultTransportType, tran
         setTransport(undefined);
         setError(e);
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transportType, url, transports, transportOptions]);
   const setSelectedTransportType = async (t: ITransport) => {
     setTransportConnected(false);
