@@ -1,3 +1,18 @@
+# [1.5.0](https://github.com/open-rpc/inspector/compare/1.4.18...1.5.0) (2020-11-10)
+
+
+### Bug Fixes
+
+* add discord link ([2722bec](https://github.com/open-rpc/inspector/commit/2722bec312a59148adef82b44223864553d093d4))
+* update meta-schema ([6b4d47e](https://github.com/open-rpc/inspector/commit/6b4d47e788965957c69c1450cb3fde3a0a5cefdf))
+* update meta-schema + dereffer ([fab0533](https://github.com/open-rpc/inspector/commit/fab05335e1f5f28a7b3525667a01a93e5b957b01))
+
+
+### Features
+
+* add http transport options configuration ([585ebe8](https://github.com/open-rpc/inspector/commit/585ebe82e087be1af8b68d8a5651bc439bcb85b0))
+* notification wip ([8e759b1](https://github.com/open-rpc/inspector/commit/8e759b18462e79139cb54df3dbcfd3f7d182e664))
+
 ## [1.4.18](https://github.com/open-rpc/inspector/compare/1.4.17...1.4.18) (2020-10-15)
 
 
