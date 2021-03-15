@@ -103,10 +103,6 @@ const useTransport: TUseTransport = (transports, url, defaultTransportType, tran
     [ITransport | undefined, Dispatch<ITransport>] = useState(defaultTransportType);
   const [error, setError]: [JSONRPCError | undefined, Dispatch<JSONRPCError | undefined>] = useState();
   useEffect(() => {
-    if (url === "" || url === undefined) {
-      setTransport(undefined);
-      return;
-    }
     if (!transportType) {
       return;
     }
