@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/open-rpc/inspector/compare/1.5.0...1.5.1) (2021-03-15)
+
+
+### Bug Fixes
+
+* allow play button press for transports with no url ([fcdac25](https://github.com/open-rpc/inspector/commit/fcdac2501becd897482e6754cf3034b71c26d29d))
+
 # [1.5.0](https://github.com/open-rpc/inspector/compare/1.4.18...1.5.0) (2020-11-10)
 
 
