@@ -3,7 +3,7 @@ import { JSONRPCError } from "@open-rpc/client-js/build/Error";
 import { Dispatch, useEffect, useState } from "react";
 import { HTTPTransport, WebSocketTransport, PostMessageWindowTransport, PostMessageIframeTransport } from "@open-rpc/client-js";
 import { Transport } from "@open-rpc/client-js/build/transports/Transport";
-import { IJSONRPCData } from "@open-rpc/client-js/build/Request";
+import { IJSONRPCData, IJSONRPCNotificationResponse } from "@open-rpc/client-js/build/Request";
 import { JSONSchema } from "@open-rpc/meta-schema";
 
 export type TTransport = "http" | "websocket" | "postmessagewindow" | "postmessageiframe";
@@ -56,6 +56,9 @@ const getTransportFromType = async (
             id: 0,
           },
         });
+        intermediateTransport.subscribe("notification", (data: IJSONRPCNotificationResponse) => {
+          this.transportRequestManager.transportEventChannel.emit("notification", data);
+        });
         return results;
       }
       public sendData(data: IJSONRPCData): Promise<any> {
@@ -70,6 +73,7 @@ const getTransportFromType = async (
         });
       }
       public close() {
+        intermediateTransport.unsubscribe();
         return intermediateTransport.sendData({
           internalID: 0,
           request: {
