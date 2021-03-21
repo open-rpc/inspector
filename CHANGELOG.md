@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/open-rpc/inspector/compare/1.5.1...1.5.2) (2021-03-21)
+
+
+### Bug Fixes
+
+* allows notifications to be passed through custom transports ([fe75d3f](https://github.com/open-rpc/inspector/commit/fe75d3fb6e9c73e0d49ff4c27985471aba9465c3))
+
 ## [1.5.1](https://github.com/open-rpc/inspector/compare/1.5.0...1.5.1) (2021-03-15)
 
 
