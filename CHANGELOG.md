@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/open-rpc/inspector/compare/1.5.2...1.5.3) (2021-03-21)
+
+
+### Bug Fixes
+
+* allow custom transport as option ([56685a0](https://github.com/open-rpc/inspector/commit/56685a0a66695ea7d2c0b34881ee444d16455c1b))
+
 ## [1.5.2](https://github.com/open-rpc/inspector/compare/1.5.1...1.5.2) (2021-03-21)
 
 
