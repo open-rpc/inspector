@@ -125,6 +125,7 @@ interface IProps {
   hideToggleTheme?: boolean;
   openrpcDocument?: OpenrpcDocument;
   transport?: TTransport;
+  customTransport?: ITransport;
   onToggleDarkMode?: () => void;
 }
 
@@ -166,16 +167,21 @@ const Inspector: React.FC<IProps> = (props) => {
     params: [],
     id: 0,
   });
-  const [transportList, setTransportList] = useState(defaultTransports);
+  const [transportList, setTransportList] = useState(() => {
+    if (props.customTransport) {
+      return [...defaultTransports, props.customTransport];
+    }
+    return defaultTransports;
+  });
   const [url, setUrl] = useState(props.url || "");
   const [debouncedUrl] = useDebounce(url, 1000);
-  const [selectedTransport, setSelectedTransport] = useState(defaultTransports[0]);
+  const [selectedTransport, setSelectedTransport] = useState(props.customTransport || defaultTransports[0]);
   const [transportOptions, setTransportOptions] = useState<any>();
   const [debouncedtransportOptions] = useDebounce(transportOptions, 1000);
   const [transport, setTransport, , connected] = useTransport(
     transportList,
     debouncedUrl,
-    defaultTransports[0],
+    props.customTransport || defaultTransports[0],
     debouncedtransportOptions,
   );
   const [historyOpen, setHistoryOpen] = useState(false);
