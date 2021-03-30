@@ -1,3 +1,10 @@
+## [1.5.4](https://github.com/open-rpc/inspector/compare/1.5.3...1.5.4) (2021-03-30)
+
+
+### Bug Fixes
+
+* make clear button more visible ([61c7bb2](https://github.com/open-rpc/inspector/commit/61c7bb21d85429a2a0db9154bd51be44c9d052f4))
+
 ## [1.5.3](https://github.com/open-rpc/inspector/compare/1.5.2...1.5.3) (2021-03-21)
 
 
