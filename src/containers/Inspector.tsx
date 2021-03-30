@@ -630,7 +630,15 @@ const Inspector: React.FC<IProps> = (props) => {
         <>
           {logs.length > 0 &&
             <Button
-              style={{ position: "absolute", top: "5px", right: "50px", zIndex: 1 }}
+              variant="contained"
+              style={{
+                cursor: "pointer",
+                position: "absolute",
+                top: "5px",
+                right: "50px",
+                zIndex: 2,
+                background: "rgba(255,255,255,0.2)"
+              }}
               onClick={handleClearButton}>
               Clear
             </Button>
