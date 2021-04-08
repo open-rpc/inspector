@@ -1,3 +1,10 @@
+## [1.5.5](https://github.com/open-rpc/inspector/compare/1.5.4...1.5.5) (2021-04-08)
+
+
+### Bug Fixes
+
+* bump client-js ([26ba5a1](https://github.com/open-rpc/inspector/commit/26ba5a198e5303653776835149d446557d23ae43))
+
 ## [1.5.4](https://github.com/open-rpc/inspector/compare/1.5.3...1.5.4) (2021-03-30)
 
 
