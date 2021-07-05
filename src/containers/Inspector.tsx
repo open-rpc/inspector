@@ -27,6 +27,7 @@ import {
   ListItemText,
   Container,
 } from "@material-ui/core";
+import createPersistedState from "use-persisted-state";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import { JSONRPCError } from "@open-rpc/client-js/build/Error";
@@ -39,6 +40,8 @@ import TransportDropdown from "../components/TransportDropdown";
 import useTransport, { ITransport, IWebTransport, TTransport } from "../hooks/useTransport";
 import JSONRPCLogger, { JSONRPCLog } from "@open-rpc/logs-react";
 import OptionsEditor from "./OptionsEditor";
+
+const useCustomTransportList = createPersistedState("inspector-custom-transports");
 
 const defaultTransports: ITransport[] = [
   {
@@ -167,7 +170,7 @@ const Inspector: React.FC<IProps> = (props) => {
     params: [],
     id: 0,
   });
-  const [transportList, setTransportList] = useState(() => {
+  const [transportList, setTransportList] = useCustomTransportList(() => {
     if (props.customTransport) {
       return [...defaultTransports, props.customTransport];
     }
@@ -222,8 +225,8 @@ const Inspector: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     if (props.transport) {
-      const t = defaultTransports
-        .find((tp: ITransport) => tp.type === props.transport);
+      const t = transportList
+        .find((tp: ITransport) => tp.name?.toLowerCase() === props.transport?.toLowerCase());
       if (t) {
         setSelectedTransport(t);
       }

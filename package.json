@@ -27,6 +27,7 @@
     "@types/jest": "^24.0.13",
     "@types/qs": "^6.5.3",
     "@types/react-dom": "^16.8.4",
+    "@types/use-persisted-state": "^0.3.0",
     "jest": "24.9.0",
     "monaco-editor-webpack-plugin": "^1.7.0",
     "react-scripts": "^3.3.0",
@@ -68,6 +69,7 @@
     "react-split-pane": "^0.1.87",
     "semantic-release": "^15.13.21",
     "use-dark-mode": "^2.3.1",
-    "use-debounce": "^3.3.0"
+    "use-debounce": "^3.3.0",
+    "use-persisted-state": "^0.3.3"
   }
 }
