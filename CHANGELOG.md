@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/open-rpc/inspector/compare/1.5.5...1.6.0) (2021-07-05)
+
+
+### Features
+
+* keep custom transports in localstorage ([26e45af](https://github.com/open-rpc/inspector/commit/26e45afda442c213b6493b3cc57d186a89fbf974))
+
 ## [1.5.5](https://github.com/open-rpc/inspector/compare/1.5.4...1.5.5) (2021-04-08)
 
 
