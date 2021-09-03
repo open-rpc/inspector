@@ -28,7 +28,7 @@ const getTransportFromType = async (
 ): Promise<Transport> => {
   let localTransport: any;
   const localTransportType = transports.find((value) => {
-    return value.type === transport.type;
+    return value.type === transport.type && value.name === transport.name;
   });
   if (localTransportType?.type === "websocket") {
     localTransport = new WebSocketTransport(uri);
@@ -74,7 +74,7 @@ const getTransportFromType = async (
       }
       public close() {
         intermediateTransport.unsubscribe();
-        return intermediateTransport.sendData({
+        intermediateTransport.sendData({
           internalID: 0,
           request: {
             jsonrpc: "2.0",
@@ -83,6 +83,7 @@ const getTransportFromType = async (
             id: 0,
           },
         });
+        intermediateTransport.close();
       }
     }
     localTransport = new InterTransport();
@@ -119,6 +120,10 @@ const useTransport: TUseTransport = (transports, url, defaultTransportType, tran
       return localTransport.connect().then(() => {
         setTransportConnected(true);
         setTransport(localTransport);
+      }).catch((e) => {
+        localTransport.unsubscribe()
+        localTransport.close();
+        throw e;
       });
     };
 

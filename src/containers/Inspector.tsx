@@ -207,7 +207,7 @@ const Inspector: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     if (selectedTransport !== undefined) {
-      setTransport(selectedTransport!);
+      setTransport(selectedTransport);
       const s: IWebTransport = selectedTransport as IWebTransport;
       if (s.schema !== undefined && s.schema !== true && s.schema !== false) {
         setTransportOptions((s.schema.examples as ExampleObject[])[0]);
