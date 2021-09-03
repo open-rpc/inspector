@@ -1,3 +1,11 @@
+## [1.6.1](https://github.com/open-rpc/inspector/compare/1.6.0...1.6.1) (2021-09-03)
+
+
+### Bug Fixes
+
+* multiple custom transport cleanup ([78651fa](https://github.com/open-rpc/inspector/commit/78651fac4dad3ea10bec9e332d8f7417557db52c))
+* order of close for interTransport ([b059c5d](https://github.com/open-rpc/inspector/commit/b059c5d26968ad72833da134a9ff1c5224824ada))
+
 # [1.6.0](https://github.com/open-rpc/inspector/compare/1.5.5...1.6.0) (2021-07-05)
 
 
