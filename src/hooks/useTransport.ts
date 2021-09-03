@@ -72,10 +72,9 @@ const getTransportFromType = async (
           },
         });
       }
-      public close() {
+      public async close() {
         intermediateTransport.unsubscribe();
-        intermediateTransport.close();
-        return intermediateTransport.sendData({
+        intermediateTransport.sendData({
           internalID: 0,
           request: {
             jsonrpc: "2.0",
@@ -84,6 +83,7 @@ const getTransportFromType = async (
             id: 0,
           },
         });
+        intermediateTransport.close();
       }
     }
     localTransport = new InterTransport();
