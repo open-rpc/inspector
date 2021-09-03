@@ -72,7 +72,7 @@ const getTransportFromType = async (
           },
         });
       }
-      public async close() {
+      public close() {
         intermediateTransport.unsubscribe();
         intermediateTransport.sendData({
           internalID: 0,
