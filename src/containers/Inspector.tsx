@@ -88,7 +88,7 @@ const defaultTransports: ITransport[] = [
   },
 ];
 
-const errorToJSON = (error: JSONRPCError | any, id: string | number): any => {
+const errorToJSON = (error: JSONRPCError | any, id?: string | number | null): any => {
   const isError = error instanceof Error;
   if (!isError) {
     return;
@@ -252,6 +252,17 @@ const Inspector: React.FC<IProps> = (props) => {
           method: notification.method,
           timestamp: responseTimestamp,
           payload: notification,
+        };
+        setLogs((prevLogs) => [...prevLogs, notificationObj]);
+        setTabLogs(tabIndex, [...(tabs[tabIndex].logs || []), notificationObj]);
+      });
+      transport.subscribe("error", (error: any) => {
+        const responseTimestamp = new Date();
+        const notificationObj: JSONRPCLog = {
+          type: "response",
+          method: "",
+          timestamp: responseTimestamp,
+          payload: errorToJSON(error, error.id),
         };
         setLogs((prevLogs) => [...prevLogs, notificationObj]);
         setTabLogs(tabIndex, [...(tabs[tabIndex].logs || []), notificationObj]);
