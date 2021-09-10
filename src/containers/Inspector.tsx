@@ -242,35 +242,6 @@ const Inspector: React.FC<IProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.url]);
 
-  useEffect(() => {
-    if (transport) {
-      transport.subscribe("notification", (notification: any) => {
-        const responseTimestamp = new Date();
-        const notificationObj: JSONRPCLog = {
-          type: "response",
-          notification: true,
-          method: notification.method,
-          timestamp: responseTimestamp,
-          payload: notification,
-        };
-        setLogs((prevLogs) => [...prevLogs, notificationObj]);
-        setTabLogs(tabIndex, [...(tabs[tabIndex].logs || []), notificationObj]);
-      });
-      transport.subscribe("error", (error: any) => {
-        const responseTimestamp = new Date();
-        const notificationObj: JSONRPCLog = {
-          type: "response",
-          method: "",
-          timestamp: responseTimestamp,
-          payload: errorToJSON(error, error.id),
-        };
-        setLogs((prevLogs) => [...prevLogs, notificationObj]);
-        setTabLogs(tabIndex, [...(tabs[tabIndex].logs || []), notificationObj]);
-      });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transport]);
-
   const handlePlayButton = async () => {
     let requestTimestamp = new Date();
     if (transport) {
@@ -354,6 +325,31 @@ const Inspector: React.FC<IProps> = (props) => {
         setOpenRpcDocument(undefined);
         setTabOpenRPCDocument(tabIndex, undefined);
       }
+    }
+    if (transport) {
+      transport.subscribe("notification", (notification: any) => {
+        const responseTimestamp = new Date();
+        const notificationObj: JSONRPCLog = {
+          type: "response",
+          notification: true,
+          method: notification.method,
+          timestamp: responseTimestamp,
+          payload: notification,
+        };
+        setLogs((prevLogs) => [...prevLogs, notificationObj]);
+        setTabLogs(tabIndex, [...(tabs[tabIndex].logs || []), notificationObj]);
+      });
+      transport.subscribe("error", (error: any) => {
+        const responseTimestamp = new Date();
+        const notificationObj: JSONRPCLog = {
+          type: "response",
+          method: "",
+          timestamp: responseTimestamp,
+          payload: errorToJSON(error, null),
+        };
+        setLogs((prevLogs) => [...prevLogs, notificationObj]);
+        setTabLogs(tabIndex, [...(tabs[tabIndex].logs || []), notificationObj]);
+      });
     }
   };
   useEffect(() => {
