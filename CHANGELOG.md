@@ -1,3 +1,11 @@
+## [1.6.2](https://github.com/open-rpc/inspector/compare/1.6.1...1.6.2) (2021-09-11)
+
+
+### Bug Fixes
+
+* add support for out of band errors with no id ([0c4a63d](https://github.com/open-rpc/inspector/commit/0c4a63d0260ca4d8ad64ba6219294da42845e2a1))
+* subscribe to errors/notifications after rpc.discover ([7f70ce4](https://github.com/open-rpc/inspector/commit/7f70ce4b6d9b3879b94e69f7e4668111b7f4802f))
+
 ## [1.6.1](https://github.com/open-rpc/inspector/compare/1.6.0...1.6.1) (2021-09-03)
 
 
