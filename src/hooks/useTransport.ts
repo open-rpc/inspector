@@ -59,6 +59,9 @@ const getTransportFromType = async (
         intermediateTransport.subscribe("notification", (data: IJSONRPCNotificationResponse) => {
           this.transportRequestManager.transportEventChannel.emit("notification", data);
         });
+        intermediateTransport.subscribe("error", (data: JSONRPCError) => {
+          this.transportRequestManager.transportEventChannel.emit("error", data);
+        });
         return results;
       }
       public sendData(data: IJSONRPCData): Promise<any> {
