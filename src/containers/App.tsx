@@ -24,6 +24,7 @@ const App: React.FC = () => {
       <Inspector
         onToggleDarkMode={darkMode.toggle}
         darkMode={darkMode.value}
+        customTransport={query.customTransport}
         transport={query.transport}
         url={query.url}
         openrpcDocument={query.openrpcDocument}
