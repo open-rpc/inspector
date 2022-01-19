@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/open-rpc/inspector/compare/1.6.2...1.6.3) (2022-01-19)
+
+
+### Bug Fixes
+
+* add customTransport api from query string ([c7f41b5](https://github.com/open-rpc/inspector/commit/c7f41b5c449023a0e9143ceeef9d211fc287c02c))
+
 ## [1.6.2](https://github.com/open-rpc/inspector/compare/1.6.1...1.6.2) (2021-09-11)
 
 
