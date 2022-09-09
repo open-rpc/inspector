@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/open-rpc/inspector/compare/1.6.3...1.7.0) (2022-09-09)
+
+
+### Features
+
+* adds support for schemaUrl to inspector ([901cfc9](https://github.com/open-rpc/inspector/commit/901cfc97e8ec6d692c39b8d33525940ab5432f1c))
+
 ## [1.6.3](https://github.com/open-rpc/inspector/compare/1.6.2...1.6.3) (2022-01-19)
 
 
