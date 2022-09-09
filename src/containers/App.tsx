@@ -7,11 +7,14 @@ import useDarkMode from "use-dark-mode";
 import Inspector from "./Inspector";
 import useQueryParams from "../hooks/useQueryParams";
 import * as monaco from "monaco-editor";
+import useOpenrpcDocument from "../hooks/useOpenrpcDocument";
 
 const App: React.FC = () => {
   const darkMode = useDarkMode();
   const [query] = useQueryParams();
   const theme = darkMode.value ? darkTheme : lightTheme;
+  const openrpcDocument = useOpenrpcDocument(query.openrpcDocument, query.schemaUrl);
+
   useEffect(() => {
     const t = darkMode.value ? "vs-dark" : "vs";
     monaco.editor.setTheme(t);
@@ -27,7 +30,7 @@ const App: React.FC = () => {
         customTransport={query.customTransport}
         transport={query.transport}
         url={query.url}
-        openrpcDocument={query.openrpcDocument}
+        openrpcDocument={openrpcDocument}
         request={query.request}
       />
     </MuiThemeProvider>
