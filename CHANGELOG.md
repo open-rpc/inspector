@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/open-rpc/inspector/compare/1.7.0...1.7.1) (2022-09-29)
+
+
+### Bug Fixes
+
+* bump logs-react to latest ([8561580](https://github.com/open-rpc/inspector/commit/8561580e8be4c7a1ea88de66db9af5ef88d0f315))
+
 # [1.7.0](https://github.com/open-rpc/inspector/compare/1.6.3...1.7.0) (2022-09-09)
 
 
