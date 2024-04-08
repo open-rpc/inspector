@@ -317,7 +317,9 @@ const Inspector: React.FC<IProps> = (props) => {
           method: "rpc.discover",
         },
       });
-      const doc = await parseOpenRPCDocument(d);
+
+      const doc = d as OpenrpcDocument
+      console.log("discovered "+JSON.stringify(doc))
       setOpenRpcDocument(doc);
       setTabOpenRPCDocument(tabIndex, doc);
     } catch (e) {
