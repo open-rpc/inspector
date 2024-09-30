@@ -38,20 +38,22 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
       method: {
         type: "string",
         oneOf: openrpcDocument && openrpcDocument.methods && openrpcDocument.methods.map((method) => {
+          const m = method as MethodObject;
           return {
-            const: method.name,
-            description: method.description || method.summary,
-            markdownDescription: method.description || method.summary,
+            const: m.name,
+            description: m.description || m.summary,
+            markdownDescription: m.description || m.summary,
           };
         }),
       },
     },
-    allOf: openrpcDocument && openrpcDocument.methods && openrpcDocument.methods.map((method: MethodObject) => {
+    allOf: openrpcDocument && openrpcDocument.methods && openrpcDocument.methods.map((method) => {
+      const m = method as MethodObject;
       return {
         if: {
           properties: {
             method: {
-              const: method.name,
+              const: m.name,
             },
           },
         },
@@ -61,16 +63,16 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
               oneOf: [
                 {
                   type: "array",
-                  minItems: method.params && method.params.filter((param: any) => param.required).length,
-                  maxItems: method.params && method.params.length,
-                  defaultSnippets: method.examples ? method.examples.map((example: any) => {
+                  minItems: m.params && m.params.filter((param: any) => param.required).length,
+                  maxItems: m.params && m.params.length,
+                  defaultSnippets: m.examples ? m.examples.map((example: any) => {
                     return {
                       label: example.name,
                       description: example.description || example.summary,
                       body: example.params && example.params.map((ex: ExampleObject) => ex.value),
                     };
                   }) : [],
-                  items: method.params && method.params.map((param: any) => {
+                  items: m.params && m.params.map((param: any) => {
                     return {
                       ...param.schema,
                       markdownDescription: param.description || param.summary,
@@ -81,7 +83,7 @@ const openrpcDocumentToJSONRPCSchema = (openrpcDocument: OpenrpcDocument) => {
                 },
                 {
                   type: "object",
-                  properties: method.params && (method.params as ContentDescriptorObject[])
+                  properties: m.params && (m.params as ContentDescriptorObject[])
                     .reduce((memo: any, param: ContentDescriptorObject) => {
                       if (typeof param.schema === "object") {
                         memo[param.name] = {

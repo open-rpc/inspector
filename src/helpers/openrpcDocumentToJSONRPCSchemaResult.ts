@@ -22,7 +22,7 @@ const schema: any = {
 };
 
 const openrpcDocumentToJSONRPCSchemaResult = (openrpcDocument: OpenrpcDocument, methodName: string) => {
-  const methodObject: MethodObject | undefined = openrpcDocument.methods.find((method) => method.name === methodName);
+  const methodObject = openrpcDocument.methods.find((method) => (method as MethodObject).name === methodName) as MethodObject;
   let methodSchema: any;
   if (methodObject !== undefined && methodObject.result !== undefined) {
     methodSchema = (methodObject.result as ContentDescriptorObject).schema;
