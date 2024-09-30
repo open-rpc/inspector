@@ -56,7 +56,7 @@
     "@monaco-editor/react": "^2.3.0",
     "@open-rpc/client-js": "^1.6.3",
     "@open-rpc/logs-react": "^1.2.0",
-    "@open-rpc/meta-schema": "^1.13.20",
+    "@open-rpc/meta-schema": "^1.14.9",
     "@open-rpc/schema-utils-js": "^1.14.3",
     "@rehooks/window-size": "^1.0.2",
     "acorn-dynamic-import": "^4.0.0",

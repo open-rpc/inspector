@@ -647,7 +647,7 @@ const Inspector: React.FC<IProps> = (props) => {
                 top: "5px",
                 right: "50px",
                 zIndex: 2,
-                background: "rgba(255,255,255,0.2)"
+                background: "rgba(255,255,255,0.2)",
               }}
               onClick={handleClearButton}>
               Clear

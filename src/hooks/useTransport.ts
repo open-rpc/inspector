@@ -124,7 +124,7 @@ const useTransport: TUseTransport = (transports, url, defaultTransportType, tran
         setTransportConnected(true);
         setTransport(localTransport);
       }).catch((e) => {
-        localTransport.unsubscribe()
+        localTransport.unsubscribe();
         localTransport.close();
         throw e;
       });

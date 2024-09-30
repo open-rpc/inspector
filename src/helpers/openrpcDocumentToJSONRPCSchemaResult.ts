@@ -1,4 +1,8 @@
-import { MethodObject, ContentDescriptorObject, OpenrpcDocument } from "@open-rpc/meta-schema";
+import {
+  MethodObject,
+  ContentDescriptorObject,
+  OpenrpcDocument,
+} from "@open-rpc/meta-schema";
 
 const schema: any = {
   type: "object",
@@ -21,8 +25,13 @@ const schema: any = {
   },
 };
 
-const openrpcDocumentToJSONRPCSchemaResult = (openrpcDocument: OpenrpcDocument, methodName: string) => {
-  const methodObject: MethodObject | undefined = openrpcDocument.methods.find((method) => method.name === methodName);
+const openrpcDocumentToJSONRPCSchemaResult = (
+  openrpcDocument: OpenrpcDocument,
+  methodName: string
+) => {
+  const methodObject = openrpcDocument.methods.find(
+    (method) => (method as MethodObject).name === methodName
+  ) as MethodObject;
   let methodSchema: any;
   if (methodObject !== undefined && methodObject.result !== undefined) {
     methodSchema = (methodObject.result as ContentDescriptorObject).schema;
