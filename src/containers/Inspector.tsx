@@ -35,7 +35,6 @@ import { OpenrpcDocument, ExampleObject } from "@open-rpc/meta-schema";
 import useTabs from "../hooks/useTabs";
 import { useDebounce } from "use-debounce";
 import { green } from "@material-ui/core/colors";
-import { parseOpenRPCDocument } from "@open-rpc/schema-utils-js";
 import TransportDropdown from "../components/TransportDropdown";
 import useTransport, { ITransport, IWebTransport, TTransport } from "../hooks/useTransport";
 import JSONRPCLogger, { JSONRPCLog } from "@open-rpc/logs-react";
@@ -317,10 +316,12 @@ const Inspector: React.FC<IProps> = (props) => {
           method: "rpc.discover",
         },
       });
-      const doc = await parseOpenRPCDocument(d);
+      console.log("discovered: "+JSON.stringify(d))
+      const doc = d as OpenrpcDocument
       setOpenRpcDocument(doc);
       setTabOpenRPCDocument(tabIndex, doc);
     } catch (e) {
+      console.log("disovery error "+e)
       if (!props.openrpcDocument) {
         setOpenRpcDocument(undefined);
         setTabOpenRPCDocument(tabIndex, undefined);
